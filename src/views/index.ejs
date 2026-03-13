@@ -1,0 +1,79 @@
+<%- include('./includes/head'); %>
+<%- include('./includes/nav'); %>
+
+
+<main class="hero">
+  <!-- Conteúdo -->
+<div class="container py-3 py-md-5">
+  <div class="row align-items-stretch"> <!-- força as colunas a terem a mesma altura -->
+    
+    <!-- Texto e botão -->
+    <div class="col-12 col-md-6 d-flex flex-column justify-content-center mb-3 mb-md-0 hero-text">
+      <h1 class="">Geo Recife</h1>
+      <p class="text-justify">
+        Geo Recife é uma plataforma desenvolvida para monitorar a cidade, registrando ocorrências como acidentes, criminalidade e áreas de risco. Com dados atualizados e acessíveis, ela ajuda a população e autoridades a entender melhor a dinâmica da cidade e agir de forma mais eficiente.
+      </p>
+      <button class="btn btn-success px-4 align-self-start">Get Started</button>
+    </div>
+    
+    <!-- Imagem/Mapa -->
+    <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
+      <img src="/assets/img/mapa3.png" alt="Mapa do Recife" class="img-fluid rounded">
+    </div>
+
+  </div>
+</div>
+
+<div class="container py-5">
+  <h2 class="text-center mb-5">Sobre Nós</h2>
+
+  <div class="row g-4"> <!-- g-4 adiciona espaçamento entre colunas -->
+
+    <!-- Pessoa 1 -->
+    <div class="col-12 col-md-4">
+      <h5>Heitor</h5>
+      <p>Responsáveis pela pesquisa de dados e análise de ocorrências.</p>
+    </div>
+
+    <!-- Pessoa 2 -->
+    <div class="col-12 col-md-4">
+      <h5>Vanessa e Lufyo</h5>
+      <p>Desenvolvimento Front-end, interfaces, validando o Front-end.</p>
+    </div>
+
+    <!-- Pessoa 3 -->
+    <div class="col-12 col-md-4">
+      <h5>Lieberty e Ananda</h5>
+      <p>Desenvolvimento Back-end, APIs e lógica de negócios.</p>
+    </div>
+
+    <!-- Pessoa 4 -->
+    <div class="col-12 col-md-4">
+      <h5>Caio e Heitor</h5>
+      <p>Administração e modelagem do banco de dados.</p>
+    </div>
+
+    <!-- Pessoa 5 -->
+    <div class="col-12 col-md-4">
+      <h5>Geovanne</h5>
+      <p>Integração de sistemas e conectividade entre front-end e back-end.</p>
+    </div>
+
+    <!-- Pessoa 6 -->
+    <div class="col-12 col-md-4">
+      <h5>Camila Rodrigues</h5>
+      <p>Testes e controle de qualidade da plataforma.</p>
+    </div>
+
+  </div>
+
+  <!-- Botão Get Started -->
+  <div class="d-flex justify-content-center mt-4">
+    <button class="btn btn-success px-4">Get Started</button>
+  </div>
+</div>
+
+</main>
+
+
+<%- include('./includes/footer'); %>

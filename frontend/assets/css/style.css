@@ -1,0 +1,91 @@
+/* Estilos da NAV */
+
+.nav-white {
+  color: white;
+  position: relative;
+  font-size: 20px;
+}
+
+a:hover {
+    transform: scale(1.05);
+    transition: all 0.25s;
+}
+
+.bg-green {
+    background-color: #1D4835;
+}
+
+/* só ativa no desktop */
+@media (min-width: 768px) {
+
+  .nav-white::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: width 0.25s ease;
+  }
+
+  .nav-white:hover::after {
+    width: 100%;
+  }
+
+}
+
+.btn-login {
+    color: #1D4835;
+}
+
+
+
+.text-justify {
+    text-align: justify;
+}
+
+/* Margens padrão para desktop grande */
+.hero-text h1 {
+  margin-bottom: 5rem;
+}
+
+.hero-text p {
+    font-size: 17px;
+}
+
+
+.hero-text button {
+  margin-top: 5rem;
+}
+
+/* Quando a tela diminuir (ex: tablets e tamanhos intermediários) */
+@media (max-width: 980px) {
+  .hero-text h1 {
+    margin-bottom: 1rem;
+  }
+
+  .hero-text p {
+    margin-bottom: 1rem;
+    font-size: 13px;
+  }
+
+  .hero-text button {
+    margin-top: 1rem;
+  }
+}
+
+/* Para mobile bem pequeno */
+@media (max-width: 576px) {
+  .hero-text h1 {
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-text p {
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-text button {
+    margin-top: 1.5rem;
+  }
+}

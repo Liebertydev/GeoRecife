@@ -21,7 +21,97 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ``, "",{"version":3,"sources":[],"names":[],"mappings":"","sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `/* Estilos da NAV */
+
+.nav-white {
+  color: white;
+  position: relative;
+  font-size: 20px;
+}
+
+a:hover {
+    transform: scale(1.05);
+    transition: all 0.25s;
+}
+
+.bg-green {
+    background-color: #1D4835;
+}
+
+/* só ativa no desktop */
+@media (min-width: 768px) {
+
+  .nav-white::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: width 0.25s ease;
+  }
+
+  .nav-white:hover::after {
+    width: 100%;
+  }
+
+}
+
+.btn-login {
+    color: #1D4835;
+}
+
+
+
+.text-justify {
+    text-align: justify;
+}
+
+/* Margens padrão para desktop grande */
+.hero-text h1 {
+  margin-bottom: 5rem;
+}
+
+.hero-text p {
+    font-size: 17px;
+}
+
+
+.hero-text button {
+  margin-top: 5rem;
+}
+
+/* Quando a tela diminuir (ex: tablets e tamanhos intermediários) */
+@media (max-width: 980px) {
+  .hero-text h1 {
+    margin-bottom: 1rem;
+  }
+
+  .hero-text p {
+    margin-bottom: 1rem;
+    font-size: 13px;
+  }
+
+  .hero-text button {
+    margin-top: 1rem;
+  }
+}
+
+/* Para mobile bem pequeno */
+@media (max-width: 576px) {
+  .hero-text h1 {
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-text p {
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-text button {
+    margin-top: 1.5rem;
+  }
+}`, "",{"version":3,"sources":["webpack://./frontend/assets/css/style.css"],"names":[],"mappings":"AAAA,mBAAmB;;AAEnB;EACE,YAAY;EACZ,kBAAkB;EAClB,eAAe;AACjB;;AAEA;IACI,sBAAsB;IACtB,qBAAqB;AACzB;;AAEA;IACI,yBAAyB;AAC7B;;AAEA,wBAAwB;AACxB;;EAEE;IACE,WAAW;IACX,kBAAkB;IAClB,OAAO;IACP,YAAY;IACZ,QAAQ;IACR,WAAW;IACX,iBAAiB;IACjB,4BAA4B;EAC9B;;EAEA;IACE,WAAW;EACb;;AAEF;;AAEA;IACI,cAAc;AAClB;;;;AAIA;IACI,mBAAmB;AACvB;;AAEA,uCAAuC;AACvC;EACE,mBAAmB;AACrB;;AAEA;IACI,eAAe;AACnB;;;AAGA;EACE,gBAAgB;AAClB;;AAEA,mEAAmE;AACnE;EACE;IACE,mBAAmB;EACrB;;EAEA;IACE,mBAAmB;IACnB,eAAe;EACjB;;EAEA;IACE,gBAAgB;EAClB;AACF;;AAEA,4BAA4B;AAC5B;EACE;IACE,qBAAqB;EACvB;;EAEA;IACE,qBAAqB;EACvB;;EAEA;IACE,kBAAkB;EACpB;AACF","sourcesContent":["/* Estilos da NAV */\r\n\r\n.nav-white {\r\n  color: white;\r\n  position: relative;\r\n  font-size: 20px;\r\n}\r\n\r\na:hover {\r\n    transform: scale(1.05);\r\n    transition: all 0.25s;\r\n}\r\n\r\n.bg-green {\r\n    background-color: #1D4835;\r\n}\r\n\r\n/* só ativa no desktop */\r\n@media (min-width: 768px) {\r\n\r\n  .nav-white::after {\r\n    content: \"\";\r\n    position: absolute;\r\n    left: 0;\r\n    bottom: -4px;\r\n    width: 0;\r\n    height: 2px;\r\n    background: white;\r\n    transition: width 0.25s ease;\r\n  }\r\n\r\n  .nav-white:hover::after {\r\n    width: 100%;\r\n  }\r\n\r\n}\r\n\r\n.btn-login {\r\n    color: #1D4835;\r\n}\r\n\r\n\r\n\r\n.text-justify {\r\n    text-align: justify;\r\n}\r\n\r\n/* Margens padrão para desktop grande */\r\n.hero-text h1 {\r\n  margin-bottom: 5rem;\r\n}\r\n\r\n.hero-text p {\r\n    font-size: 17px;\r\n}\r\n\r\n\r\n.hero-text button {\r\n  margin-top: 5rem;\r\n}\r\n\r\n/* Quando a tela diminuir (ex: tablets e tamanhos intermediários) */\r\n@media (max-width: 980px) {\r\n  .hero-text h1 {\r\n    margin-bottom: 1rem;\r\n  }\r\n\r\n  .hero-text p {\r\n    margin-bottom: 1rem;\r\n    font-size: 13px;\r\n  }\r\n\r\n  .hero-text button {\r\n    margin-top: 1rem;\r\n  }\r\n}\r\n\r\n/* Para mobile bem pequeno */\r\n@media (max-width: 576px) {\r\n  .hero-text h1 {\r\n    margin-bottom: 1.5rem;\r\n  }\r\n\r\n  .hero-text p {\r\n    margin-bottom: 1.5rem;\r\n  }\r\n\r\n  .hero-text button {\r\n    margin-top: 1.5rem;\r\n  }\r\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

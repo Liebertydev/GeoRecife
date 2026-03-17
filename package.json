@@ -25,6 +25,7 @@
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "helmet": "^8.1.0",
+    "leaflet": "^1.9.4",
     "pg": "^8.20.0",
     "regenerator-runtime": "^0.14.1",
     "style-loader": "^4.0.0",

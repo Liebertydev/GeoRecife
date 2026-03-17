@@ -8,6 +8,9 @@ module.exports = {
     path: path.resolve(__dirname, 'public/assets/js'),
     filename: 'bundle.js'
   },
+  externals: {
+    leaflet: 'L'
+  },
   module: {
     rules: [
       {
@@ -23,7 +26,7 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: '../css/bundle.css' // Vai gerar em public/assets/css/bundle.css
+      filename: '../css/bundle.css'
     })
   ],
   devtool: 'source-map'

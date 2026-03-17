@@ -1,0 +1,53 @@
+<%- include('./includes/head') %>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+<%- include('./includes/nav') %>
+
+<div class="container-fluid" style="height: 100vh;">
+  <div class="row h-100">
+
+    <!-- Navbar lateral (25%) -->
+    <div class="col-3 bg-success text-white p-3 d-flex flex-column" style="min-width: 250px;">
+      <h4 class="mb-4">Filtros do Mapa</h4>
+
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="filterCrimes" checked>
+        <label class="form-check-label" for="filterCrimes">Crimes</label>
+      </div>
+
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="filterTraffic" checked>
+        <label class="form-check-label" for="filterTraffic">Trânsito</label>
+      </div>
+
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="filterIncidents" checked>
+        <label class="form-check-label" for="filterIncidents">Incidentes</label>
+      </div>
+
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="filterOthers" checked>
+        <label class="form-check-label" for="filterOthers">Outros</label>
+      </div>
+
+      <button class="btn btn-light mt-auto">Aplicar Filtros</button>
+    </div>
+
+    <!-- Área do mapa (75%) -->
+    <div class="col bg-light p-0 position-relative">
+      <div id="map" style="height: 100%; width: 100%;" class="z-1"></div>
+
+      <div class="position-absolute top-0 start-50 translate-middle-x mt-3 z-3 w-75" style="max-width: 600px;">
+        <div class="input-group">
+          <input type="text" id="searchInput" class="form-control" placeholder="Busque por um local">
+          <button type="button" class="btn btn-primary" id="searchBtn">Buscar</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%- include('./includes/footer') %>

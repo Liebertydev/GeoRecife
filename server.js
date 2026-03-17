@@ -17,6 +17,13 @@ const routes = require('./routes');
 
 const prisma = require('./src/database/prisma');
 
+const {
+  middlewareGlobal,
+  checkCsrfError,
+  csrfMiddleware
+} = require('./src/middlewares/middleware');
+
+
 // ====================
 // CONEXÃO COM BANCO
 // ====================
@@ -26,6 +33,7 @@ async function connectDB() {
   console.log('Banco conectado');
 }
 
+
 // ====================
 // SEGURANÇA
 // ====================
@@ -33,6 +41,7 @@ async function connectDB() {
 if (process.env.NODE_ENV !== 'development') {
   app.use(helmet());
 }
+
 
 // ====================
 // SESSÕES
@@ -59,12 +68,14 @@ app.use(
   })
 );
 
+
 // ====================
 // PARSE BODY
 // ====================
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use('/assets', express.static(path.join(__dirname, 'frontend/assets')));
 
 // ====================
 // ARQUIVOS ESTÁTICOS
@@ -72,17 +83,28 @@ app.use(express.json());
 
 app.use(express.static(path.resolve(__dirname, 'public')));
 
+
 // ====================
 // FLASH MESSAGES
 // ====================
 
 app.use(flash());
 
+
+// ====================
+// MIDDLEWARE GLOBAL
+// ====================
+
+app.use(middlewareGlobal);
+
+
 // ====================
 // CSRF
 // ====================
 
 app.use(csrf());
+app.use(csrfMiddleware);
+
 
 // ====================
 // CONFIGURAÇÃO DO EJS
@@ -92,34 +114,29 @@ app.set('views', path.resolve(__dirname, 'src', 'views'));
 app.set('view engine', 'ejs');
 app.set('trust proxy', 1);
 
+
 // ====================
 // ROTAS
 // ====================
 
 app.use(routes);
 
+
 // ====================
-// ERRO GLOBAL
+// TRATAR ERRO CSRF
 // ====================
 
-// Erro 404
+app.use(checkCsrfError);
+
+
+// ====================
+// ERRO 404
+// ====================
+
 app.use((req, res) => {
-    res.status(404).render('404');
+  res.status(404).render('404');
 });
 
-
-
-app.use((err, req, res, next) => {
-
-  if (err.code === 'EBADCSRFTOKEN') {
-    return res.status(403).send('Token CSRF inválido');
-  }
-
-  console.error(err);
-
-  res.status(500).send('Erro interno do servidor');
-
-});
 
 // ====================
 // INICIAR SERVIDOR

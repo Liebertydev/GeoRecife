@@ -1,13 +1,14 @@
-// module.exports.middlewareGlobal = (req, res, next) => {
-//     res.locals.errors = req.flash('errors');
-//     res.locals.success = req.flash('success');
-//     res.locals.user = req.session.user;
-//     next();
-// };
+module.exports.middlewareGlobal = (req, res, next) => {
+    res.locals.errors = req.flash('errors');
+    res.locals.success = req.flash('success');
+    res.locals.pageCSS = null;
+    // res.locals.user = req.session.user;
+    next();
+};
 
 module.exports.checkCsrfError = (err, req, res, next) => {
-    if (err /*&& err.code === 'EBADCSRFTOKEN'*/) {
-        return res.render('404');
+    if (err.code === 'EBADCSRFTOKEN') {
+        return res.status(403).send('CSRF inválido');
     }
 
     next(err);

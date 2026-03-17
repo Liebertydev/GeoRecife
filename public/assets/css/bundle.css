@@ -1,5 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-
+/*!*********************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/style.css ***!
+  \*********************************************************************************/
+@import url(https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap);
+/*!*************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/style.css (1) ***!
+  \*************************************************************************************/
 /* =========================
    VARIÁVEIS
 ========================= */
@@ -114,3 +119,5 @@ nav a:hover {
   }
 
 }
+
+/*# sourceMappingURL=bundle.css.map*/

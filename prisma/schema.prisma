@@ -20,10 +20,20 @@ model User {
   createdAt DateTime @default(now())
 }
 
-model Contact {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String?
-  phone     String
-  createdAt DateTime @default(now())
+
+model Occurrence {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  latitude    Float
+  longitude   Float
+  createdAt   DateTime @default(now())
+}
+
+model Session {
+  sid    String @id
+  sess   Json
+  expire DateTime
+
+  @@map("session") // indica pro Prisma que a tabela existe, mas não vai alterar
 }

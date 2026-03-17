@@ -1,0 +1,61 @@
+
+/* =========================
+   ESTILOS DO HERO / BODY
+========================= */
+
+.hero-text h1 {
+  margin-bottom: 5rem;
+  font-family: var(--fonte-title);
+}
+
+.hero-text p {
+  font-size: 17px;
+  font-family: var(--fonte-principal);
+  margin-bottom: 0;
+}
+
+.hero-text button {
+  margin-top: 5rem;
+}
+
+/* =========================
+   RESPONSIVIDADE HOME
+========================= */
+
+/* tablets e telas médias */
+@media (max-width: 980px) {
+
+  .hero-text h1 {
+    margin-bottom: 1rem;
+  }
+
+  .hero-text p {
+    font-size: 13px;
+  }
+
+  .hero-text button {
+    margin-top: 1rem;
+  }
+
+}
+
+/* mobile pequeno */
+@media (max-width: 576px) {
+
+  .hero-text h1 {
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-text button {
+    margin-top: 1.5rem;
+  }
+
+}
+
+/* margin para mobile */
+@media (max-width: 768px) {
+
+  .mb-mobile {
+    margin-bottom: 1.5rem !important;
+  }
+}

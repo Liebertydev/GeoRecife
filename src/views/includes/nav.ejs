@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-green px-4 py-3">
   <div class="container-fluid">
 
-    <a class="navbar-brand me-5" href="#">Agenda</a>
+    <a class="navbar-brand me-5 title" href="/">GeoRecife</a>
 
     <!-- botão hamburguer -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
@@ -12,17 +12,20 @@
     <div class="collapse navbar-collapse" id="navbarMenu">
 
       <div class="navbar-nav gap-3 ms-md-5">
-        <a class="nav-link d-md-none nav-white fw-semibold" href="#">Login</a>
+        <!-- Link visível apenas em mobile -->
+        <a class="nav-link d-md-none nav-white fw-semibold" href="/login">Login</a>
 
-        <a class="nav-link nav-white fw-semibold" href="#">Início</a>
-        <a class="nav-link nav-white fw-semibold" href="#">Mapa</a>
-        <a class="nav-link nav-white fw-semibold" href="#">Incidentes</a>
-
+        <a class="nav-link nav-white fw-semibold" href="/">Início</a>
+        <a class="nav-link nav-white fw-semibold" href="/mapa">Mapa</a>
+        <a class="nav-link nav-white fw-semibold" href="/ocorrencias">Incidentes</a>
       </div>
 
-      <button class="btn btn-light ms-auto d-none d-md-block px-4 fw-bold btn-login">
-        Login
-      </button>
+      <!-- Botão login visível apenas em desktop -->
+      <a href="/login" class="ms-auto">
+        <button class="btn btn-light ms-auto d-none d-md-block px-5 fw-bold btn-login btn-aument btn-lg fw-bolder">
+          Login
+        </button>
+      </a>
 
     </div>
 

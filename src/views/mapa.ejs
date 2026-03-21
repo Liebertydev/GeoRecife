@@ -40,11 +40,15 @@
       <div id="map" style="height: 100%; width: 100%;" class="z-1"></div>
 
       <div class="position-absolute top-0 start-50 translate-middle-x mt-3 z-3 w-75" style="max-width: 600px;">
-        <div class="input-group">
-          <input type="text" id="searchInput" class="form-control" placeholder="Busque por um local">
-          <button type="button" class="btn btn-primary" id="searchBtn">Buscar</button>
+  
+          <div class="input-group">
+            <input type="text" id="searchInput" class="form-control" placeholder="Busque por um local" autocomplete="off">
+            <button type="button" class="btn btn-primary" id="searchBtn">Buscar</button>
+          </div>
+
+          <div id="suggestions" class="list-group"></div>
+
         </div>
-      </div>
     </div>
 
   </div>

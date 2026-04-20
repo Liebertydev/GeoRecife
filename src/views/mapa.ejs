@@ -1,15 +1,11 @@
-<%- include('./includes/head') %>
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-
+<%- include('./includes/head', { pageCSS: pageCSS }); %>
 <%- include('./includes/nav') %>
 
-<div class="container-fluid" style="height: 100vh;">
-  <div class="row h-100">
+<div class="container-fluid overflow-hidden p-0" id="map-wrapper">
+  <div class="row g-0 h-100">
 
-    <!-- Navbar lateral (25%) -->
-    <div class="col-3 bg-success text-white p-3 d-flex flex-column" style="min-width: 250px;">
+    <!-- Sidebar (25%) -->
+    <div class="col-3 bg-success text-white p-3 d-flex flex-column" style="min-width: 250px; overflow-y: auto;">
       <h4 class="mb-4">Filtros do Mapa</h4>
 
       <div class="form-check mb-2">
@@ -36,22 +32,37 @@
     </div>
 
     <!-- Área do mapa (75%) -->
-    <div class="col bg-light p-0 position-relative">
-      <div id="map" style="height: 100%; width: 100%;" class="z-1"></div>
+    <div class="col p-0 position-relative">
+      <div id="map" style="height: 100%; width: 100%;"></div>
 
-      <div class="position-absolute top-0 start-50 translate-middle-x mt-3 z-3 w-75" style="max-width: 600px;">
-  
-          <div class="input-group">
-            <input type="text" id="searchInput" class="form-control" placeholder="Busque por um local" autocomplete="off">
-            <button type="button" class="btn btn-primary" id="searchBtn">Buscar</button>
-          </div>
-
-          <div id="suggestions" class="list-group"></div>
-
+      <!-- Barra de busca -->
+      <div class="position-absolute top-0 start-50 translate-middle-x mt-3" style="z-index: 1000; max-width: 600px; width: 75%;">
+        <div class="input-group">
+          <input type="text" id="searchInput" class="form-control" placeholder="Busque por um local" autocomplete="off">
+          <button type="button" class="btn btn-primary" id="searchBtn">Buscar</button>
         </div>
+        <div id="suggestions" class="list-group"></div>
+      </div>
+
+      <!-- Botão registrar ocorrência -->
+      <div class="position-absolute bottom-0 start-50 translate-middle-x mb-4" style="z-index: 1000;">
+        <button id="btnRegistrarOcorrencia">
+          Registrar ocorrência
+        </button>
+      </div>
     </div>
 
   </div>
 </div>
 
-<%- include('./includes/footer') %>
+<div style="position: fixed; bottom: -9999px; left: -9999px; visibility: hidden;">
+  <%- include('./includes/footer') %>
+</div>
+
+<script>
+  const navbar = document.querySelector('nav.navbar');
+  const wrapper = document.getElementById('map-wrapper');
+  if (navbar && wrapper) {
+    wrapper.style.height = (window.innerHeight - navbar.offsetHeight) + 'px';
+  }
+</script>

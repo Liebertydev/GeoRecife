@@ -1,55 +1,52 @@
-<%- include('./includes/head'); %>
+<%- include('./includes/head', { pageCSS: pageCSS }); %>
 <%- include('./includes/nav'); %>
 
-<div class="container h-100 empurrar-baixo">
-  <div class="row h-100 justify-content-center align-items-center">
-    <div class="col-12">
-      <div class="login-box mx-auto p-4 p-md-5">
-        <h2 class="text-center mb-4">Login</h2>
+<div class="container h-100 empurrar-baixo d-flex justify-content-center align-items-center">
+  
+  <div class="login-box p-4 p-md-5">
+    <h2 class="text-center mb-4">Login</h2>
 
-        <form action="/login/login" method="POST">
-          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <form action="/login/login" method="POST">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-          <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input 
-              type="email"
-              class="form-control"
-              name="email"
-              placeholder="Digite seu email"
-              required
-            >
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Senha</label>
-            <input 
-              type="password"
-              class="form-control"
-              name="password"
-              placeholder="Digite sua senha"
-              required
-            >
-          </div>
-
-          <div class="text-end mb-4">
-            <a href="#" class="small text-decoration-none">Esqueceu sua senha?</a>
-          </div>
-
-          <div class="d-grid mb-3">
-            <button class="btn btn-success btn-lg bg-green fw-bold">Entrar</button>
-          </div>
-
-          <p class="text-center mb-0">
-            Não tem uma conta?
-            <a href="/register" class="fw-semibold text-decoration-none">Cadastre-se</a>
-          </p>
-
-        </form>
-
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input 
+          type="email"
+          class="form-control"
+          name="email"
+          placeholder="Digite seu email"
+          required
+        >
       </div>
-    </div>
+
+      <div class="mb-3">
+        <label class="form-label">Senha</label>
+        <input 
+          type="password"
+          class="form-control"
+          name="password"
+          placeholder="Digite sua senha"
+          required
+        >
+      </div>
+
+      <div class="text-end mb-4">
+        <a href="#" class="small text-decoration-none">Esqueceu sua senha?</a>
+      </div>
+
+      <div class="d-grid mb-3">
+        <button class="btn btn-success btn-lg bg-green fw-bold">Entrar</button>
+      </div>
+
+      <p class="text-center mb-0">
+        Não tem uma conta?
+        <a href="/register" class="fw-semibold text-decoration-none">Cadastre-se</a>
+      </p>
+    </form>
+
   </div>
+
 </div>
 
 <%- include('./includes/footer'); %>

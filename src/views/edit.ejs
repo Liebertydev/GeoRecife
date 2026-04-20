@@ -1,0 +1,80 @@
+<%- include('./includes/head', { pageCSS: pageCSS }) %>
+<%- include('./includes/nav') %>
+
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+
+      <h2 class="mb-4 text-center">Editar Ocorrência</h2>
+
+      <% if (errors && errors.length > 0) { %>
+        <div class="alert alert-danger">
+          <% errors.forEach(err => { %>
+            <p class="mb-0"><%= err %></p>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <form action="/ocorrencias/<%= occurrence.id %>/editar" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+        <!-- Lat/lng readonly na edição — não faz sentido mudar sem o mapa -->
+        <input type="hidden" name="latitude" value="<%= occurrence.latitude %>">
+        <input type="hidden" name="longitude" value="<%= occurrence.longitude %>">
+
+        <div class="mb-3">
+          <label class="form-label">Rua / Local</label>
+          <input type="text" name="street" class="form-control" value="<%= occurrence.street %>">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Bairro</label>
+          <input type="text" name="district" class="form-control" value="<%= occurrence.district %>">
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">CEP</label>
+            <input type="text" name="postcode" class="form-control" value="<%= occurrence.postcode %>">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Cidade</label>
+            <input type="text" name="city" class="form-control" value="<%= occurrence.city %>" readonly>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Nome do local</label>
+          <input type="text" name="placeName" class="form-control" value="<%= occurrence.placeName || '' %>">
+        </div>
+
+        <hr class="my-4">
+
+        <div class="mb-3">
+          <label class="form-label">Tipo da ocorrência <span class="text-danger">*</span></label>
+          <select name="type" class="form-select" required>
+            <option value="buraco" <%= occurrence.type === 'buraco' ? 'selected' : '' %>>Buraco na via</option>
+            <option value="alagamento" <%= occurrence.type === 'alagamento' ? 'selected' : '' %>>Alagamento</option>
+            <option value="iluminacao" <%= occurrence.type === 'iluminacao' ? 'selected' : '' %>>Problema de iluminação</option>
+            <option value="entulho" <%= occurrence.type === 'entulho' ? 'selected' : '' %>>Entulho / descarte irregular</option>
+            <option value="outro" <%= occurrence.type === 'outro' ? 'selected' : '' %>>Outro</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label">Descrição <span class="text-muted">(opcional)</span></label>
+          <textarea name="description" class="form-control" rows="4"><%= occurrence.description || '' %></textarea>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary flex-grow-1">Salvar alterações</button>
+          <a href="/ocorrencias/<%= occurrence.id %>" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<%- include('./includes/footer') %>

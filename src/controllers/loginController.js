@@ -3,7 +3,7 @@ const Login = require('../services/LoginService');
 
 // src/controllers/homeController.js
 exports.index = (req, res) => {
-    res.render('login', { pageCSS: '/assets/css/login.css' });
+    res.render('login', { pageCSS: '/frontend/assets/css/login.css' });
 };
 
 exports.register = async (req, res, next) => {
@@ -42,7 +42,15 @@ exports.login = async (req, res, next) => {
             return;
         }
 
-        req.flash('sucsess', 'Login realizado com sucesso');
+        req.session.user = {
+            id: login.user.id,
+            name: login.user.name,
+            email: login.user.email
+        };
+
+        console.log('SALVANDO SESSION:', req.session.user);
+
+        req.flash('success', 'Login realizado com sucesso');
         req.session.save(() => {
             return res.redirect('/');
         });
@@ -51,4 +59,10 @@ exports.login = async (req, res, next) => {
         res.render('404');
     }
 
+};
+
+exports.logout = (req, res, next) => {
+    req.session.destroy(() => {
+        res.redirect('/');
+    });
 };

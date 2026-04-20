@@ -13,20 +13,34 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
+  id          Int          @id @default(autoincrement())
+  name        String
+  email       String       @unique
+  password    String
+  createdAt   DateTime     @default(now())
+  occurrences Occurrence[]
 }
 
 
 model Occurrence {
   id          Int      @id @default(autoincrement())
-  title       String
-  description String
+  title       String?
+  description String?
+
   latitude    Float
   longitude   Float
+
+  street      String
+  district    String
+  city        String   @default("Recife")
+  postcode    String
+  placeName   String?
+
+  type        String
+
+  userId      Int?
+  user        User?    @relation(fields: [userId], references: [id])
+
   createdAt   DateTime @default(now())
 }
 

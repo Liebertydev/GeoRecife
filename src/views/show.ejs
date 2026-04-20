@@ -1,0 +1,51 @@
+<%- include('./includes/head', { pageCSS: pageCSS }) %>
+<%- include('./includes/nav') %>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+
+      <div class="d-flex justify-content-between align-items-start mb-4">
+        <h2>Detalhes da Ocorrência</h2>
+        <% if (isAuthor) { %>
+          <a href="/ocorrencias/<%= occurrence.id %>/editar" class="btn btn-outline-primary btn-sm">
+            ✏ Editar
+          </a>
+        <% } %>
+      </div>
+
+      <ul class="list-group list-group-flush mb-4">
+        <li class="list-group-item"><strong>Tipo:</strong> <%= occurrence.type %></li>
+        <li class="list-group-item"><strong>Rua:</strong> <%= occurrence.street %></li>
+        <li class="list-group-item"><strong>Bairro:</strong> <%= occurrence.district %></li>
+        <li class="list-group-item"><strong>CEP:</strong> <%= occurrence.postcode %></li>
+        <li class="list-group-item"><strong>Cidade:</strong> <%= occurrence.city %></li>
+        <% if (occurrence.placeName) { %>
+          <li class="list-group-item"><strong>Local:</strong> <%= occurrence.placeName %></li>
+        <% } %>
+        <li class="list-group-item">
+          <strong>Coordenadas:</strong>
+          <%= occurrence.latitude %>, <%= occurrence.longitude %>
+        </li>
+        <% if (occurrence.description) { %>
+          <li class="list-group-item">
+            <strong>Descrição:</strong>
+            <p class="mt-1 mb-0"><%= occurrence.description %></p>
+          </li>
+        <% } %>
+        <li class="list-group-item">
+          <strong>Autor:</strong>
+          <%= occurrence.user ? occurrence.user.name : 'Anônimo' %>
+        </li>
+        <li class="list-group-item">
+          <strong>Registrado em:</strong>
+          <%= new Date(occurrence.createdAt).toLocaleDateString('pt-BR') %>
+        </li>
+      </ul>
+
+      <a href="/ocorrencias" class="btn btn-outline-secondary">← Voltar para lista</a>
+    </div>
+  </div>
+</div>
+
+<%- include('./includes/footer') %>

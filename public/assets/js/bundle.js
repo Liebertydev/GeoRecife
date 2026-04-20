@@ -1,6 +1,46 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./frontend/modules/form.js"
+/*!**********************************!*\
+  !*** ./frontend/modules/form.js ***!
+  \**********************************/
+() {
+
+// frontend/modules/occurrences/form.js
+
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('formOcorrencia');
+  if (!form) return;
+  const raw = localStorage.getItem('ocorrenciaTemp');
+  if (!raw) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'alert alert-warning';
+    alertDiv.textContent = 'Erro ao importar localização. Preencha manualmente ou tente novamente.';
+    form.prepend(alertDiv);
+    return;
+  }
+  try {
+    const dados = JSON.parse(raw);
+    document.getElementById('f-latitude').value = dados.latitude || '';
+    document.getElementById('f-longitude').value = dados.longitude || '';
+    document.getElementById('f-street').value = dados.street || '';
+    document.getElementById('f-district').value = dados.district || '';
+    document.getElementById('f-postcode').value = dados.postcode || '';
+    document.getElementById('f-placeName').value = dados.placeName || '';
+    document.getElementById('f-city').value = dados.city || 'Recife';
+    document.getElementById('f-lat-display').value = dados.latitude || '';
+    document.getElementById('f-lng-display').value = dados.longitude || '';
+  } catch (e) {
+    console.error('Erro ao ler localStorage:', e);
+  }
+  form.addEventListener('submit', () => {
+    localStorage.removeItem('ocorrenciaTemp');
+  });
+});
+
+/***/ },
+
 /***/ "./frontend/modules/map.js"
 /*!*********************************!*\
   !*** ./frontend/modules/map.js ***!
@@ -8,62 +48,176 @@
 () {
 
 document.addEventListener('DOMContentLoaded', function () {
+  // ====================
+  // VALIDAÇÃO DO ELEMENTO DO MAPA
+  // ====================
   const mapEl = document.getElementById('map');
   if (!mapEl) return;
 
-  // 1. Limites da Região Metropolitana do Recife (RMR)
-  // [Sudoeste, Nordeste] - Abrange de Ipojuca até Itamaracá
+  // ====================
+  // DEFINIÇÃO DOS LIMITES (RMR)
+  // ====================
   const rmrBounds = [[-8.55, -35.20], [-7.50, -34.70]];
+
+  // ====================
+  // VALIDAÇÃO DE BOUNDS
+  // ====================
+  function dentroDosBounds(lat, lng) {
+    const poly = [[-8.0500, -35.1500], [-7.8000, -35.0000], [-7.6000, -34.9000], [-7.5500, -34.8000], [-7.7000, -34.7500], [-7.9000, -34.7500], [-8.1000, -34.7800], [-8.2500, -34.8500], [-8.3500, -34.9000], [-8.4000, -35.0000], [-8.3500, -35.1000], [-8.2000, -35.1800], [-8.0500, -35.1500]];
+    let inside = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const xi = poly[i][0],
+        yi = poly[i][1];
+      const xj = poly[j][0],
+        yj = poly[j][1];
+      const intersect = yi > lng !== yj > lng && lat < (xj - xi) * (lng - yi) / (yj - yi) + xi;
+      if (intersect) inside = !inside;
+    }
+    return inside;
+  }
+
+  // ====================
+  // INICIALIZAÇÃO DO MAPA
+  // ====================
   const map = L.map('map', {
     maxBounds: rmrBounds,
     maxBoundsViscosity: 1.0,
     minZoom: 10,
     maxZoom: 18
   });
+
+  // ====================
+  // CAMADA VISUAL DO MAPA (TILES)
+  // ====================
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap'
+    attribution: '© OpenStreetMap'
   }).addTo(map);
+
+  // ====================
+  // ESTADO GLOBAL
+  // ====================
+  let marcacaoAtual = null;
+  let userLocation = null;
+  let dadosMarcadorAtual = {};
+
+  // ====================
+  // BUSCA REVERSA (LAT/LNG → ENDEREÇO)
+  // ====================
+  async function buscaReversa(lat, lng) {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&addressdetails=1&accept-language=pt-BR&lat=${lat}&lon=${lng}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    const addr = data.address || {};
+    dadosMarcadorAtual = {
+      street: addr.amenity || addr.road || '',
+      district: addr.suburb || addr.neighbourhood || '',
+      postcode: addr.postcode || '',
+      placeName: addr.amenity || '',
+      city: addr.city || addr.town || 'Recife'
+    };
+    const localOuRua = addr.amenity || addr.road || "";
+    const bairro = addr.suburb || addr.neighbourhood || "";
+    const cidade = addr.city || addr.town || "";
+    const cep = addr.postcode || "";
+    return [localOuRua, bairro, cidade, cep].filter(x => x !== "").join(', ') || data.display_name;
+  }
+
+  // ====================
+  // CONTROLE DE DRAG DO MARCADOR
+  // ====================
+  function adicionarDragend(marcador) {
+    let ultimaPosicaoValida = marcador.getLatLng();
+    marcador.on('dragstart', function () {
+      ultimaPosicaoValida = marcador.getLatLng();
+    });
+    marcador.on('dragend', async function () {
+      const {
+        lat,
+        lng
+      } = marcador.getLatLng();
+      if (!dentroDosBounds(lat, lng)) {
+        marcador.setLatLng(ultimaPosicaoValida);
+        marcador.bindPopup('Área fora do limite permitido.').openPopup();
+        return;
+      }
+      try {
+        marcador.bindPopup('Buscando endereço...').openPopup();
+        const enderecoLimpo = await buscaReversa(lat, lng);
+        marcador.bindPopup(`<strong>${enderecoLimpo}</strong>`).openPopup();
+        map.setView([lat, lng], map.getZoom());
+      } catch (e) {
+        console.error(e);
+        marcador.bindPopup('Erro ao buscar endereço.').openPopup();
+      }
+    });
+  }
+
+  // ====================
+  // GEOLOCALIZAÇÃO DO USUÁRIO
+  // ====================
   navigator.geolocation.getCurrentPosition(pos => {
     const lat = pos.coords.latitude;
     const lon = pos.coords.longitude;
+    userLocation = {
+      lat,
+      lon
+    };
     map.setView([lat, lon], 17, {
       animate: true,
       duration: 1.5
     });
     const userIcon = L.icon({
       iconUrl: '/assets/img/Localization (2).png',
-      // tu troca depois
       iconSize: [40, 40],
       iconAnchor: [20, 40],
       popupAnchor: [0, -40]
     });
     L.marker([lat, lon], {
-      icon: userIcon
+      icon: userIcon,
+      draggable: true
     }).addTo(map).bindPopup("Você está aqui");
   }, () => {
-    // fallback (se usuário negar localização)
     map.setView([-8.0631, -34.8710], 16);
   });
-  let marcacaoAtual = null;
+
+  // ====================
+  // BUSCA POR TEXTO
+  // ====================
   document.getElementById('searchBtn').addEventListener('click', async () => {
     const query = document.getElementById('searchInput').value.trim();
     if (!query) return;
-    const viewbox = `-35.20,-7.50,-34.70,-8.55`;
-    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&addressdetails=1&accept-language=pt-BR&viewbox=${viewbox}&bounded=1&q=${encodeURIComponent(query)}`;
     try {
+      const viewbox = `-35.20,-7.50,-34.70,-8.55`;
+      const url = `https://nominatim.openstreetmap.org/search?format=json&limit=5&addressdetails=1&accept-language=pt-BR&viewbox=${viewbox}&bounded=1&q=${encodeURIComponent(query)}`;
       const response = await fetch(url);
       const results = await response.json();
       if (results.length > 0) {
         const res = results[0];
-        const addr = res.address;
-        const localOuRua = addr.information || addr.amenity || "";
-        const bairro = addr.suburb || "";
-        const cidade = addr.city || "";
+        const addr = res.address || {};
+        const localOuRua = addr.amenity || addr.road || addr.information || "";
+        const bairro = addr.suburb || addr.neighbourhood || "";
+        const cidade = addr.city || addr.town || "";
         const cep = addr.postcode || "";
-        const enderecoLimpo = [localOuRua, bairro, cidade, cep].filter(item => item !== "").join(', ');
+        const enderecoLimpo = [localOuRua, bairro, cidade, cep].filter(item => item !== "").join(', ') || res.display_name;
+        const lat = parseFloat(res.lat);
+        const lon = parseFloat(res.lon);
+        if (!dentroDosBounds(lat, lon)) {
+          alert('Local fora da Região Metropolitana do Recife.');
+          return;
+        }
+        dadosMarcadorAtual = {
+          street: addr.amenity || addr.road || '',
+          district: addr.suburb || addr.neighbourhood || '',
+          postcode: addr.postcode || '',
+          placeName: addr.amenity || '',
+          city: addr.city || addr.town || 'Recife'
+        };
         if (marcacaoAtual) map.removeLayer(marcacaoAtual);
-        marcacaoAtual = L.marker([parseFloat(res.lat), parseFloat(res.lon)]).addTo(map).bindPopup(`<strong>${enderecoLimpo}</strong>`).openPopup();
-        map.setView([res.lat, res.lon], 16);
+        marcacaoAtual = L.marker([lat, lon], {
+          draggable: true
+        }).addTo(map).bindPopup(`<strong>${enderecoLimpo}</strong>`).openPopup();
+        adicionarDragend(marcacaoAtual);
+        map.setView([lat, lon], 16);
       } else {
         alert('Local não encontrado na Região Metropolitana do Recife.');
       }
@@ -72,9 +226,17 @@ document.addEventListener('DOMContentLoaded', function () {
       alert('Erro ao processar a busca.');
     }
   });
+
+  // ====================
+  // ENTER PARA BUSCAR
+  // ====================
   document.getElementById('searchInput').addEventListener('keydown', e => {
     if (e.key === 'Enter') document.getElementById('searchBtn').click();
   });
+
+  // ====================
+  // AUTOCOMPLETE (PHOTON API)
+  // ====================
   const input = document.getElementById("searchInput");
   const suggestions = document.getElementById("suggestions");
   let debounceTimer;
@@ -91,13 +253,8 @@ document.addEventListener('DOMContentLoaded', function () {
       const data = await res.json();
       suggestions.innerHTML = "";
       data.features.forEach(place => {
-        console.log(data);
         const p = place.properties;
-        const localOuRua = p.name || p.street || "";
-        const bairro = p.district || p.suburb || "";
-        const cidade = p.city || "";
-        const cep = p.postcode || "";
-        const enderecoLimpo = [localOuRua, bairro, cidade, cep].filter(x => x !== "").join(", ");
+        const enderecoLimpo = [p.name || p.street || "", p.district || p.suburb || "", p.city || "", p.postcode || ""].filter(x => x !== "").join(", ");
         const item = document.createElement("button");
         item.className = "list-group-item list-group-item-action";
         item.textContent = enderecoLimpo;
@@ -106,13 +263,68 @@ document.addEventListener('DOMContentLoaded', function () {
           input.value = enderecoLimpo;
           const lat = place.geometry.coordinates[1];
           const lon = place.geometry.coordinates[0];
+          if (!dentroDosBounds(lat, lon)) {
+            alert('Local fora da Região Metropolitana do Recife.');
+            return;
+          }
+          dadosMarcadorAtual = {
+            street: p.street || p.name || '',
+            district: p.district || p.suburb || '',
+            postcode: p.postcode || '',
+            placeName: p.name || '',
+            city: p.city || 'Recife'
+          };
           if (marcacaoAtual) map.removeLayer(marcacaoAtual);
-          marcacaoAtual = L.marker([lat, lon]).addTo(map).bindPopup(`<strong>${enderecoLimpo}</strong>`).openPopup();
+          marcacaoAtual = L.marker([lat, lon], {
+            draggable: true
+          }).addTo(map).bindPopup(`<strong>${enderecoLimpo}</strong>`).openPopup();
+          adicionarDragend(marcacaoAtual);
           map.setView([lat, lon], 16);
         };
         suggestions.appendChild(item);
       });
     }, 300);
+  });
+
+  // ====================
+  // POLÍGONO REAL DA RMR
+  // ====================
+  const rmrPolygonCoords = [[-8.0500, -35.1500], [-7.8000, -35.0000], [-7.6000, -34.9000], [-7.5500, -34.8000], [-7.7000, -34.7500], [-7.9000, -34.7500], [-8.1000, -34.7800], [-8.2500, -34.8500], [-8.3500, -34.9000], [-8.4000, -35.0000], [-8.3500, -35.1000], [-8.2000, -35.1800], [-8.0500, -35.1500]];
+  L.polygon(rmrPolygonCoords, {
+    color: 'green',
+    weight: 2,
+    fill: false
+  }).addTo(map);
+  L.polygon([[[-90, -180], [-90, 180], [90, 180], [90, -180]], rmrPolygonCoords], {
+    color: 'transparent',
+    fillColor: '#000',
+    fillOpacity: 0.25,
+    stroke: false
+  }).addTo(map);
+
+  // ====================
+  // BOTÃO "REGISTRAR OCORRÊNCIA"
+  // ====================
+  document.getElementById('btnRegistrarOcorrencia').addEventListener('click', () => {
+    if (!marcacaoAtual) {
+      alert('Busque ou selecione um local antes de registrar ocorrência.');
+      return;
+    }
+    const {
+      lat,
+      lng
+    } = marcacaoAtual.getLatLng();
+    const dados = {
+      latitude: lat,
+      longitude: lng,
+      street: dadosMarcadorAtual.street || '',
+      district: dadosMarcadorAtual.district || '',
+      postcode: dadosMarcadorAtual.postcode || '',
+      placeName: dadosMarcadorAtual.placeName || '',
+      city: dadosMarcadorAtual.city || 'Recife'
+    };
+    localStorage.setItem('ocorrenciaTemp', JSON.stringify(dados));
+    window.location.href = '/ocorrencias/nova';
   });
 });
 
@@ -26963,10 +27175,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _assets_css_style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./assets/css/style.css */ "./frontend/assets/css/style.css");
 /* harmony import */ var _modules_map_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/map.js */ "./frontend/modules/map.js");
 /* harmony import */ var _modules_map_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_modules_map_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _modules_form_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/form.js */ "./frontend/modules/form.js");
+/* harmony import */ var _modules_form_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_modules_form_js__WEBPACK_IMPORTED_MODULE_4__);
+// frontend/index.js
 
 
 
- // ou o caminho onde está seu map.js
+ // ← import estático
+
 })();
 
 /******/ })()

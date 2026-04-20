@@ -13,19 +13,31 @@
 
       <div class="navbar-nav gap-3 ms-md-5">
         <!-- Link visível apenas em mobile -->
-        <a class="nav-link d-md-none nav-white fw-semibold" href="/login">Login</a>
+        <% if (user) { %>
+          <a class="nav-link d-md-none nav-white fw-semibold" href="/logout">Sair</a>
+        <% } else { %>
+          <a class="nav-link d-md-none nav-white fw-semibold" href="/login">Login</a>
+        <% } %>
 
         <a class="nav-link nav-white fw-semibold" href="/">Início</a>
         <a class="nav-link nav-white fw-semibold" href="/mapa">Mapa</a>
         <a class="nav-link nav-white fw-semibold" href="/ocorrencias">Incidentes</a>
       </div>
 
-      <!-- Botão login visível apenas em desktop -->
-      <a href="/login" class="ms-auto">
-        <button class="btn btn-light ms-auto d-none d-md-block px-5 fw-bold btn-login btn-aument btn-lg fw-bolder">
-          Login
-        </button>
-      </a>
+      <!-- Botão visível apenas em desktop -->
+      <% if (user) { %>
+        <a href="/logout" class="ms-auto">
+          <button class="btn btn-light ms-auto d-none d-md-block px-5 fw-bold btn-login btn-aument btn-lg fw-bolder">
+            Sair
+          </button>
+        </a>
+      <% } else { %>
+        <a href="/login" class="ms-auto">
+          <button class="btn btn-light ms-auto d-none d-md-block px-5 fw-bold btn-login btn-aument btn-lg fw-bolder">
+            Login
+          </button>
+        </a>
+      <% } %>
 
     </div>
 

@@ -1,0 +1,101 @@
+<%- include('./includes/head', { pageCSS: pageCSS }) %>
+<%- include('./includes/nav') %>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+
+      <h2 class="mb-4 text-center">Registrar Ocorrência</h2>
+
+      <!-- Flash de erros -->
+      <% if (errors && errors.length > 0) { %>
+        <div class="alert alert-danger">
+          <% errors.forEach(err => { %>
+            <p class="mb-0"><%= err %></p>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <!-- Flash de sucesso -->
+      <% if (success && success.length > 0) { %>
+        <div class="alert alert-success">
+          <% success.forEach(msg => { %>
+            <p class="mb-0"><%= msg %></p>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <form action="/ocorrencias/nova" method="POST" id="formOcorrencia">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+        <!-- Campos ocultos (vindos do localStorage) -->
+        <input type="hidden" name="latitude" id="f-latitude">
+        <input type="hidden" name="longitude" id="f-longitude">
+
+        <!-- Localização pré-preenchida -->
+        <div class="mb-3">
+          <label class="form-label">Rua / Local</label>
+          <input type="text" name="street" id="f-street" class="form-control" placeholder="Preencha manualmente se necessário">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Bairro</label>
+          <input type="text" name="district" id="f-district" class="form-control" placeholder="Bairro">
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">CEP</label>
+            <input type="text" name="postcode" id="f-postcode" class="form-control" placeholder="CEP">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Cidade</label>
+            <!-- readonly: não pode editar pois o sistema é restrito à RMR -->
+            <input type="text" name="city" id="f-city" class="form-control" value="Recife" readonly>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Nome do local</label>
+          <input type="text" name="placeName" id="f-placeName" class="form-control" placeholder="Ex: Farmácia, Escola...">
+        </div>
+
+        <div class="row">
+          <div class="col-6 mb-3">
+            <label class="form-label">Latitude</label>
+            <input type="text" id="f-lat-display" class="form-control" readonly placeholder="—">
+          </div>
+          <div class="col-6 mb-3">
+            <label class="form-label">Longitude</label>
+            <input type="text" id="f-lng-display" class="form-control" readonly placeholder="—">
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Campos editáveis pelo usuário -->
+        <div class="mb-3">
+          <label class="form-label">Tipo da ocorrência <span class="text-danger">*</span></label>
+          <select name="type" class="form-select" required>
+            <option value="" disabled selected>Selecione...</option>
+            <option value="buraco">Buraco na via</option>
+            <option value="alagamento">Alagamento</option>
+            <option value="iluminacao">Problema de iluminação</option>
+            <option value="entulho">Entulho / descarte irregular</option>
+            <option value="outro">Outro</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label">Descrição <span class="text-muted">(opcional)</span></label>
+          <textarea name="description" class="form-control" rows="4" placeholder="Descreva a ocorrência..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Salvar ocorrência</button>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<%- include('./includes/footer') %>

@@ -1,6 +1,8 @@
 const express = require('express');
 const route = express.Router();
 
+const { loginRequired } = require('./src/middlewares/middleware');
+
 // Controllers
 const homeController = require('./src/controllers/homeController');
 const loginController = require('./src/controllers/loginController');
@@ -23,10 +25,10 @@ route.get('/mapa', mapController.showMap);
 
 // Rotas de Ocorrências
 route.get('/ocorrencias', occurrenceController.list);
-route.get('/ocorrencias/nova', occurrenceController.renderForm);
-route.post('/ocorrencias/nova', occurrenceController.create);
+route.get('/ocorrencias/nova', loginRequired, occurrenceController.renderForm);
+route.post('/ocorrencias/nova', loginRequired, occurrenceController.create);
 route.get('/ocorrencias/:id', occurrenceController.show);
-route.get('/ocorrencias/:id/editar', occurrenceController.renderEdit);
-route.post('/ocorrencias/:id/editar', occurrenceController.update);
+route.get('/ocorrencias/:id/editar', loginRequired, occurrenceController.renderEdit);
+route.post('/ocorrencias/:id/editar', loginRequired, occurrenceController.update);
 
 module.exports = route;

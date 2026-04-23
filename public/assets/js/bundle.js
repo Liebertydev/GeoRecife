@@ -41,148 +41,391 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /***/ },
 
-/***/ "./frontend/modules/map.js"
-/*!*********************************!*\
-  !*** ./frontend/modules/map.js ***!
-  \*********************************/
-() {
+/***/ "./frontend/modules/modulesMap/autocomplete.js"
+/*!*****************************************************!*\
+  !*** ./frontend/modules/modulesMap/autocomplete.js ***!
+  \*****************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-document.addEventListener('DOMContentLoaded', function () {
-  // ====================
-  // VALIDAÇÃO DO ELEMENTO DO MAPA
-  // ====================
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   inicializarAutocomplete: () => (/* binding */ inicializarAutocomplete)
+/* harmony export */ });
+/* harmony import */ var _bounds_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bounds.js */ "./frontend/modules/modulesMap/bounds.js");
+/* harmony import */ var _marker_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./marker.js */ "./frontend/modules/modulesMap/marker.js");
+/* harmony import */ var _geocoding_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./geocoding.js */ "./frontend/modules/modulesMap/geocoding.js");
+
+
+
+
+// ====================
+// AUTOCOMPLETE (PHOTON API)
+// ====================
+function inicializarAutocomplete(map, state) {
+  const input = document.getElementById('searchInput');
+  const suggestions = document.getElementById('suggestions');
+  let debounceTimer;
+  input.addEventListener('input', function () {
+    clearTimeout(debounceTimer);
+    const query = this.value.trim();
+    if (query.length < 3) {
+      suggestions.innerHTML = '';
+      return;
+    }
+    debounceTimer = setTimeout(async () => {
+      const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=4&bbox=-35.20,-8.55,-34.70,-7.50`;
+      const res = await fetch(url);
+      const data = await res.json();
+      suggestions.innerHTML = '';
+      data.features.forEach(place => {
+        const p = place.properties;
+        const enderecoLimpo = [p.name || p.street || '', p.district || p.suburb || '', p.city || '', p.postcode || ''].filter(x => x !== '').join(', ');
+        const item = document.createElement('button');
+        item.className = 'list-group-item list-group-item-action';
+        item.textContent = enderecoLimpo;
+        item.onclick = () => {
+          suggestions.innerHTML = '';
+          input.value = enderecoLimpo;
+          const lat = place.geometry.coordinates[1];
+          const lon = place.geometry.coordinates[0];
+          if (!(0,_bounds_js__WEBPACK_IMPORTED_MODULE_0__.dentroDosBounds)(lat, lon)) {
+            alert('Local fora da Região Metropolitana do Recife.');
+            return;
+          }
+          state.dadosMarcadorAtual = {
+            street: p.street || p.name || '',
+            district: p.district || p.suburb || '',
+            postcode: p.postcode || '',
+            placeName: p.name || '',
+            city: p.city || 'Recife'
+          };
+          if (state.marcacaoAtual) map.removeLayer(state.marcacaoAtual);
+          state.marcacaoAtual = (0,_marker_js__WEBPACK_IMPORTED_MODULE_1__.criarMarcador)(map, lat, lon, enderecoLimpo, async (latDrag, lngDrag) => {
+            const result = await (0,_geocoding_js__WEBPACK_IMPORTED_MODULE_2__.buscaReversa)(latDrag, lngDrag);
+            state.dadosMarcadorAtual = result.dadosMarcador;
+            return result;
+          });
+          map.setView([lat, lon], 16);
+        };
+        suggestions.appendChild(item);
+      });
+    }, 300);
+  });
+}
+
+/***/ },
+
+/***/ "./frontend/modules/modulesMap/bounds.js"
+/*!***********************************************!*\
+  !*** ./frontend/modules/modulesMap/bounds.js ***!
+  \***********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   RMR_BOUNDS: () => (/* binding */ RMR_BOUNDS),
+/* harmony export */   RMR_POLYGON_COORDS: () => (/* binding */ RMR_POLYGON_COORDS),
+/* harmony export */   dentroDosBounds: () => (/* binding */ dentroDosBounds)
+/* harmony export */ });
+// ====================
+// POLÍGONO DA RMR
+// ====================
+const RMR_BOUNDS = [[-8.55, -35.20], [-7.50, -34.70]];
+const RMR_POLYGON_COORDS = [[-8.0500, -35.1500], [-7.8000, -35.0000], [-7.6000, -34.9000], [-7.5500, -34.8000], [-7.7000, -34.7500], [-7.9000, -34.7500], [-8.1000, -34.7800], [-8.2500, -34.8500], [-8.3500, -34.9000], [-8.4000, -35.0000], [-8.3500, -35.1000], [-8.2000, -35.1800], [-8.0500, -35.1500]];
+
+// ====================
+// VALIDAÇÃO DE BOUNDS (POINT-IN-POLYGON)
+// ====================
+function dentroDosBounds(lat, lng) {
+  const poly = RMR_POLYGON_COORDS;
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const xi = poly[i][0],
+      yi = poly[i][1];
+    const xj = poly[j][0],
+      yj = poly[j][1];
+    const intersect = yi > lng !== yj > lng && lat < (xj - xi) * (lng - yi) / (yj - yi) + xi;
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+
+/***/ },
+
+/***/ "./frontend/modules/modulesMap/geocoding.js"
+/*!**************************************************!*\
+  !*** ./frontend/modules/modulesMap/geocoding.js ***!
+  \**************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   buscaReversa: () => (/* binding */ buscaReversa)
+/* harmony export */ });
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils.js */ "./frontend/modules/modulesMap/utils.js");
+
+
+// ====================
+// BUSCA REVERSA (LAT/LNG → ENDEREÇO)
+// ====================
+async function buscaReversa(lat, lng) {
+  const url = `https://nominatim.openstreetmap.org/reverse?format=json&addressdetails=1&accept-language=pt-BR&lat=${lat}&lon=${lng}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  const addr = data.address || {};
+  const enderecoLimpo = (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__.formatarEndereco)(addr, data.display_name);
+  const dadosMarcador = (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__.extrairDadosMarcador)(addr);
+  return {
+    enderecoLimpo,
+    dadosMarcador
+  };
+}
+
+/***/ },
+
+/***/ "./frontend/modules/modulesMap/geolocation.js"
+/*!****************************************************!*\
+  !*** ./frontend/modules/modulesMap/geolocation.js ***!
+  \****************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   obterGeolocalizacao: () => (/* binding */ obterGeolocalizacao)
+/* harmony export */ });
+function obterGeolocalizacao(map) {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(pos => {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+      map.setView([lat, lon], 17, {
+        animate: true,
+        duration: 1.5
+      });
+      const userIcon = L.icon({
+        iconUrl: '/assets/img/Localization (2).png',
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40]
+      });
+      L.marker([lat, lon], {
+        icon: userIcon,
+        draggable: true
+      }).addTo(map).bindPopup('Você está aqui');
+      resolve({
+        lat,
+        lon
+      }); // 🔥 aqui retorna
+    }, err => {
+      map.setView([-8.0631, -34.8710], 16);
+      reject(err);
+    });
+  });
+}
+
+/***/ },
+
+/***/ "./frontend/modules/modulesMap/main.js"
+/*!*********************************************!*\
+  !*** ./frontend/modules/modulesMap/main.js ***!
+  \*********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _map_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./map.js */ "./frontend/modules/modulesMap/map.js");
+/* harmony import */ var _geolocation_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./geolocation.js */ "./frontend/modules/modulesMap/geolocation.js");
+/* harmony import */ var _search_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./search.js */ "./frontend/modules/modulesMap/search.js");
+/* harmony import */ var _autocomplete_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./autocomplete.js */ "./frontend/modules/modulesMap/autocomplete.js");
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./storage.js */ "./frontend/modules/modulesMap/storage.js");
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', async function () {
   const mapEl = document.getElementById('map');
   if (!mapEl) return;
+  const state = {
+    marcacaoAtual: null,
+    userLocation: null,
+    dadosMarcadorAtual: {}
+  };
+  const map = (0,_map_js__WEBPACK_IMPORTED_MODULE_0__.inicializarMapa)('map');
+  (0,_map_js__WEBPACK_IMPORTED_MODULE_0__.renderizarPoligonoRMR)(map);
 
-  // ====================
-  // DEFINIÇÃO DOS LIMITES (RMR)
-  // ====================
-  const rmrBounds = [[-8.55, -35.20], [-7.50, -34.70]];
-
-  // ====================
-  // VALIDAÇÃO DE BOUNDS
-  // ====================
-  function dentroDosBounds(lat, lng) {
-    const poly = [[-8.0500, -35.1500], [-7.8000, -35.0000], [-7.6000, -34.9000], [-7.5500, -34.8000], [-7.7000, -34.7500], [-7.9000, -34.7500], [-8.1000, -34.7800], [-8.2500, -34.8500], [-8.3500, -34.9000], [-8.4000, -35.0000], [-8.3500, -35.1000], [-8.2000, -35.1800], [-8.0500, -35.1500]];
-    let inside = false;
-    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
-      const xi = poly[i][0],
-        yi = poly[i][1];
-      const xj = poly[j][0],
-        yj = poly[j][1];
-      const intersect = yi > lng !== yj > lng && lat < (xj - xi) * (lng - yi) / (yj - yi) + xi;
-      if (intersect) inside = !inside;
-    }
-    return inside;
+  // 🔥 GEOLOCALIZAÇÃO (AGORA COM ASYNC/AWAIT)
+  try {
+    const {
+      lat,
+      lon
+    } = await (0,_geolocation_js__WEBPACK_IMPORTED_MODULE_1__.obterGeolocalizacao)(map);
+    state.userLocation = {
+      lat,
+      lon
+    };
+  } catch (e) {
+    console.error('Erro ao obter localização:', e);
   }
+  (0,_search_js__WEBPACK_IMPORTED_MODULE_2__.inicializarBusca)(map, state);
+  (0,_autocomplete_js__WEBPACK_IMPORTED_MODULE_3__.inicializarAutocomplete)(map, state);
+  const btnRegistrar = document.getElementById('btnRegistrarOcorrencia');
+  btnRegistrar.setAttribute('type', 'button');
+  btnRegistrar.addEventListener('click', () => {
+    if (!state.marcacaoAtual) {
+      alert('Busque ou selecione um local antes de registrar ocorrência.');
+      return;
+    }
+    const {
+      lat,
+      lng
+    } = state.marcacaoAtual.getLatLng();
+    (0,_storage_js__WEBPACK_IMPORTED_MODULE_4__.salvarOcorrenciaTemp)(state.dadosMarcadorAtual, lat, lng);
+    window.location.href = '/ocorrencias/nova';
+  });
+});
 
-  // ====================
-  // INICIALIZAÇÃO DO MAPA
-  // ====================
-  const map = L.map('map', {
-    maxBounds: rmrBounds,
+/***/ },
+
+/***/ "./frontend/modules/modulesMap/map.js"
+/*!********************************************!*\
+  !*** ./frontend/modules/modulesMap/map.js ***!
+  \********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   inicializarMapa: () => (/* binding */ inicializarMapa),
+/* harmony export */   renderizarPoligonoRMR: () => (/* binding */ renderizarPoligonoRMR)
+/* harmony export */ });
+/* harmony import */ var _bounds_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bounds.js */ "./frontend/modules/modulesMap/bounds.js");
+
+
+// ====================
+// INICIALIZAÇÃO DO MAPA
+// ====================
+function inicializarMapa(elementId) {
+  const map = L.map(elementId, {
+    maxBounds: _bounds_js__WEBPACK_IMPORTED_MODULE_0__.RMR_BOUNDS,
     maxBoundsViscosity: 1.0,
     minZoom: 10,
     maxZoom: 18
   });
-
-  // ====================
-  // CAMADA VISUAL DO MAPA (TILES)
-  // ====================
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
   }).addTo(map);
+  return map;
+}
 
-  // ====================
-  // ESTADO GLOBAL
-  // ====================
-  let marcacaoAtual = null;
-  let userLocation = null;
-  let dadosMarcadorAtual = {};
+// ====================
+// RENDERIZAÇÃO DO POLÍGONO DA RMR
+// ====================
+function renderizarPoligonoRMR(map) {
+  L.polygon(_bounds_js__WEBPACK_IMPORTED_MODULE_0__.RMR_POLYGON_COORDS, {
+    color: 'green',
+    weight: 2,
+    fill: false
+  }).addTo(map);
+  L.polygon([[[-90, -180], [-90, 180], [90, 180], [90, -180]], _bounds_js__WEBPACK_IMPORTED_MODULE_0__.RMR_POLYGON_COORDS], {
+    color: 'transparent',
+    fillColor: '#000',
+    fillOpacity: 0.25,
+    stroke: false
+  }).addTo(map);
+}
 
-  // ====================
-  // BUSCA REVERSA (LAT/LNG → ENDEREÇO)
-  // ====================
-  async function buscaReversa(lat, lng) {
-    const url = `https://nominatim.openstreetmap.org/reverse?format=json&addressdetails=1&accept-language=pt-BR&lat=${lat}&lon=${lng}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    const addr = data.address || {};
-    dadosMarcadorAtual = {
-      street: addr.amenity || addr.road || '',
-      district: addr.suburb || addr.neighbourhood || '',
-      postcode: addr.postcode || '',
-      placeName: addr.amenity || '',
-      city: addr.city || addr.town || 'Recife'
-    };
-    const localOuRua = addr.amenity || addr.road || "";
-    const bairro = addr.suburb || addr.neighbourhood || "";
-    const cidade = addr.city || addr.town || "";
-    const cep = addr.postcode || "";
-    return [localOuRua, bairro, cidade, cep].filter(x => x !== "").join(', ') || data.display_name;
-  }
+/***/ },
 
-  // ====================
-  // CONTROLE DE DRAG DO MARCADOR
-  // ====================
-  function adicionarDragend(marcador) {
-    let ultimaPosicaoValida = marcador.getLatLng();
-    marcador.on('dragstart', function () {
-      ultimaPosicaoValida = marcador.getLatLng();
-    });
-    marcador.on('dragend', async function () {
-      const {
-        lat,
-        lng
-      } = marcador.getLatLng();
-      if (!dentroDosBounds(lat, lng)) {
-        marcador.setLatLng(ultimaPosicaoValida);
-        marcador.bindPopup('Área fora do limite permitido.').openPopup();
-        return;
-      }
-      try {
-        marcador.bindPopup('Buscando endereço...').openPopup();
-        const enderecoLimpo = await buscaReversa(lat, lng);
-        marcador.bindPopup(`<strong>${enderecoLimpo}</strong>`).openPopup();
-        map.setView([lat, lng], map.getZoom());
-      } catch (e) {
-        console.error(e);
-        marcador.bindPopup('Erro ao buscar endereço.').openPopup();
-      }
-    });
-  }
+/***/ "./frontend/modules/modulesMap/marker.js"
+/*!***********************************************!*\
+  !*** ./frontend/modules/modulesMap/marker.js ***!
+  \***********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-  // ====================
-  // GEOLOCALIZAÇÃO DO USUÁRIO
-  // ====================
-  navigator.geolocation.getCurrentPosition(pos => {
-    const lat = pos.coords.latitude;
-    const lon = pos.coords.longitude;
-    userLocation = {
-      lat,
-      lon
-    };
-    map.setView([lat, lon], 17, {
-      animate: true,
-      duration: 1.5
-    });
-    const userIcon = L.icon({
-      iconUrl: '/assets/img/Localization (2).png',
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
-      popupAnchor: [0, -40]
-    });
-    L.marker([lat, lon], {
-      icon: userIcon,
-      draggable: true
-    }).addTo(map).bindPopup("Você está aqui");
-  }, () => {
-    map.setView([-8.0631, -34.8710], 16);
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   adicionarDragend: () => (/* binding */ adicionarDragend),
+/* harmony export */   criarMarcador: () => (/* binding */ criarMarcador)
+/* harmony export */ });
+/* harmony import */ var _bounds_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bounds.js */ "./frontend/modules/modulesMap/bounds.js");
+
+
+// ====================
+// CONTROLE DE DRAG DO MARCADOR
+// ====================
+function adicionarDragend(marcador, map, onEnderecoAtualizado) {
+  let ultimaPosicaoValida = marcador.getLatLng();
+  marcador.on('dragstart', function () {
+    ultimaPosicaoValida = marcador.getLatLng();
   });
+  marcador.on('dragend', async function () {
+    const {
+      lat,
+      lng
+    } = marcador.getLatLng();
+    if (!(0,_bounds_js__WEBPACK_IMPORTED_MODULE_0__.dentroDosBounds)(lat, lng)) {
+      marcador.setLatLng(ultimaPosicaoValida);
+      marcador.bindPopup('Área fora do limite permitido.').openPopup();
+      return;
+    }
+    try {
+      marcador.bindPopup('Buscando endereço...').openPopup();
+      const {
+        enderecoLimpo,
+        dadosMarcador
+      } = await onEnderecoAtualizado(lat, lng);
+      marcador.bindPopup(`<strong>${enderecoLimpo}</strong>`).openPopup();
+      map.setView([lat, lng], map.getZoom());
+    } catch (e) {
+      console.error(e);
+      marcador.bindPopup('Erro ao buscar endereço.').openPopup();
+    }
+  });
+}
 
-  // ====================
-  // BUSCA POR TEXTO
-  // ====================
+// ====================
+// CRIAÇÃO DE MARCADOR PADRÃO (ARRASTÁVEL)
+// ====================
+function criarMarcador(map, lat, lon, popupText, onEnderecoAtualizado) {
+  const marcador = L.marker([lat, lon], {
+    draggable: true
+  }).addTo(map).bindPopup(`<strong>${popupText}</strong>`).openPopup();
+  adicionarDragend(marcador, map, onEnderecoAtualizado);
+  return marcador;
+}
+
+/***/ },
+
+/***/ "./frontend/modules/modulesMap/search.js"
+/*!***********************************************!*\
+  !*** ./frontend/modules/modulesMap/search.js ***!
+  \***********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   inicializarBusca: () => (/* binding */ inicializarBusca)
+/* harmony export */ });
+/* harmony import */ var _bounds_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bounds.js */ "./frontend/modules/modulesMap/bounds.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils.js */ "./frontend/modules/modulesMap/utils.js");
+/* harmony import */ var _marker_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./marker.js */ "./frontend/modules/modulesMap/marker.js");
+/* harmony import */ var _geocoding_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./geocoding.js */ "./frontend/modules/modulesMap/geocoding.js");
+
+
+
+
+
+// ====================
+// BUSCA POR TEXTO (NOMINATIM)
+// ====================
+function inicializarBusca(map, state) {
   document.getElementById('searchBtn').addEventListener('click', async () => {
     const query = document.getElementById('searchInput').value.trim();
     if (!query) return;
@@ -194,29 +437,20 @@ document.addEventListener('DOMContentLoaded', function () {
       if (results.length > 0) {
         const res = results[0];
         const addr = res.address || {};
-        const localOuRua = addr.amenity || addr.road || addr.information || "";
-        const bairro = addr.suburb || addr.neighbourhood || "";
-        const cidade = addr.city || addr.town || "";
-        const cep = addr.postcode || "";
-        const enderecoLimpo = [localOuRua, bairro, cidade, cep].filter(item => item !== "").join(', ') || res.display_name;
+        const enderecoLimpo = (0,_utils_js__WEBPACK_IMPORTED_MODULE_1__.formatarEndereco)(addr, res.display_name);
         const lat = parseFloat(res.lat);
         const lon = parseFloat(res.lon);
-        if (!dentroDosBounds(lat, lon)) {
+        if (!(0,_bounds_js__WEBPACK_IMPORTED_MODULE_0__.dentroDosBounds)(lat, lon)) {
           alert('Local fora da Região Metropolitana do Recife.');
           return;
         }
-        dadosMarcadorAtual = {
-          street: addr.amenity || addr.road || '',
-          district: addr.suburb || addr.neighbourhood || '',
-          postcode: addr.postcode || '',
-          placeName: addr.amenity || '',
-          city: addr.city || addr.town || 'Recife'
-        };
-        if (marcacaoAtual) map.removeLayer(marcacaoAtual);
-        marcacaoAtual = L.marker([lat, lon], {
-          draggable: true
-        }).addTo(map).bindPopup(`<strong>${enderecoLimpo}</strong>`).openPopup();
-        adicionarDragend(marcacaoAtual);
+        state.dadosMarcadorAtual = (0,_utils_js__WEBPACK_IMPORTED_MODULE_1__.extrairDadosMarcador)(addr);
+        if (state.marcacaoAtual) map.removeLayer(state.marcacaoAtual);
+        state.marcacaoAtual = (0,_marker_js__WEBPACK_IMPORTED_MODULE_2__.criarMarcador)(map, lat, lon, enderecoLimpo, async (latDrag, lngDrag) => {
+          const result = await (0,_geocoding_js__WEBPACK_IMPORTED_MODULE_3__.buscaReversa)(latDrag, lngDrag);
+          state.dadosMarcadorAtual = result.dadosMarcador;
+          return result;
+        });
         map.setView([lat, lon], 16);
       } else {
         alert('Local não encontrado na Região Metropolitana do Recife.');
@@ -233,100 +467,74 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('searchInput').addEventListener('keydown', e => {
     if (e.key === 'Enter') document.getElementById('searchBtn').click();
   });
+}
 
-  // ====================
-  // AUTOCOMPLETE (PHOTON API)
-  // ====================
-  const input = document.getElementById("searchInput");
-  const suggestions = document.getElementById("suggestions");
-  let debounceTimer;
-  input.addEventListener("input", function () {
-    clearTimeout(debounceTimer);
-    const query = this.value.trim();
-    if (query.length < 3) {
-      suggestions.innerHTML = "";
-      return;
-    }
-    debounceTimer = setTimeout(async () => {
-      const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=4&bbox=-35.20,-8.55,-34.70,-7.50`;
-      const res = await fetch(url);
-      const data = await res.json();
-      suggestions.innerHTML = "";
-      data.features.forEach(place => {
-        const p = place.properties;
-        const enderecoLimpo = [p.name || p.street || "", p.district || p.suburb || "", p.city || "", p.postcode || ""].filter(x => x !== "").join(", ");
-        const item = document.createElement("button");
-        item.className = "list-group-item list-group-item-action";
-        item.textContent = enderecoLimpo;
-        item.onclick = () => {
-          suggestions.innerHTML = "";
-          input.value = enderecoLimpo;
-          const lat = place.geometry.coordinates[1];
-          const lon = place.geometry.coordinates[0];
-          if (!dentroDosBounds(lat, lon)) {
-            alert('Local fora da Região Metropolitana do Recife.');
-            return;
-          }
-          dadosMarcadorAtual = {
-            street: p.street || p.name || '',
-            district: p.district || p.suburb || '',
-            postcode: p.postcode || '',
-            placeName: p.name || '',
-            city: p.city || 'Recife'
-          };
-          if (marcacaoAtual) map.removeLayer(marcacaoAtual);
-          marcacaoAtual = L.marker([lat, lon], {
-            draggable: true
-          }).addTo(map).bindPopup(`<strong>${enderecoLimpo}</strong>`).openPopup();
-          adicionarDragend(marcacaoAtual);
-          map.setView([lat, lon], 16);
-        };
-        suggestions.appendChild(item);
-      });
-    }, 300);
-  });
+/***/ },
 
-  // ====================
-  // POLÍGONO REAL DA RMR
-  // ====================
-  const rmrPolygonCoords = [[-8.0500, -35.1500], [-7.8000, -35.0000], [-7.6000, -34.9000], [-7.5500, -34.8000], [-7.7000, -34.7500], [-7.9000, -34.7500], [-8.1000, -34.7800], [-8.2500, -34.8500], [-8.3500, -34.9000], [-8.4000, -35.0000], [-8.3500, -35.1000], [-8.2000, -35.1800], [-8.0500, -35.1500]];
-  L.polygon(rmrPolygonCoords, {
-    color: 'green',
-    weight: 2,
-    fill: false
-  }).addTo(map);
-  L.polygon([[[-90, -180], [-90, 180], [90, 180], [90, -180]], rmrPolygonCoords], {
-    color: 'transparent',
-    fillColor: '#000',
-    fillOpacity: 0.25,
-    stroke: false
-  }).addTo(map);
+/***/ "./frontend/modules/modulesMap/storage.js"
+/*!************************************************!*\
+  !*** ./frontend/modules/modulesMap/storage.js ***!
+  \************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-  // ====================
-  // BOTÃO "REGISTRAR OCORRÊNCIA"
-  // ====================
-  document.getElementById('btnRegistrarOcorrencia').addEventListener('click', () => {
-    if (!marcacaoAtual) {
-      alert('Busque ou selecione um local antes de registrar ocorrência.');
-      return;
-    }
-    const {
-      lat,
-      lng
-    } = marcacaoAtual.getLatLng();
-    const dados = {
-      latitude: lat,
-      longitude: lng,
-      street: dadosMarcadorAtual.street || '',
-      district: dadosMarcadorAtual.district || '',
-      postcode: dadosMarcadorAtual.postcode || '',
-      placeName: dadosMarcadorAtual.placeName || '',
-      city: dadosMarcadorAtual.city || 'Recife'
-    };
-    localStorage.setItem('ocorrenciaTemp', JSON.stringify(dados));
-    window.location.href = '/ocorrencias/nova';
-  });
-});
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   salvarOcorrenciaTemp: () => (/* binding */ salvarOcorrenciaTemp)
+/* harmony export */ });
+// ====================
+// PERSISTÊNCIA DE DADOS DA OCORRÊNCIA
+// ====================
+function salvarOcorrenciaTemp(dadosMarcador, lat, lng) {
+  const dados = {
+    latitude: lat,
+    longitude: lng,
+    street: dadosMarcador.street || '',
+    district: dadosMarcador.district || '',
+    postcode: dadosMarcador.postcode || '',
+    placeName: dadosMarcador.placeName || '',
+    city: dadosMarcador.city || 'Recife'
+  };
+  localStorage.setItem('ocorrenciaTemp', JSON.stringify(dados));
+}
+
+/***/ },
+
+/***/ "./frontend/modules/modulesMap/utils.js"
+/*!**********************************************!*\
+  !*** ./frontend/modules/modulesMap/utils.js ***!
+  \**********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   extrairDadosMarcador: () => (/* binding */ extrairDadosMarcador),
+/* harmony export */   formatarEndereco: () => (/* binding */ formatarEndereco)
+/* harmony export */ });
+// ====================
+// FORMATAÇÃO DE ENDEREÇO A PARTIR DE OBJETO ADDRESS
+// ====================
+function formatarEndereco(addr, fallback = '') {
+  const localOuRua = addr.amenity || addr.road || addr.information || '';
+  const bairro = addr.suburb || addr.neighbourhood || '';
+  const cidade = addr.city || addr.town || '';
+  const cep = addr.postcode || '';
+  return [localOuRua, bairro, cidade, cep].filter(x => x !== '').join(', ') || fallback;
+}
+
+// ====================
+// EXTRAÇÃO DE DADOS DO MARCADOR A PARTIR DE OBJETO ADDRESS
+// ====================
+function extrairDadosMarcador(addr) {
+  return {
+    street: addr.amenity || addr.road || '',
+    district: addr.suburb || addr.neighbourhood || '',
+    postcode: addr.postcode || '',
+    placeName: addr.amenity || '',
+    city: addr.city || addr.town || 'Recife'
+  };
+}
 
 /***/ },
 
@@ -27173,8 +27381,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _assets_css_style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./assets/css/style.css */ "./frontend/assets/css/style.css");
-/* harmony import */ var _modules_map_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/map.js */ "./frontend/modules/map.js");
-/* harmony import */ var _modules_map_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_modules_map_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _modules_modulesMap_main_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/modulesMap/main.js */ "./frontend/modules/modulesMap/main.js");
 /* harmony import */ var _modules_form_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/form.js */ "./frontend/modules/form.js");
 /* harmony import */ var _modules_form_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_modules_form_js__WEBPACK_IMPORTED_MODULE_4__);
 // frontend/index.js

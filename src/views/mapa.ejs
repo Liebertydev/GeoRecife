@@ -1,68 +1,70 @@
 <%- include('./includes/head', { pageCSS: pageCSS }); %>
-<%- include('./includes/nav') %>
+  <%- include('./includes/nav') %>
 
-<div class="container-fluid overflow-hidden p-0" id="map-wrapper">
-  <div class="row g-0 h-100">
+    <div class="container-fluid overflow-hidden p-0" id="map-wrapper">
+      <div class="row g-0 h-100">
 
-    <!-- Sidebar (25%) -->
-    <div class="col-3 bg-success text-white p-3 d-flex flex-column" style="min-width: 250px; overflow-y: auto;">
-      <h4 class="mb-4">Filtros do Mapa</h4>
+        <!-- Sidebar (25%) -->
+        <div class="col-3 bg-success text-white p-3 d-flex flex-column" style="min-width: 250px; overflow-y: auto;">
+          <h4 class="mb-4">Filtros do Mapa</h4>
 
-      <div class="form-check mb-2">
-        <input class="form-check-input" type="checkbox" id="filterCrimes" checked>
-        <label class="form-check-label" for="filterCrimes">Crimes</label>
-      </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="filterCrimes" checked>
+            <label class="form-check-label" for="filterCrimes">Crimes</label>
+          </div>
 
-      <div class="form-check mb-2">
-        <input class="form-check-input" type="checkbox" id="filterTraffic" checked>
-        <label class="form-check-label" for="filterTraffic">Trânsito</label>
-      </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="filterTraffic" checked>
+            <label class="form-check-label" for="filterTraffic">Trânsito</label>
+          </div>
 
-      <div class="form-check mb-2">
-        <input class="form-check-input" type="checkbox" id="filterIncidents" checked>
-        <label class="form-check-label" for="filterIncidents">Incidentes</label>
-      </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="filterIncidents" checked>
+            <label class="form-check-label" for="filterIncidents">Incidentes</label>
+          </div>
 
-      <div class="form-check mb-2">
-        <input class="form-check-input" type="checkbox" id="filterOthers" checked>
-        <label class="form-check-label" for="filterOthers">Outros</label>
-      </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="filterOthers" checked>
+            <label class="form-check-label" for="filterOthers">Outros</label>
+          </div>
 
-      <button class="btn btn-light mt-auto">Aplicar Filtros</button>
-    </div>
-
-    <!-- Área do mapa (75%) -->
-    <div class="col p-0 position-relative">
-      <div id="map" style="height: 100%; width: 100%;"></div>
-
-      <!-- Barra de busca -->
-      <div class="position-absolute top-0 start-50 translate-middle-x mt-3" style="z-index: 1000; max-width: 600px; width: 75%;">
-        <div class="input-group">
-          <input type="text" id="searchInput" class="form-control" placeholder="Busque por um local" autocomplete="off">
-          <button type="button" class="btn btn-primary" id="searchBtn">Buscar</button>
+          <button class="btn btn-light mt-auto">Aplicar Filtros</button>
         </div>
-        <div id="suggestions" class="list-group"></div>
-      </div>
 
-      <!-- Botão registrar ocorrência -->
-      <div class="position-absolute bottom-0 start-50 translate-middle-x mb-4" style="z-index: 1000;">
-        <button id="btnRegistrarOcorrencia">
-          Registrar ocorrência
-        </button>
+        <!-- Área do mapa (75%) -->
+        <div class="col p-0 position-relative">
+          <div id="map" style="height: 100%; width: 100%;"></div>
+
+          <!-- Barra de busca -->
+          <div class="position-absolute top-0 start-50 translate-middle-x mt-3"
+            style="z-index: 1000; max-width: 600px; width: 75%;">
+            <div class="input-group">
+              <input type="text" id="searchInput" class="form-control" placeholder="Busque por um local"
+                autocomplete="off">
+              <button type="button" class="btn btn-primary" id="searchBtn">Buscar</button>
+            </div>
+            <div id="suggestions" class="list-group"></div>
+          </div>
+
+          <!-- Botão registrar ocorrência -->
+          <div class="position-absolute bottom-0 start-50 translate-middle-x mb-4" style="z-index: 1000;">
+            <button type="button" id="btnRegistrarOcorrencia">
+              Registrar ocorrência
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
 
-  </div>
-</div>
+    <div style="position: fixed; bottom: -9999px; left: -9999px; visibility: hidden;">
+      <%- include('./includes/footer') %>
+    </div>
 
-<div style="position: fixed; bottom: -9999px; left: -9999px; visibility: hidden;">
-  <%- include('./includes/footer') %>
-</div>
-
-<script>
-  const navbar = document.querySelector('nav.navbar');
-  const wrapper = document.getElementById('map-wrapper');
-  if (navbar && wrapper) {
-    wrapper.style.height = (window.innerHeight - navbar.offsetHeight) + 'px';
-  }
-</script>
+    <script>
+      const navbar = document.querySelector('nav.navbar');
+      const wrapper = document.getElementById('map-wrapper');
+      if (navbar && wrapper) {
+        wrapper.style.height = (window.innerHeight - navbar.offsetHeight) + 'px';
+      }
+    </script>

@@ -97,6 +97,11 @@ class OccurrenceService {
       },
     });
   }
+
+
+  static async listarTodas() {
+    return await prisma.occurrence.findMany();
+  }
 }
 
 module.exports = OccurrenceService;

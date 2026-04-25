@@ -242,6 +242,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _search_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./search.js */ "./frontend/modules/modulesMap/search.js");
 /* harmony import */ var _autocomplete_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./autocomplete.js */ "./frontend/modules/modulesMap/autocomplete.js");
 /* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./storage.js */ "./frontend/modules/modulesMap/storage.js");
+/* harmony import */ var _occurrences_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./occurrences.js */ "./frontend/modules/modulesMap/occurrences.js");
+
 
 
 
@@ -271,6 +273,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   } catch (e) {
     console.error('Erro ao obter localização:', e);
   }
+  (0,_occurrences_js__WEBPACK_IMPORTED_MODULE_5__.carregarOcorrencias)(map);
   (0,_search_js__WEBPACK_IMPORTED_MODULE_2__.inicializarBusca)(map, state);
   (0,_autocomplete_js__WEBPACK_IMPORTED_MODULE_3__.inicializarAutocomplete)(map, state);
   const btnRegistrar = document.getElementById('btnRegistrarOcorrencia');
@@ -351,7 +354,8 @@ function renderizarPoligonoRMR(map) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   adicionarDragend: () => (/* binding */ adicionarDragend),
-/* harmony export */   criarMarcador: () => (/* binding */ criarMarcador)
+/* harmony export */   criarMarcador: () => (/* binding */ criarMarcador),
+/* harmony export */   criarMarcadorOcc: () => (/* binding */ criarMarcadorOcc)
 /* harmony export */ });
 /* harmony import */ var _bounds_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bounds.js */ "./frontend/modules/modulesMap/bounds.js");
 
@@ -392,12 +396,49 @@ function adicionarDragend(marcador, map, onEnderecoAtualizado) {
 // ====================
 // CRIAÇÃO DE MARCADOR PADRÃO (ARRASTÁVEL)
 // ====================
-function criarMarcador(map, lat, lon, popupText, onEnderecoAtualizado) {
+function criarMarcador(map, lat, lon, popupText, onEnderecoAtualizado = null) {
   const marcador = L.marker([lat, lon], {
     draggable: true
   }).addTo(map).bindPopup(`<strong>${popupText}</strong>`).openPopup();
   adicionarDragend(marcador, map, onEnderecoAtualizado);
   return marcador;
+}
+function criarMarcadorOcc(map, lat, lon, popupText) {
+  return L.marker([lat, lon]).addTo(map).bindPopup(`<strong>${popupText}<strong>`).bindTooltip(popupText, {
+    permanent: true,
+    direction: 'top',
+    offset: [0, -10]
+  });
+}
+
+/***/ },
+
+/***/ "./frontend/modules/modulesMap/occurrences.js"
+/*!****************************************************!*\
+  !*** ./frontend/modules/modulesMap/occurrences.js ***!
+  \****************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   carregarOcorrencias: () => (/* binding */ carregarOcorrencias)
+/* harmony export */ });
+/* harmony import */ var _marker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./marker */ "./frontend/modules/modulesMap/marker.js");
+
+async function carregarOcorrencias(map) {
+  try {
+    const res = await fetch('/api/ocorrencias');
+    const ocorrencias = await res.json();
+    ocorrencias.forEach(occ => {
+      const marcador = (0,_marker__WEBPACK_IMPORTED_MODULE_0__.criarMarcadorOcc)(map, occ.latitude, occ.longitude, occ.placeName || occ.street);
+      marcador.on('click', () => {
+        window.location.href = `/ocorrencias/${occ.id}`;
+      });
+    });
+  } catch (e) {
+    console.error('Erro ao carregar ocorrências:', e);
+  }
 }
 
 /***/ },

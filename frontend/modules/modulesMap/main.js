@@ -3,6 +3,7 @@ import { obterGeolocalizacao } from './geolocation.js';
 import { inicializarBusca } from './search.js';
 import { inicializarAutocomplete } from './autocomplete.js';
 import { salvarOcorrenciaTemp } from './storage.js';
+import { carregarOcorrencias } from './occurrences.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
 
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     console.error('Erro ao obter localização:', e);
   }
 
+  carregarOcorrencias(map);
   inicializarBusca(map, state);
   inicializarAutocomplete(map, state);
 

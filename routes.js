@@ -24,11 +24,20 @@ route.get('/logout', loginController.logout)
 route.get('/mapa', mapController.showMap);
 
 // Rotas de Ocorrências
-route.get('/ocorrencias', occurrenceController.list);
+
+//Renderiza a lista de ocorrências:
+route.get('/ocorrencias', occurrenceController.list); 
+//Renderiza o formulario de registrar ocorrencias
 route.get('/ocorrencias/nova', loginRequired, occurrenceController.renderForm);
+//Cria Uma nova ocorrencia
 route.post('/ocorrencias/nova', loginRequired, occurrenceController.create);
+//Mostra os detalhes de uma ocorrencia
 route.get('/ocorrencias/:id', occurrenceController.show);
+//Renderiza a pagina de editar a occorrencia
 route.get('/ocorrencias/:id/editar', loginRequired, occurrenceController.renderEdit);
+//Edita a occorrencia
 route.post('/ocorrencias/:id/editar', loginRequired, occurrenceController.update);
+//rederiza as occorrencias no mapa
+route.get('/api/ocorrencias', occurrenceController.apiList);
 
 module.exports = route;

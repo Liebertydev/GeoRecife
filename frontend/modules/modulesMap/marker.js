@@ -34,7 +34,7 @@ export function adicionarDragend(marcador, map, onEnderecoAtualizado) {
 // ====================
 // CRIAÇÃO DE MARCADOR PADRÃO (ARRASTÁVEL)
 // ====================
-export function criarMarcador(map, lat, lon, popupText, onEnderecoAtualizado) {
+export function criarMarcador(map, lat, lon, popupText, onEnderecoAtualizado = null) {
   const marcador = L.marker([lat, lon], { draggable: true })
     .addTo(map)
     .bindPopup(`<strong>${popupText}</strong>`)
@@ -42,4 +42,16 @@ export function criarMarcador(map, lat, lon, popupText, onEnderecoAtualizado) {
 
   adicionarDragend(marcador, map, onEnderecoAtualizado);
   return marcador;
+}
+
+
+export function criarMarcadorOcc(map, lat, lon, popupText) {
+  return L.marker([lat, lon])
+    .addTo(map)
+    .bindPopup(`<strong>${popupText}<strong>`)
+    .bindTooltip(popupText, {
+      permanent: true,
+      direction: 'top',
+      offset: [0, -10]
+    });
 }

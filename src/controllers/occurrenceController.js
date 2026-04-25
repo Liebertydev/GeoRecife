@@ -160,3 +160,13 @@ exports.update = async (req, res) => {
     res.render('404');
   }
 };
+
+exports.apiList = async (req, res) => {
+  try {
+    const ocorrencias = await OccurrenceService.listarTodas();
+    res.json(ocorrencias);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ erro: "Erro ao buscar ocorrências" });
+  }
+}

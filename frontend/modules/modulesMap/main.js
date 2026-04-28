@@ -4,6 +4,7 @@ import { inicializarBusca } from './search.js';
 import { inicializarAutocomplete } from './autocomplete.js';
 import { salvarOcorrenciaTemp } from './storage.js';
 import { carregarOcorrencias } from './occurrences.js';
+import { inicializarFiltro } from './filter.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
 
@@ -30,6 +31,8 @@ document.addEventListener('DOMContentLoaded', async function () {
   carregarOcorrencias(map);
   inicializarBusca(map, state);
   inicializarAutocomplete(map, state);
+
+  inicializarFiltro(map, carregarOcorrencias)
 
   const btnRegistrar = document.getElementById('btnRegistrarOcorrencia');
   btnRegistrar.setAttribute('type', 'button');

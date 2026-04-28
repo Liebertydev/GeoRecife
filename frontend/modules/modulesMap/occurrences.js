@@ -1,8 +1,18 @@
 import { criarMarcadorOcc } from "./marker";
 
-export async function carregarOcorrencias(map) {
+let marcadores = []; // 👈 guarda todos os markers
+
+export async function carregarOcorrencias(map, url = '/api/ocorrencias') {
+
+    // 🔥 LIMPA os markers antigos
+    marcadores.forEach(marker => {
+        map.removeLayer(marker);
+    });
+
+    marcadores = [];
+
     try {
-        const res = await fetch('/api/ocorrencias');
+        const res = await fetch(url);
         const ocorrencias = await res.json();
 
         ocorrencias.forEach(occ => {
@@ -16,7 +26,10 @@ export async function carregarOcorrencias(map) {
             marcador.on('click', () => {
                 window.location.href = `/ocorrencias/${occ.id}`;
             });
+
+            marcadores.push(marcador); // 👈 salva
         });
+
     } catch(e) {
         console.error('Erro ao carregar ocorrências:', e)
     }

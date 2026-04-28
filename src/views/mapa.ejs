@@ -9,26 +9,42 @@
           <h4 class="mb-4">Filtros do Mapa</h4>
 
           <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" id="filterCrimes" checked>
+            <input class="form-check-input" type="checkbox" id="filterCrimes" value="crime">
             <label class="form-check-label" for="filterCrimes">Crimes</label>
           </div>
 
           <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" id="filterTraffic" checked>
+            <input class="form-check-input" type="checkbox" id="filterTraffic" value="transito">
             <label class="form-check-label" for="filterTraffic">Trânsito</label>
           </div>
 
           <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" id="filterIncidents" checked>
-            <label class="form-check-label" for="filterIncidents">Incidentes</label>
+            <input class="form-check-input" type="checkbox" id="filterBuracos" value="buraco">
+            <label class="form-check-label" for="filterBuracos">Buracos na via</label>
           </div>
 
           <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" id="filterOthers" checked>
+            <input class="form-check-input" type="checkbox" id="filterAlagamento" value="alagamento">
+            <label class="form-check-label" for="filterAlagamento">Alagamento</label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="filterEntulho" value="entulho">
+            <label class="form-check-label" for="filterEntulho">Entulho/Descarte irregular</label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="filterIluminacao" value="iluminacao">
+            <label class="form-check-label" for="filterIluminacao">Iluminação</label>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="filterOthers" value="outros">
             <label class="form-check-label" for="filterOthers">Outros</label>
           </div>
 
-          <button class="btn btn-light mt-auto">Aplicar Filtros</button>
+
+          <button class="btn btn-light mt-auto" id="filtrarOcc">Aplicar Filtros</button>
         </div>
 
         <!-- Área do mapa (75%) -->

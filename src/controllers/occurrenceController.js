@@ -163,7 +163,10 @@ exports.update = async (req, res) => {
 
 exports.apiList = async (req, res) => {
   try {
-    const ocorrencias = await OccurrenceService.listarTodas();
+    const tipos = req.query.tipos;
+
+    const ocorrencias = await OccurrenceService.listarTodas(tipos);
+    
     res.json(ocorrencias);
   } catch (e) {
     console.error(e);

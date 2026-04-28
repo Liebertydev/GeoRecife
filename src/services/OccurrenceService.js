@@ -99,8 +99,21 @@ class OccurrenceService {
   }
 
 
-  static async listarTodas() {
-    return await prisma.occurrence.findMany();
+  static async listarTodas(tipos) {
+    if (!tipos) {
+      return await prisma.occurrence.findMany();
+    }
+
+    const tiposArray = tipos.split(',');
+
+    return await prisma.occurrence.findMany({
+      where: {
+        type: {
+          in: tiposArray
+        }
+      }
+    });
+
   }
 }
 

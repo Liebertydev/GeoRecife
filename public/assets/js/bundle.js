@@ -154,6 +154,35 @@ function dentroDosBounds(lat, lng) {
 
 /***/ },
 
+/***/ "./frontend/modules/modulesMap/filter.js"
+/*!***********************************************!*\
+  !*** ./frontend/modules/modulesMap/filter.js ***!
+  \***********************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   inicializarFiltro: () => (/* binding */ inicializarFiltro)
+/* harmony export */ });
+function inicializarFiltro(map, carregarOcorrencias) {
+  const btnFilter = document.getElementById('filtrarOcc');
+  btnFilter.addEventListener('click', async () => {
+    console.log("clicou no botão");
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    const tipos = Array.from(checkboxes).map(cb => cb.value);
+    console.log("tipos:", tipos);
+    let url = '/api/ocorrencias';
+    if (tipos.length > 0) {
+      url += `?tipos=${tipos.join(",")}`;
+    }
+    console.log("url:", url);
+    carregarOcorrencias(map, url);
+  });
+}
+
+/***/ },
+
 /***/ "./frontend/modules/modulesMap/geocoding.js"
 /*!**************************************************!*\
   !*** ./frontend/modules/modulesMap/geocoding.js ***!
@@ -243,6 +272,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _autocomplete_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./autocomplete.js */ "./frontend/modules/modulesMap/autocomplete.js");
 /* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./storage.js */ "./frontend/modules/modulesMap/storage.js");
 /* harmony import */ var _occurrences_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./occurrences.js */ "./frontend/modules/modulesMap/occurrences.js");
+/* harmony import */ var _filter_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./filter.js */ "./frontend/modules/modulesMap/filter.js");
+
 
 
 
@@ -276,6 +307,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   (0,_occurrences_js__WEBPACK_IMPORTED_MODULE_5__.carregarOcorrencias)(map);
   (0,_search_js__WEBPACK_IMPORTED_MODULE_2__.inicializarBusca)(map, state);
   (0,_autocomplete_js__WEBPACK_IMPORTED_MODULE_3__.inicializarAutocomplete)(map, state);
+  (0,_filter_js__WEBPACK_IMPORTED_MODULE_6__.inicializarFiltro)(map, _occurrences_js__WEBPACK_IMPORTED_MODULE_5__.carregarOcorrencias);
   const btnRegistrar = document.getElementById('btnRegistrarOcorrencia');
   btnRegistrar.setAttribute('type', 'button');
   btnRegistrar.addEventListener('click', () => {
@@ -426,15 +458,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _marker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./marker */ "./frontend/modules/modulesMap/marker.js");
 
-async function carregarOcorrencias(map) {
+let marcadores = []; // 👈 guarda todos os markers
+
+async function carregarOcorrencias(map, url = '/api/ocorrencias') {
+  // 🔥 LIMPA os markers antigos
+  marcadores.forEach(marker => {
+    map.removeLayer(marker);
+  });
+  marcadores = [];
   try {
-    const res = await fetch('/api/ocorrencias');
+    const res = await fetch(url);
     const ocorrencias = await res.json();
     ocorrencias.forEach(occ => {
       const marcador = (0,_marker__WEBPACK_IMPORTED_MODULE_0__.criarMarcadorOcc)(map, occ.latitude, occ.longitude, occ.placeName || occ.street);
       marcador.on('click', () => {
         window.location.href = `/ocorrencias/${occ.id}`;
       });
+      marcadores.push(marcador); // 👈 salva
     });
   } catch (e) {
     console.error('Erro ao carregar ocorrências:', e);

@@ -1,0 +1,113 @@
+<%- include('./includes/head'); %>
+<%- include('./includes/nav'); %>
+
+<main class="hero">
+  <div class="container py-3 py-md-5">
+
+    <!-- Cabeçalho -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <h1>Dashboard de Ocorrências</h1>
+        <p class="text-justify">
+          Visualize os dados registrados na plataforma GeoRecife. Os gráficos e estatísticas abaixo mostram o panorama das ocorrências na cidade.
+        </p>
+      </div>
+    </div>
+
+    <!-- Área principal -->
+    <div class="row g-4 align-items-stretch">
+
+      <!-- GRÁFICOS -->
+      <div class="col-12 col-md-8 d-flex flex-column gap-4">
+
+        <!-- GRÁFICO 1: TIPOS (SEM FILTRO) -->
+        <div class="card border-success shadow-sm">
+          <div class="card-header bg-green text-white fw-bold">
+            <i class="bi bi-pie-chart-fill me-2"></i>Ocorrências por Tipo
+          </div>
+
+          <div class="card-body d-flex justify-content-center align-items-center" style="min-height: 280px;">
+            <canvas id="graficoPizza"></canvas>
+          </div>
+        </div>
+
+        <!-- GRÁFICO 2: BAIRRO (COM FILTRO) -->
+        <div class="card border-success shadow-sm">
+
+          <!-- Header com filtro -->
+          <div class="card-header bg-green text-white fw-bold d-flex justify-content-between align-items-center">
+            <span>
+              <i class="bi bi-bar-chart-fill me-2"></i>Ocorrências por Bairro
+            </span>
+
+            <select id="filtroTipo" class="form-select form-select-sm w-auto">
+              <option value="todos">Todos</option>
+              <option value="crime">Crime</option>
+              <option value="alagamento">Alagamento</option>
+              <option value="acidente">Acidente</option>
+            </select>
+          </div>
+
+          <div class="card-body d-flex justify-content-center align-items-center" style="min-height: 280px;">
+            <canvas id="graficoBarra"></canvas>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- CARDS -->
+      <div class="col-12 col-md-4 d-flex flex-column gap-4">
+
+        <!-- Total -->
+        <div class="card border-success shadow-sm text-center">
+          <div class="card-header bg-green text-white fw-bold">
+            <i class="bi bi-clipboard-data-fill me-2"></i>Total de Ocorrências
+          </div>
+          <div class="card-body">
+            <p class="display-6 fw-bold text-success mb-1" id="totalOcorrencias">0</p>
+            <p class="text-muted small mb-0">ocorrências registradas</p>
+          </div>
+        </div>
+
+        <!-- Tipo mais comum -->
+        <div class="card border-success shadow-sm text-center">
+          <div class="card-header bg-green text-white fw-bold">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>Tipo Mais Comum
+          </div>
+          <div class="card-body">
+            <p class="fs-5 fw-bold text-success mb-1" id="topTipo">Carregando...</p>
+            <p class="text-muted small mb-0">tipo com mais registros</p>
+          </div>
+        </div>
+
+        <!-- Bairro destaque -->
+        <div class="card border-success shadow-sm text-center">
+          <div class="card-header bg-green text-white fw-bold">
+            <i class="bi bi-geo-alt-fill me-2"></i>Bairro em Destaque
+          </div>
+          <div class="card-body">
+            <p class="fs-5 fw-bold text-success mb-1" id="topBairro">Carregando...</p>
+            <p class="text-muted small mb-0">bairro com mais ocorrências</p>
+          </div>
+        </div>
+
+        <!-- Botão mapa -->
+        <div class="d-flex justify-content-center mt-auto">
+          <a href="/mapa">
+            <button class="btn btn-success btn-lg px-4 bg-green btn-aument fw-bold w-100">
+              Ver no Mapa
+            </button>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- JS do dashboard -->
+<!-- <script type="module" src="/js/dashboard/index.js"></script> -->
+
+<%- include('./includes/footer'); %>

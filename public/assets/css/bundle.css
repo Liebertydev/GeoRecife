@@ -1,123 +1,842 @@
-/*!*********************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/style.css ***!
-  \*********************************************************************************/
-@import url(https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap);
-/*!*************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/style.css (1) ***!
-  \*************************************************************************************/
-/* =========================
-   VARIÁVEIS
-========================= */
+/*!*********************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/global/typography.css ***!
+  \*********************************************************************************************/
+@import url(https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=SN+Pro:ital,wght@0,200..900;1,200..900&display=swap);
+/*!********************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/global/variables.css ***!
+  \********************************************************************************************/
+/* ===================================================
+   VARIABLES
+   =================================================== */
+
 :root {
-  --fonte-principal: 'Roboto', sans-serif;
-  --fonte-secundaria: 'Montserrat', sans-serif;
-  --fonte-title: 'Alfa Slab One', serif;
+  --white: #ffffff;
+  --off-white: #f7f8fc;
+  --surface: #f0f2f8;
+
+  --border: #e2e6f0;
+  --border-light: #eef0f6;
+
+  --green: #10a861;
+  --green-dark: #0d8a4f;
+  --green-light: #d6f5e8;
+  --green-glow: rgba(16,168,97,.12);
+
+  --blue: #2563eb;
+  --blue-dark: #1d4ed8;
+  --blue-light: #dbeafe;
+  --blue-glow: rgba(37,99,235,.10);
+
+  --red: #f56363ef;
+
+  --ink: #111827;
+  --ink-mid: #374151;
+  --ink-muted: #6b7280;
+  --ink-faint: #9ca3af;
+
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+
+  --shadow-xs: 0 1px 3px rgba(0,0,0,.06);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.07);
+  --shadow: 0 4px 16px rgba(0,0,0,.08);
+  --shadow-md: 0 8px 32px rgba(0,0,0,.10);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,.12);
+
+  --nav-h: 64px;
+
+  --transition: .18s cubic-bezier(.4,0,.2,1);
+}
+/*!****************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/global/reset.css ***!
+  \****************************************************************************************/
+/* ===================================================
+   RESET
+   =================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* =========================
-   ESTILOS GERAIS
-========================= */
-html, body {
-  overflow-x: hidden;
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+
+  color: var(--ink);
+  background: var(--off-white);
+
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
+  color: inherit;
   text-decoration: none;
 }
 
-p {
-  font-size: 17px;
-  font-family: var(--fonte-principal);
-  font-weight: 400;
+img {
+  max-width: 100%;
+}
+/*!*************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/global/typography.css (1) ***!
+  \*************************************************************************************************/
+/* ===================================================
+   TYPOGRAPHY
+   =================================================== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+
+  color: var(--ink);
 }
 
-h2 {
-  font-family: var(--fonte-title);
+.display-6 {
+  font-family: 'Montserrat', sans-serif !important;
+}
+/*!********************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/global/scrollbar.css ***!
+  \********************************************************************************************/
+/* ===================================================
+   SCROLLBAR
+   =================================================== */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
-h4 {
-  font-family: var(--fonte-principal);
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.text-justify {
-  text-align: justify;
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 99px;
 }
 
-.btn-aument:hover {
-  transform: scale(1.02);
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-faint);
+}
+/*!*****************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/global/navbar.css ***!
+  \*****************************************************************************************/
+/* ===================================================
+   NAVBAR
+   =================================================== */
+
+.navbar {
+  background: var(--white) !important;
+
+  border-bottom: 1px solid var(--border);
+
+  min-height: var(--nav-h);
+
+  padding: 0 20px !important;
+
+  position: sticky;
+  top: 0;
+  z-index: 1040;
+
+  box-shadow: var(--shadow-xs);
+
+  display: flex;
+  align-items: center;
 }
 
-/* =========================
-   ESTILOS DE BOTÕES GLOBAIS
-========================= */
-.bg-green {
-  background-color: #157347;
-  transition: all 0.25s;
+.navbar-brand.title {
+  font-weight: 800;
+  font-size: 2rem;
+
+  color: var(--ink) !important;
+
+  letter-spacing: -.5px;
+}
+
+.nav-brand-dot {
+  width: 10px;
+  height: 10px;
+
+  border-radius: 50%;
+
+  background: var(--green);
+
+  display: inline-block;
+
+  box-shadow: 0 0 0 3px var(--green-glow);
+}
+
+.navbar-nav .nav-link.nav-white {
+  color: var(--ink) !important;
+
+  font-weight: 500;
+  font-size: 1rem;
+
+  padding: .45rem .75rem;
+
+  border-radius: var(--radius-sm);
+
+  transition: var(--transition);
+}
+
+.navbar-nav .nav-link.nav-white:hover {
+  color: var(--white) !important;
+  background: var(--ink);
+}
+
+.navbar-nav .nav-link.nav-white.active {
+  color: var(--green) !important;
+  background: var(--green-light);
 }
 
 .btn-login {
-  color: #157347;
-  font-family: var(--fonte-secundaria);
-  font-weight: bolder;
+  background: var(--ink) !important;
+  color: var(--white) !important;
+
+  border: none !important;
+
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+
+  padding: .70rem 3rem !important;
+
+  border-radius: 80px !important;
+
+  transition: var(--transition) !important;
+}
+
+.btn-login:hover {
+  background: var(--ink-mid) !important;
+
+  transform: translateY(-1px);
+
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.navbar-toggler {
+  border: 1px solid var(--border) !important;
+
+  border-radius: var(--radius-sm) !important;
+
+  padding: .35rem .6rem !important;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none !important;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 30 30%27%3E%3Cpath stroke=%27%23374151%27 stroke-width=%272%27 d=%27M4 7h22M4 15h22M4 23h22%27/%3E%3C/svg%3E") !important;
+}
+
+.nav-divider.d-md-none {
+  height: 1px;
+
+  background: var(--border);
+
+  margin: .5rem 0;
+}
+
+.nav-mobile-action {
+  color: var(--green) !important;
+}
+
+@media (max-width: 767px) {
+
+  .navbar-collapse {
+    background: var(--white);
+
+    border-top: 1px solid var(--border);
+
+    padding: 1rem 1.5rem;
+
+    margin: 0 -1.5rem;
+  }
+
+}
+/*!*****************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/global/footer.css ***!
+  \*****************************************************************************************/
+/* ===================================================
+   FOOTER
+   =================================================== */
+
+footer,
+.site-footer {
+  background: var(--white) !important;
+  border-top: 1px solid var(--border) !important;
+  color: var(--ink-muted) !important;
+  font-size: .8125rem !important;
+  padding: 1.25rem 1.5rem !important;
+  text-align: center !important;
+}
+/*!******************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/global/buttons.css ***!
+  \******************************************************************************************/
+/* ===================================================
+   BOTÕES GLOBAIS
+   =================================================== */
+
+.btn {
+  border-radius: var(--radius-sm) !important;
+  font-weight: 600 !important;
+  transition: var(--transition) !important;
+}
+
+/* Success */
+
+.btn-success,
+.bg-green {
+  background: var(--green) !important;
+  border-color: var(--green) !important;
+  color: var(--white) !important;
+}
+
+.btn-success:hover {
+  background: var(--green-dark) !important;
+  border-color: var(--green-dark) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px var(--green-glow) !important;
+}
+
+/* Primary */
+
+.btn-primary {
+  background: var(--blue) !important;
+  border-color: var(--blue) !important;
+}
+
+.btn-primary:hover {
+  background: var(--blue-dark) !important;
+  border-color: var(--blue-dark) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px var(--blue-glow) !important;
+}
+
+/* Outline Primary */
+
+.btn-outline-primary {
+  color: var(--blue) !important;
+  border-color: var(--blue) !important;
+}
+
+.btn-outline-primary:hover {
+  background: var(--blue) !important;
+  color: var(--white) !important;
+}
+
+/* Outline Secondary */
+
+.btn-outline-secondary {
+  color: var(--ink-mid) !important;
+  border-color: var(--border) !important;
+}
+
+.btn-outline-secondary:hover {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border-color: var(--border) !important;
+}
+
+/* Helpers */
+
+.btn-aument {
+  letter-spacing: .3px;
+}
+/*!****************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/global/forms.css ***!
+  \****************************************************************************************/
+/* ===================================================
+   FORM CONTROLS
+   =================================================== */
+
+.form-control,
+.form-select {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-sm) !important;
+  font-size: .875rem !important;
+  color: var(--ink) !important;
+  background: var(--white) !important;
+  padding: .6rem .9rem !important;
+  transition: var(--transition) !important;
+}
+
+.form-select {
+    display: inline;
+}
+
+/* Focus */
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--green) !important;
+  box-shadow: 0 0 0 3px var(--green-glow) !important;
+  outline: none !important;
+}
+
+/* Readonly */
+
+.form-control[readonly] {
+  background: var(--surface) !important;
+  color: var(--ink-muted) !important;
+}
+
+/* Labels */
+
+.form-label {
+  font-size: .8125rem !important;
+  font-weight: 600 !important;
+  color: var(--ink-mid) !important;
+  margin-bottom: .4rem !important;
+  letter-spacing: .2px;
+}
+
+/* Textarea */
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 100px;
+}
+/*!****************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/global/cards.css ***!
+  \****************************************************************************************/
+/* ===================================================
+   CARDS
+   =================================================== */
+
+.card {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-sm) !important;
+  background: var(--white) !important;
+  transition: var(--transition) !important;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md) !important;
+  transform: translateY(-2px);
+}
+
+/* Header */
+
+.card-header {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: .85rem 1.25rem !important;
+  font-size: .8125rem !important;
+  letter-spacing: .3px;
+}
+
+.card-header.bg-green {
+  background: linear-gradient(
+    135deg,
+    var(--green) 0%,
+    var(--green-dark) 100%
+  ) !important;
+
+  border-bottom: none !important;
+  color: var(--white) !important;
+}
+
+/* Body */
+
+.card-body {
+  padding: 1.25rem !important;
+}
+
+/* Footer */
+
+.card-footer {
+  border-top: 1px solid var(--border-light) !important;
+  background: var(--off-white) !important;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg) !important;
+  padding: .75rem 1rem !important;
+}
+/*!*****************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/global/badges.css ***!
+  \*****************************************************************************************/
+/* ===================================================
+   CARDS
+   =================================================== */
+
+.card {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-sm) !important;
+  background: var(--white) !important;
+  transition: var(--transition) !important;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md) !important;
+  transform: translateY(-2px);
+}
+
+/* Header */
+
+.card-header {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: .85rem 1.25rem !important;
+  font-size: .8125rem !important;
+  letter-spacing: .3px;
+}
+
+.card-header.bg-green {
+  background: linear-gradient(
+    135deg,
+    var(--green) 0%,
+    var(--green-dark) 100%
+  ) !important;
+
+  border-bottom: none !important;
+  color: var(--white) !important;
+}
+
+/* Body */
+
+.card-body {
+  padding: 1.25rem !important;
+}
+
+/* Footer */
+
+.card-footer {
+  border-top: 1px solid var(--border-light) !important;
+  background: var(--off-white) !important;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg) !important;
+  padding: .75rem 1rem !important;
+}
+/*!****************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/global/flash.css ***!
+  \****************************************************************************************/
+/* ===================================================
+   FLASH MESSAGES
+   =================================================== */
+
+.flash-wrapper {
+  position: fixed;
+
+  top: calc(var(--nav-h) + 12px);
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  z-index: 1050;
+
+  width: 90%;
+  max-width: 480px;
+}
+
+.flashMsg {
+  border-radius: var(--radius) !important;
+
+  border: none !important;
+
+  font-size: .875rem !important;
+  font-weight: 500 !important;
+
+  box-shadow: var(--shadow-md) !important;
+
+  animation: slideDown .3s ease;
+}
+
+.alert-danger {
+  background: #fef2f2 !important;
+
+  color: #991b1b !important;
+
+  border-left: 4px solid #dc2626 !important;
+}
+
+.alert-success {
+  background: var(--green-light) !important;
+
+  color: #065f46 !important;
+
+  border-left: 4px solid var(--green) !important;
+}
+
+@keyframes slideDown {
+
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+/*!**********************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/global/list-groups.css ***!
+  \**********************************************************************************************/
+/* ===================================================
+   LIST GROUP
+   =================================================== */
+
+.list-group-item {
+  border-color: var(--border-light) !important;
+  font-size: .875rem !important;
+}
+/*!******************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/global/helpers.css ***!
+  \******************************************************************************************/
+/* ===================================================
+   HELPERS
+   =================================================== */
+
+.empurrar-baixo {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* Login box */
+
+.login-box {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+  max-width: 420px;
+  width: 100%;
+}
+
+/* Text helpers */
+
+.text-success {
+  color: var(--green) !important;
+}
+
+.text-primary {
+  color: var(--blue) !important;
+}
+
+/* Display */
+
+.display-6 {
+  font-family: 'Syne', sans-serif !important;
+}
+/*!*********************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/global/responsive.css ***!
+  \*********************************************************************************************/
+/* ===================================================
+   RESPONSIVE GLOBAL (GEORECIFE)
+   Breakpoints gerais do sistema
+   =================================================== */
+
+/* =========================
+   EXTRA LARGE (>=1200px)
+========================= */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
 }
 
 /* =========================
-   ESTILOS DA NAVBAR
+   LARGE (>=992px)
 ========================= */
-.navbar .title {
-  font-family: var(--fonte-title);
-  font-weight: 500;
-}
-
-.nav-white {
-  color: white;
-  position: relative;
-  font-size: 20px;
-}
-
-nav a:hover {
-  transform: scale(1.05);
-  transition: all 0.25s;
-}
-
-/* Media Query específico da Navbar */
-@media (min-width: 768px) {
-  .nav-white::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -4px;
-    width: 0;
-    height: 2px;
-    background: white;
-    transition: width 0.25s ease;
+@media (max-width: 1199px) {
+  .hero-text h1 {
+    font-size: 3rem;
   }
 
-  .nav-white:hover::after {
-    width: 100%;
+  .stat-value {
+    font-size: 2rem;
   }
 }
 
-.navbar {
-  position: relative;
+/* =========================
+   MEDIUM (<=992px)
+========================= */
+@media (max-width: 992px) {
+
+  /* NAVBAR */
+  .navbar {
+    padding: 0 1rem !important;
+  }
+
+  .navbar-nav .nav-link.nav-white {
+    font-size: .9rem;
+  }
+
+  /* HERO */
+  .hero-text h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-text p {
+    font-size: .95rem;
+  }
+
+  /* DASHBOARD */
+  .stat-card {
+    padding: 1.25rem;
+  }
+
+  .stat-value {
+    font-size: 1.75rem;
+  }
+
+  /* MAPA */
+  .map-sidebar {
+    min-width: 220px !important;
+    max-width: 240px !important;
+  }
 }
 
+/* =========================
+   SMALL (<=768px)
+========================= */
 @media (max-width: 768px) {
 
+  /* NAVBAR MOBILE */
   .navbar-collapse {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background-color: #157347; /* mesmo verde da navbar */
-    padding: 0px 35px; /* mantém o alinhamento */
-    z-index: 1000;
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    padding: 1rem 1.25rem;
+    margin: 0 -1.5rem;
   }
 
   .navbar-nav {
-    align-items: flex-start;
+    gap: .25rem;
   }
 
+  .nav-white {
+    font-size: 1rem;
+  }
+
+  /* HERO */
+  .hero-text h1 {
+    font-size: 2.1rem;
+    text-align: center;
+  }
+
+  .hero-text p {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  /* CARDS */
+  .card {
+    margin-bottom: 1rem;
+  }
+
+  /* DASHBOARD */
+  .stat-card {
+    width: 100%;
+  }
+
+  /* MAPA */
+  .map-sidebar {
+    position: relative;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+
+  /* FORM */
+  .form-card {
+    margin: 0 1rem;
+  }
+
+  .form-card-body {
+    padding: 1.25rem;
+  }
+
+  /* SHOW PAGE */
+  .show-detail-row {
+    flex-direction: column;
+    gap: .25rem;
+  }
+
+  .show-detail-label {
+    min-width: auto;
+  }
 }
+
+/* =========================
+   EXTRA SMALL (<=576px)
+========================= */
+@media (max-width: 576px) {
+
+  /* GLOBAL TEXT */
+  body {
+    font-size: 14px;
+  }
+
+  /* HERO */
+  .hero-text h1 {
+    font-size: 1.8rem;
+  }
+
+  .hero-text p {
+    font-size: .9rem;
+  }
+
+  /* AUTH */
+  .auth-card {
+    padding: 1.5rem;
+  }
+
+  /* DASHBOARD */
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* NOT FOUND */
+  .not-found-code {
+    font-size: 4.5rem;
+  }
+
+  /* BUTTONS */
+  .btn {
+    font-size: .85rem !important;
+  }
+}
+/*!*********************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./frontend/assets/css/style.css ***!
+  \*********************************************************************************/
+/* ====================================================
+   GLOBAL STYLE ENTRY
+   Carregado em TODAS as páginas
+   ==================================================== */
+
+/* ---------- TOKENS ---------- */
+
+/* ---------- BASE ---------- */
+
+/* ---------- LAYOUT ---------- */
+
+/* ---------- COMPONENTS ---------- */
+
+/* ---------- HELPERS ---------- */
 
 /*# sourceMappingURL=bundle.css.map*/

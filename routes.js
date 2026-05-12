@@ -44,6 +44,6 @@ route.get('/api/ocorrencias', occurrenceController.apiList);
 
 //Rotas do dashboard
 route.get('/dashboard', dashboardController.renderDashboard);
-route.get('api/dashboard', dashboardController.getDashboard);
+route.get('/api/dashboard', dashboardController.getDashboard);
 
 module.exports = route;

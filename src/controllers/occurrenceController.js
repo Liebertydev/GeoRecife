@@ -11,9 +11,7 @@ exports.renderForm = (req, res) => {
   // O redirect foi feito no frontend via window.location.href
   // (explicação completa na seção do map.js)
   res.render('form', {
-    pageCSS: '/frontend/assets/css/occurrences.css',
-    errors: req.flash('errors'),
-    success: req.flash('success'),
+    pageCSS: '/frontend/assets/css/pages/form_occ.css'
   });
 };
 
@@ -40,29 +38,36 @@ exports.create = async (req, res) => {
     req.session.save(() => res.redirect('/ocorrencias'));
   } catch (e) {
     console.error(e);
-    res.render('404');
+    res.render('404', {
+      pageCSS: '/frontend/assets/css/pages/404.css'
+    });
   }
 };
 
 // ====================
 // LISTAGEM
 // ====================
+
 exports.list = async (req, res) => {
   try {
-    const occurrences = await prisma.occurrence.findMany({
-      orderBy: { createdAt: 'desc' },
-      include: { user: true }, // puxa nome do autor junto
-    });
+    const page = Number(req.query.page) || 1;
+
+    const occurrences = await OccurrenceService.listarPaginado(page);
 
     res.render('list', {
-      pageCSS: '/assets/css/occurrences.css',
+      pageCSS: '/frontend/assets/css/pages/list_occ.css',
       occurrences,
       currentUserId: req.session.user ? req.session.user.id : null,
+      currentPage: page,
       success: req.flash('success'),
     });
+
   } catch (e) {
     console.error(e);
-    res.render('404');
+
+    res.render('404', {
+      pageCSS: '/frontend/assets/css/pages/404.css'
+    });
   }
 };
 
@@ -76,19 +81,23 @@ exports.show = async (req, res) => {
       include: { user: true },
     });
 
-    if (!occurrence) return res.render('404');
+    if (!occurrence) {
+      return res.render('404', { pageCSS: '/frontend/assets/css/pages/login.css' });
+    } 
 
     const isAuthor =
       req.session.user && req.session.user.id === occurrence.userId;
 
     res.render('show', {
-      pageCSS: '/assets/css/occurrences.css',
+      pageCSS: '/frontend/assets/css/pages/show_occ.css',
       occurrence,
       isAuthor,
     });
   } catch (e) {
     console.error(e);
-    res.render('404');
+    res.render('404', {
+      pageCSS: '/frontend/assets/css/pages/404.css'
+    });
   }
 };
 
@@ -101,8 +110,9 @@ exports.renderEdit = async (req, res) => {
       where: { id: parseInt(req.params.id) },
     });
 
-    if (!occurrence) return res.render('404');
-
+    if (!occurrence) {
+      return res.render('404', { pageCSS: '/frontend/assets/css/pages/login.css' });
+    }
     // Controle de autoria: só o dono pode editar
     // req.session.user.id é o id salvo na sessão no momento do login
     // occurrence.userId é o id gravado no banco quando a ocorrência foi criada
@@ -114,13 +124,15 @@ exports.renderEdit = async (req, res) => {
     }
 
     res.render('edit', {
-      pageCSS: '/assets/css/occurrences.css',
+      pageCSS: '/frontend/assets/css/pages/form_occ.css',
       occurrence,
       errors: req.flash('errors'),
     });
   } catch (e) {
     console.error(e);
-    res.render('404');
+    res.render('404', {
+      pageCSS: '/frontend/assets/css/pages/404.css'
+    });
   }
 };
 
@@ -133,7 +145,11 @@ exports.update = async (req, res) => {
       where: { id: parseInt(req.params.id) },
     });
 
-    if (!occurrence) return res.render('404');
+    if (!occurrence) {
+      return res.render('404', {
+        pageCSS: '/frontend/assets/css/pages/404.css'
+      });
+    }
 
     // Segunda verificação de autoria no POST
     // Necessário porque alguém poderia fazer uma requisição POST direta
@@ -157,7 +173,9 @@ exports.update = async (req, res) => {
     req.session.save(() => res.redirect(`/ocorrencias/${req.params.id}`));
   } catch (e) {
     console.error(e);
-    res.render('404');
+    res.render('404', {
+      pageCSS: '/frontend/assets/css/pages/404.css'
+    });
   }
 };
 
@@ -166,7 +184,7 @@ exports.apiList = async (req, res) => {
     const tipos = req.query.tipos;
 
     const ocorrencias = await OccurrenceService.listarTodas(tipos);
-    
+
     res.json(ocorrencias);
   } catch (e) {
     console.error(e);

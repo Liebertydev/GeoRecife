@@ -3,7 +3,7 @@ const Login = require('../services/LoginService');
 
 // src/controllers/homeController.js
 exports.index = (req, res) => {
-    res.render('login', { pageCSS: '/frontend/assets/css/login.css' });
+    res.render('login', { pageCSS: '/frontend/assets/css/pages/auth.css' });
 };
 
 exports.register = async (req, res, next) => {
@@ -24,7 +24,7 @@ exports.register = async (req, res, next) => {
         });
     } catch (e) {
         console.log(e);
-        res.render('404');
+        res.render('404', { pageCSS: '/frontend/assets/css/pages/login.css' });
     }
 
 };
@@ -56,7 +56,7 @@ exports.login = async (req, res, next) => {
         });
     } catch (e) {
         console.log(e);
-        res.render('404');
+        res.render('404', { pageCSS: '/frontend/assets/css/pages/login.css' });
     }
 
 };

@@ -1,0 +1,124 @@
+/* ====================================================
+   LOGIN / REGISTER PAGE
+   ==================================================== */
+
+.auth-wrapper {
+  min-height: calc(100vh - var(--nav-h));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 2rem 1rem;
+
+  background: linear-gradient(
+    160deg,
+    var(--off-white) 0%,
+    #e8f5ee 100%
+  );
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+
+  background: var(--white);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+
+  box-shadow: var(--shadow-lg);
+
+  padding: 2.5rem;
+}
+
+.auth-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .6rem;
+
+  margin-bottom: 2rem;
+}
+
+.auth-logo-dot {
+  width: 12px;
+  height: 12px;
+
+  border-radius: 50%;
+
+  background: var(--green);
+}
+
+.auth-logo-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+
+  color: var(--ink);
+}
+
+.auth-title {
+  text-align: center;
+
+  font-size: 1.5rem;
+  font-weight: 800;
+
+  margin-bottom: .35rem;
+}
+
+.auth-subtitle {
+  text-align: center;
+
+  color: var(--ink-muted);
+
+  font-size: .875rem;
+
+  margin-bottom: 1.75rem;
+}
+
+.auth-divider {
+  height: 1px;
+
+  background: var(--border);
+
+  margin: 1.5rem 0;
+}
+
+.auth-footer-text {
+  text-align: center;
+
+  font-size: .875rem;
+
+  color: var(--ink-muted);
+}
+
+.auth-footer-text a {
+  color: var(--green);
+  font-weight: 600;
+}
+
+.auth-footer-text a:hover {
+  text-decoration: underline;
+}
+
+.auth-forgot a {
+  font-size: .8rem;
+
+  color: var(--ink-muted);
+
+  text-decoration: none;
+}
+
+.auth-forgot a:hover {
+  color: var(--green);
+}
+
+/* ====================================================
+   RESPONSIVO
+   ==================================================== */
+
+@media (max-width: 576px) {
+  .auth-card {
+    padding: 2rem 1.25rem;
+  }
+}

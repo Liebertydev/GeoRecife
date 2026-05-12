@@ -1,0 +1,149 @@
+/* ====================================================
+   HOME PAGE
+   ==================================================== */
+
+main.hero {
+  background: var(--off-white);
+}
+
+.hero-text h1 {
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+.hero-text p {
+  font-size: 1rem;
+  color: var(--ink-muted);
+  max-width: 520px;
+}
+
+.hero-map-img {
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--shadow-lg);
+  border: 3px solid var(--border);
+}
+
+/* Features */
+
+.features-section {
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.feat-card {
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem 1.5rem;
+  height: 100%;
+  transition: var(--transition);
+}
+
+.feat-card:hover {
+  border-color: var(--green);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+.feat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  background: var(--green-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  font-size: 1.35rem;
+  color: var(--green);
+}
+
+.feat-card h5 {
+  font-size: .9375rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: .5rem;
+}
+
+.feat-card p {
+  font-size: .875rem;
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+/* Team */
+
+.team-section {
+  background: var(--off-white);
+}
+
+.team-title {
+  font-size: 2rem;
+  color: var(--ink);
+}
+
+.team-subtitle {
+  color: var(--ink-muted);
+  font-size: .9375rem;
+}
+
+.team-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  transition: var(--transition);
+}
+
+.team-card:hover {
+  border-color: var(--green);
+  box-shadow: var(--shadow-sm);
+  transform: translateX(4px);
+}
+
+.team-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--green) 0%, var(--blue) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-family: 'Syne', sans-serif;
+  font-size: .7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  letter-spacing: .5px;
+}
+
+.team-info h6 {
+  font-size: .9rem;
+  font-weight: 700;
+  margin-bottom: .15rem;
+}
+
+.team-role {
+  display: inline-block;
+  font-size: .7rem;
+  font-weight: 600;
+  color: var(--green);
+  background: var(--green-light);
+  border-radius: var(--radius-sm);
+  padding: .15em .6em;
+  margin-bottom: .35rem;
+  letter-spacing: .3px;
+}
+
+.team-info p {
+  font-size: .8rem;
+  color: var(--ink-muted);
+  margin: 0;
+}

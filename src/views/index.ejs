@@ -1,79 +1,311 @@
 <%- include('./includes/head'); %>
-<%- include('./includes/nav'); %>
+  <%- include('./includes/nav'); %>
+    <%- include('./includes/messages'); %>
 
-<main class="hero">
-  <div class="container py-3 py-md-5">
-    <div class="row align-items-stretch">
+      <main class="hero">
 
-      <!-- Coluna de conteúdo textual -->
-      <div class="col-12 col-md-6 d-flex flex-column hero-text">
-        <h1 class="order-1">GeoRecife</h1>
-        <p class="mb-mobile mb-md-0 order-2 text-justify">
-          GeoRecife é uma plataforma desenvolvida para monitorar a cidade, registrando ocorrências como acidentes, criminalidade e áreas de risco, oferecendo informações atualizadas que ajudam na tomada de decisões e na melhoria da segurança urbana.
-        </p>
+        <!-- ══ HERO ══ -->
+        <div class="container py-3 py-md-5">
 
-        <!-- Botão somente desktop -->
-        <div class="d-none d-md-flex justify-content-start order-3">
-          <a href="/login"><button class="btn btn-success btn-lg px-4 bg-green btn-aument fw-bold">Faça Login</button></a>
+          <div class="row align-items-center g-4">
+
+            <!-- Texto -->
+            <div class="col-12 col-md-6 d-flex flex-column hero-text">
+
+              <h1 class="order-1">GeoRecife</h1>
+
+              <p class="mb-mobile mb-md-0 order-2 text-justify">
+                GeoRecife é uma plataforma desenvolvida para monitorar a cidade,
+                registrando ocorrências como acidentes, criminalidade e áreas de risco,
+                oferecendo informações atualizadas que ajudam na tomada de decisões e
+                na melhoria da segurança urbana.
+              </p>
+
+              <!-- Desktop -->
+              <div class="d-none d-md-flex justify-content-start order-3">
+
+                <% if (!user) { %>
+
+                  <a href="/login">
+                    <button class="btn btn-success btn-lg px-4 bg-green btn-aument fw-bold mt-4">
+                      Faça Login
+                    </button>
+                  </a>
+
+                  <% } else { %>
+
+                    <a href="/mapa">
+                      <button class="btn btn-success btn-lg px-4 bg-green btn-aument fw-bold mt-4">
+                        Ver mapa
+                      </button>
+                    </a>
+
+                    <% } %>
+
+              </div>
+
+            </div>
+
+            <!-- Imagem -->
+            <div class="col-12 col-md-6 d-flex justify-content-center align-items-center order-3 order-md-2">
+
+              <img src="/assets/img/mapa3.png" class="img-fluid rounded-4 order-1 order-md-1 hero-map-img"
+                alt="Mapa do Recife">
+
+            </div>
+
+            <!-- Mobile -->
+            <div class="col-12 d-flex d-md-none justify-content-center order-4">
+
+              <% if (!user) { %>
+
+                <a href="/login">
+                  <button class="btn btn-success btn-lg px-4 bg-green btn-aument fw-bold mt-3">
+                    Faça Login
+                  </button>
+                </a>
+
+                <% } else { %>
+
+                  <a href="/mapa">
+                    <button class="btn btn-success btn-lg px-4 bg-green btn-aument fw-bold mt-3">
+                      Ver mapa
+                    </button>
+                  </a>
+
+                  <% } %>
+
+            </div>
+
+          </div>
+
         </div>
-      </div>
 
-      <!-- Coluna da imagem -->
-      <div class="col-12 col-md-6 d-flex justify-content-center align-items-center order-3 order-md-2">
-        <img src="/assets/img/mapa3.png" class="img-fluid rounded order-1 order-md-1">
-      </div>
+        <!-- ══ FUNCIONALIDADES ══ -->
+        <div class="features-section">
 
-      <!-- Botão somente mobile -->
-      <div class="col-12 d-flex d-md-none justify-content-center mt-5 order-4">
-        <a href="/login"><button class="btn btn-success btn-lg px-4 bg-green btn-aument fw-bold">Faça Login</button></a>
-      </div>
+          <div class="container py-4 py-md-5">
 
-    </div>
-  </div>
+            <div class="row g-4 justify-content-center">
 
-  <div class="container py-4">
-    <h2 class="text-center mb-5">Sobre Nós</h2>
+              <div class="col-12 col-sm-6 col-md-4">
 
-    <div class="row g-4">
+                <div class="feat-card">
 
-      <div class="col-12 col-md-4">
-        <h4>Heitor</h4>
-        <p>Responsável pela pesquisa de dados e análise de ocorrências.</p>
-      </div>
+                  <div class="feat-icon">
+                    <i class="bi bi-geo-alt-fill"></i>
+                  </div>
 
-      <div class="col-12 col-md-4">
-        <h4>Vanessa, Lufyo e Lieberty</h4>
-        <p>Desenvolvimento Front-end, interfaces, validando o Front-end.</p>
-      </div>
+                  <h5>Registro de Ocorrências</h5>
 
-      <div class="col-12 col-md-4">
-        <h4>Lieberty e Ananda</h4>
-        <p>Desenvolvimento Back-end, APIs e lógica de negócios.</p>
-      </div>
+                  <p>
+                    Marque e registre incidentes diretamente no mapa interativo da cidade do Recife.
+                  </p>
 
-      <div class="col-12 col-md-4">
-        <h4>Caio e Heitor</h4>
-        <p>Administração e modelagem do banco de dados.</p>
-      </div>
+                </div>
 
-      <div class="col-12 col-md-4">
-        <h4>Geovanne</h4>
-        <p>Integração de sistemas entre front-end e back-end.</p>
-      </div>
+              </div>
 
-      <div class="col-12 col-md-4">
-        <h4>Geovanne</h4>
-        <p>Testes e controle de qualidade da plataforma.</p>
-      </div>
+              <div class="col-12 col-sm-6 col-md-4">
 
-    </div>
+                <div class="feat-card">
 
-    <!-- Botão Get Started -->
-    <div class="d-flex justify-content-center mt-4">
-      <a href="/login"><button class="btn btn-success px-4 btn-lg bg-green btn-aument fw-bold">Faça Login</button></a>
-    </div>
+                  <div class="feat-icon">
+                    <i class="bi bi-bar-chart-fill"></i>
+                  </div>
 
-  </div>
-</main>
+                  <h5>Dashboard Analítico</h5>
 
-<%- include('./includes/footer'); %>
+                  <p>
+                    Visualize estatísticas e padrões de ocorrências por bairro e categoria.
+                  </p>
+
+                </div>
+
+              </div>
+
+              <div class="col-12 col-sm-6 col-md-4">
+
+                <div class="feat-card">
+
+                  <div class="feat-icon">
+                    <i class="bi bi-shield-fill-check"></i>
+                  </div>
+
+                  <h5>Segurança Urbana</h5>
+
+                  <p>
+                    Dados em tempo real para apoiar decisões e melhorar a segurança na cidade.
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ══ SOBRE NÓS ══ -->
+        <div class="team-section">
+
+          <div class="container py-5">
+
+            <div class="text-center mb-5">
+
+              <h2 class="team-title">Sobre Nós</h2>
+
+              <p class="team-subtitle">
+                O time por trás do GeoRecife
+              </p>
+
+            </div>
+
+            <div class="row g-4">
+
+              <div class="col-12 col-sm-6 col-lg-4">
+
+                <div class="team-card">
+
+                  <div class="team-avatar">
+                    <i class="bi bi-graph-up-arrow fs-5"></i>
+                  </div>
+
+                  <div class="team-info">
+                    <h6>Heitor</h6>
+                    <span class="team-role">Dados &amp; Análise</span>
+                    <p>Pesquisa de dados e análise de ocorrências urbanas.</p>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="col-12 col-sm-6 col-lg-4">
+
+                <div class="team-card">
+
+                  <div class="team-avatar">
+                    <i class="bi bi-window fs-5"></i>
+                  </div>
+
+                  <div class="team-info">
+                    <h6>Vanessa, Lufyo &amp; Lieberty</h6>
+                    <span class="team-role">Front-end</span>
+                    <p>Desenvolvimento de interfaces e validação visual.</p>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="col-12 col-sm-6 col-lg-4">
+
+                <div class="team-card">
+
+                  <div class="team-avatar">
+                    <i class="bi bi-cpu fs-5"></i>
+                  </div>
+
+                  <div class="team-info">
+                    <h6>Lieberty &amp; Ananda</h6>
+                    <span class="team-role">Back-end</span>
+                    <p>APIs, lógica de negócios e arquitetura de servidor.</p>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="col-12 col-sm-6 col-lg-4">
+
+                <div class="team-card">
+
+                  <div class="team-avatar">
+                    <div class="team-avatar">
+                      <i class="bi bi-database fs-5"></i>
+                    </div>
+                  </div>
+
+                  <div class="team-info">
+                    <h6>Caio &amp; Heitor</h6>
+                    <span class="team-role">Banco de Dados</span>
+                    <p>Administração e modelagem do banco de dados.</p>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="col-12 col-sm-6 col-lg-4">
+
+                <div class="team-card">
+
+                  <div class="team-avatar">
+                    <div class="team-avatar">
+                      <i class="bi bi-plug fs-5"></i>
+                    </div>
+                  </div>
+
+                  <div class="team-info">
+                    <h6>Geovanne</h6>
+                    <span class="team-role">Integração</span>
+                    <p>Integração de sistemas entre front-end e back-end.</p>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="col-12 col-sm-6 col-lg-4">
+
+                <div class="team-card">
+
+                  <div class="team-avatar">
+                    <i class="bi bi-check-circle fs-5"></i>
+                  </div>
+
+                  <div class="team-info">
+                    <h6>Geovanne</h6>
+                    <span class="team-role">Qualidade</span>
+                    <p>Testes e controle de qualidade da plataforma.</p>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- CTA FINAL -->
+            <div class="d-flex justify-content-center mt-5">
+
+              <% if (!user) { %>
+
+                <a href="/login">
+                  <button class="btn btn-success btn-lg px-5 bg-green btn-aument fw-bold">
+                    Faça Login
+                  </button>
+                </a>
+
+                <% } else { %>
+
+                  <a href="/ocorrencias">
+                    <button class="btn btn-success btn-lg px-5 bg-green btn-aument fw-bold">
+                      Ver ocorrências
+                    </button>
+                  </a>
+
+                  <% } %>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </main>
+
+      <%- include('./includes/footer'); %>

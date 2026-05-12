@@ -1,0 +1,13 @@
+/* ===================================================
+   FOOTER
+   =================================================== */
+
+footer,
+.site-footer {
+  background: var(--white) !important;
+  border-top: 1px solid var(--border) !important;
+  color: var(--ink-muted) !important;
+  font-size: .8125rem !important;
+  padding: 1.25rem 1.5rem !important;
+  text-align: center !important;
+}

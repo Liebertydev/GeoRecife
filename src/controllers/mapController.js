@@ -1,3 +1,3 @@
 exports.showMap = (req, res, next) => {
-    res.render('mapa', { pageCSS: '/assets/css/mapa.css' });
+    res.render('mapa', { pageCSS: '/frontend/assets/css/pages/mapa.css' });
 };

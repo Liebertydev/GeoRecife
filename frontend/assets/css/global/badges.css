@@ -1,0 +1,52 @@
+/* ===================================================
+   CARDS
+   =================================================== */
+
+.card {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-sm) !important;
+  background: var(--white) !important;
+  transition: var(--transition) !important;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md) !important;
+  transform: translateY(-2px);
+}
+
+/* Header */
+
+.card-header {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: .85rem 1.25rem !important;
+  font-size: .8125rem !important;
+  letter-spacing: .3px;
+}
+
+.card-header.bg-green {
+  background: linear-gradient(
+    135deg,
+    var(--green) 0%,
+    var(--green-dark) 100%
+  ) !important;
+
+  border-bottom: none !important;
+  color: var(--white) !important;
+}
+
+/* Body */
+
+.card-body {
+  padding: 1.25rem !important;
+}
+
+/* Footer */
+
+.card-footer {
+  border-top: 1px solid var(--border-light) !important;
+  background: var(--off-white) !important;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg) !important;
+  padding: .75rem 1rem !important;
+}

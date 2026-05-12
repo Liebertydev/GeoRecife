@@ -1,0 +1,133 @@
+/* ===================================================
+   NAVBAR
+   =================================================== */
+
+.navbar {
+  background: var(--white) !important;
+
+  border-bottom: 1px solid var(--border);
+
+  min-height: var(--nav-h);
+
+  padding: 0 20px !important;
+
+  position: sticky;
+  top: 0;
+  z-index: 1040;
+
+  box-shadow: var(--shadow-xs);
+
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand.title {
+  font-weight: 800;
+  font-size: 2rem;
+
+  color: var(--ink) !important;
+
+  letter-spacing: -.5px;
+}
+
+.nav-brand-dot {
+  width: 10px;
+  height: 10px;
+
+  border-radius: 50%;
+
+  background: var(--green);
+
+  display: inline-block;
+
+  box-shadow: 0 0 0 3px var(--green-glow);
+}
+
+.navbar-nav .nav-link.nav-white {
+  color: var(--ink) !important;
+
+  font-weight: 500;
+  font-size: 1rem;
+
+  padding: .45rem .75rem;
+
+  border-radius: var(--radius-sm);
+
+  transition: var(--transition);
+}
+
+.navbar-nav .nav-link.nav-white:hover {
+  color: var(--white) !important;
+  background: var(--ink);
+}
+
+.navbar-nav .nav-link.nav-white.active {
+  color: var(--green) !important;
+  background: var(--green-light);
+}
+
+.btn-login {
+  background: var(--ink) !important;
+  color: var(--white) !important;
+
+  border: none !important;
+
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+
+  padding: .70rem 3rem !important;
+
+  border-radius: 80px !important;
+
+  transition: var(--transition) !important;
+}
+
+.btn-login:hover {
+  background: var(--ink-mid) !important;
+
+  transform: translateY(-1px);
+
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.navbar-toggler {
+  border: 1px solid var(--border) !important;
+
+  border-radius: var(--radius-sm) !important;
+
+  padding: .35rem .6rem !important;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none !important;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='%23374151' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
+}
+
+.nav-divider.d-md-none {
+  height: 1px;
+
+  background: var(--border);
+
+  margin: .5rem 0;
+}
+
+.nav-mobile-action {
+  color: var(--green) !important;
+}
+
+@media (max-width: 767px) {
+
+  .navbar-collapse {
+    background: var(--white);
+
+    border-top: 1px solid var(--border);
+
+    padding: 1rem 1.5rem;
+
+    margin: 0 -1.5rem;
+  }
+
+}

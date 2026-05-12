@@ -1,86 +1,249 @@
 <%- include('./includes/head', { pageCSS: pageCSS }); %>
-  <%- include('./includes/nav') %>
+<%- include('./includes/nav') %>
 
-    <div class="container-fluid overflow-hidden p-0" id="map-wrapper">
-      <div class="row g-0 h-100">
+<div id="map-layout">
 
-        <!-- Sidebar (25%) -->
-        <div class="col-3 bg-success text-white p-3 d-flex flex-column" style="min-width: 250px; overflow-y: auto;">
-          <h4 class="mb-4">Filtros do Mapa</h4>
+  <!-- ===================== SIDEBAR (desktop) ===================== -->
+  <aside class="map-sidebar">
 
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" id="filterCrimes" value="crime">
-            <label class="form-check-label" for="filterCrimes">Crimes</label>
-          </div>
+    <div class="map-sidebar-header">
+      <h4>Filtros</h4>
+      <p>Filtre as ocorrências exibidas no mapa.</p>
+    </div>
 
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" id="filterTraffic" value="transito">
-            <label class="form-check-label" for="filterTraffic">Trânsito</label>
-          </div>
+    <div class="map-filter-group">
 
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" id="filterBuracos" value="buraco">
-            <label class="form-check-label" for="filterBuracos">Buracos na via</label>
-          </div>
+      <label class="map-filter-item">
+        <input type="checkbox" name="filter" value="crime">
+        <span>Crimes</span>
+      </label>
 
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" id="filterAlagamento" value="alagamento">
-            <label class="form-check-label" for="filterAlagamento">Alagamento</label>
-          </div>
+      <label class="map-filter-item">
+        <input type="checkbox" name="filter" value="transito">
+        <span>Trânsito</span>
+      </label>
 
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" id="filterEntulho" value="entulho">
-            <label class="form-check-label" for="filterEntulho">Entulho/Descarte irregular</label>
-          </div>
+      <label class="map-filter-item">
+        <input type="checkbox" name="filter" value="buraco">
+        <span>Buracos na via</span>
+      </label>
 
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" id="filterIluminacao" value="iluminacao">
-            <label class="form-check-label" for="filterIluminacao">Iluminação</label>
-          </div>
+      <label class="map-filter-item">
+        <input type="checkbox" name="filter" value="alagamento">
+        <span>Alagamentos</span>
+      </label>
 
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" id="filterOthers" value="outros">
-            <label class="form-check-label" for="filterOthers">Outros</label>
-          </div>
+      <label class="map-filter-item">
+        <input type="checkbox" name="filter" value="entulho">
+        <span>Entulho irregular</span>
+      </label>
 
+      <label class="map-filter-item">
+        <input type="checkbox" name="filter" value="iluminacao">
+        <span>Iluminação</span>
+      </label>
 
-          <button class="btn btn-light mt-auto" id="filtrarOcc">Aplicar Filtros</button>
-        </div>
+      <label class="map-filter-item">
+        <input type="checkbox" name="filter" value="outros">
+        <span>Outros</span>
+      </label>
 
-        <!-- Área do mapa (75%) -->
-        <div class="col p-0 position-relative">
-          <div id="map" style="height: 100%; width: 100%;"></div>
+    </div>
 
-          <!-- Barra de busca -->
-          <div class="position-absolute top-0 start-50 translate-middle-x mt-3"
-            style="z-index: 1000; max-width: 600px; width: 75%;">
-            <div class="input-group">
-              <input type="text" id="searchInput" class="form-control" placeholder="Busque por um local"
-                autocomplete="off">
-              <button type="button" class="btn btn-primary" id="searchBtn">Buscar</button>
-            </div>
-            <div id="suggestions" class="list-group"></div>
-          </div>
+    <button id="filtrarOcc">
+      Aplicar filtros
+    </button>
 
-          <!-- Botão registrar ocorrência -->
-          <div class="position-absolute bottom-0 start-50 translate-middle-x mb-4" style="z-index: 1000;">
-            <button type="button" id="btnRegistrarOcorrencia">
-              Registrar ocorrência
-            </button>
-          </div>
-        </div>
+  </aside>
 
+  <!-- ===================== MAPA ===================== -->
+  <main class="map-content">
+
+    <!-- BUSCA -->
+    <div class="map-search-wrapper">
+
+      <div class="map-search-box">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Busque por um local..."
+          autocomplete="off"
+        >
+        <button id="searchBtn" aria-label="Buscar">
+          <i class="bi bi-search"></i>
+        </button>
       </div>
+
+      <!-- Sugestões: ficam DENTRO do wrapper para herdar position:relative -->
+      <div id="suggestions" class="list-group"></div>
+
     </div>
 
-    <div style="position: fixed; bottom: -9999px; left: -9999px; visibility: hidden;">
-      <%- include('./includes/footer') %>
+    <!-- MAPA -->
+    <div id="map"></div>
+
+    <!-- BOTÃO REGISTRAR -->
+    <button id="btnRegistrarOcorrencia">
+      <i class="bi bi-plus-lg"></i>
+      Registrar ocorrência
+    </button>
+
+    <!-- BOTÃO FILTROS  (mobile / tablet) -->
+    <button id="mobileFilterBtn" aria-label="Abrir filtros">
+      <i class="bi bi-sliders"></i>
+      Filtros
+    </button>
+
+  </main>
+
+</div>
+
+<!-- ===================== MOBILE FILTER BOTTOM SHEET ===================== -->
+<!--
+  Fora do #map-layout para garantir position:fixed correto
+  e evitar qualquer clipping de overflow pai.
+-->
+<div id="mobileFilterPanel" role="dialog" aria-modal="true" aria-label="Filtros">
+
+  <div class="mobile-sheet">
+
+    <!-- Pill handle (drag hint) -->
+    <div class="sheet-handle" aria-hidden="true"></div>
+
+    <!-- Header -->
+    <div class="mobile-filter-header">
+      <h5>Filtros</h5>
+      <button id="closeMobileFilter" aria-label="Fechar filtros">
+        <i class="bi bi-x-lg"></i>
+      </button>
     </div>
 
-    <script>
-      const navbar = document.querySelector('nav.navbar');
-      const wrapper = document.getElementById('map-wrapper');
-      if (navbar && wrapper) {
-        wrapper.style.height = (window.innerHeight - navbar.offsetHeight) + 'px';
-      }
-    </script>
+    <!-- Checkboxes (scrolláveis) -->
+    <div class="mobile-filter-body">
+
+      <label class="map-filter-item">
+        <input type="checkbox" name="filter-mobile" value="crime">
+        <span>Crimes</span>
+      </label>
+
+      <label class="map-filter-item">
+        <input type="checkbox" name="filter-mobile" value="transito">
+        <span>Trânsito</span>
+      </label>
+
+      <label class="map-filter-item">
+        <input type="checkbox" name="filter-mobile" value="buraco">
+        <span>Buracos na via</span>
+      </label>
+
+      <label class="map-filter-item">
+        <input type="checkbox" name="filter-mobile" value="alagamento">
+        <span>Alagamentos</span>
+      </label>
+
+      <label class="map-filter-item">
+        <input type="checkbox" name="filter-mobile" value="entulho">
+        <span>Entulho irregular</span>
+      </label>
+
+      <label class="map-filter-item">
+        <input type="checkbox" name="filter-mobile" value="iluminacao">
+        <span>Iluminação</span>
+      </label>
+
+      <label class="map-filter-item">
+        <input type="checkbox" name="filter-mobile" value="outros">
+        <span>Outros</span>
+      </label>
+
+    </div>
+
+    <!-- Footer fixo com botão aplicar -->
+    <div class="mobile-filter-footer">
+      <button id="applyMobileFilters">
+        Aplicar filtros
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Footer fora do viewport (mantido como estava) -->
+<div style="position: fixed; bottom: -9999px; left: -9999px; visibility: hidden;">
+  <%- include('./includes/footer') %>
+</div>
+
+<script>
+  /* ================================================
+     MOBILE FILTER SHEET
+  ================================================ */
+  const mobileFilterBtn    = document.getElementById('mobileFilterBtn');
+  const mobileFilterPanel  = document.getElementById('mobileFilterPanel');
+  const closeMobileFilter  = document.getElementById('closeMobileFilter');
+  const applyMobileFilters = document.getElementById('applyMobileFilters');
+
+  function openSheet() {
+    mobileFilterPanel.classList.add('active');
+    document.body.style.overflow = 'hidden'; // trava scroll do body
+  }
+
+  function closeSheet() {
+    mobileFilterPanel.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  mobileFilterBtn.addEventListener('click', openSheet);
+  closeMobileFilter.addEventListener('click', closeSheet);
+
+  // Fecha ao clicar no overlay (fora do sheet)
+  mobileFilterPanel.addEventListener('click', (e) => {
+    if (e.target === mobileFilterPanel) closeSheet();
+  });
+
+  // Fecha com ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileFilterPanel.classList.contains('active')) {
+      closeSheet();
+    }
+  });
+
+  applyMobileFilters.addEventListener('click', () => {
+    // Sincroniza filtros mobile → desktop (opcional mas útil)
+    const mobileChecked = [...document.querySelectorAll('[name="filter-mobile"]:checked')]
+      .map(cb => cb.value);
+
+    document.querySelectorAll('[name="filter"]').forEach(cb => {
+      cb.checked = mobileChecked.includes(cb.value);
+    });
+
+    closeSheet();
+
+    // TODO: disparar lógica real de filtros aqui
+    // aplicarFiltros(mobileChecked);
+  });
+
+  /* ================================================
+     SUGESTÕES DE BUSCA
+     (garante que nunca fique atrás de outros elementos)
+  ================================================ */
+  const searchInput  = document.getElementById('searchInput');
+  const suggestions  = document.getElementById('suggestions');
+
+  // Exemplo de listener – substitua pela sua lógica real de geocoding
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim();
+    if (!q) {
+      suggestions.innerHTML = '';
+      return;
+    }
+    // TODO: chamar API de geocoding e popular #suggestions
+  });
+
+  // Fecha sugestões ao clicar fora
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.map-search-wrapper')) {
+      suggestions.innerHTML = '';
+    }
+  });
+</script>

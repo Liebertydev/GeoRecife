@@ -9,6 +9,7 @@ export function inicializarMapa(elementId) {
     maxBoundsViscosity: 1.0,
     minZoom: 10,
     maxZoom: 18,
+    zoomControl: false
   });
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

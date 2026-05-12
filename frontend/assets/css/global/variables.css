@@ -1,0 +1,44 @@
+/* ===================================================
+   VARIABLES
+   =================================================== */
+
+:root {
+  --white: #ffffff;
+  --off-white: #f7f8fc;
+  --surface: #f0f2f8;
+
+  --border: #e2e6f0;
+  --border-light: #eef0f6;
+
+  --green: #10a861;
+  --green-dark: #0d8a4f;
+  --green-light: #d6f5e8;
+  --green-glow: rgba(16,168,97,.12);
+
+  --blue: #2563eb;
+  --blue-dark: #1d4ed8;
+  --blue-light: #dbeafe;
+  --blue-glow: rgba(37,99,235,.10);
+
+  --red: #f56363ef;
+
+  --ink: #111827;
+  --ink-mid: #374151;
+  --ink-muted: #6b7280;
+  --ink-faint: #9ca3af;
+
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+
+  --shadow-xs: 0 1px 3px rgba(0,0,0,.06);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.07);
+  --shadow: 0 4px 16px rgba(0,0,0,.08);
+  --shadow-md: 0 8px 32px rgba(0,0,0,.10);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,.12);
+
+  --nav-h: 64px;
+
+  --transition: .18s cubic-bezier(.4,0,.2,1);
+}

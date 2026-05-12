@@ -1,14 +1,21 @@
 <%- include('./includes/head'); %>
 <%- include('./includes/nav'); %>
 
-<main class="hero">
-  <div class="container py-3 py-md-5">
+<!-- INCLUDE: MESSAGE -->
+<%- include('./includes/messages') %>
+
+<main class="hero" data-page="dashboard">
+  <div class="container py-6 py-md-5">
 
     <!-- Cabeçalho -->
-    <div class="row mb-4">
+    <div class="row mb-4 dashboard-header">
       <div class="col-12">
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;"></span>
+          <span style="font-size:.75rem;font-weight:700;color:var(--green);letter-spacing:.8px;text-transform:uppercase;">Ao vivo</span>
+        </div>
         <h1>Dashboard de Ocorrências</h1>
-        <p class="text-justify">
+        <p>
           Visualize os dados registrados na plataforma GeoRecife. Os gráficos e estatísticas abaixo mostram o panorama das ocorrências na cidade.
         </p>
       </div>
@@ -17,97 +24,84 @@
     <!-- Área principal -->
     <div class="row g-4 align-items-stretch">
 
-      <!-- GRÁFICOS -->
+      <!-- ── GRÁFICOS ── -->
       <div class="col-12 col-md-8 d-flex flex-column gap-4">
 
         <!-- GRÁFICO 1: TIPOS (SEM FILTRO) -->
-        <div class="card border-success shadow-sm">
-          <div class="card-header bg-green text-white fw-bold">
-            <i class="bi bi-pie-chart-fill me-2"></i>Ocorrências por Tipo
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">
+              <i class="bi bi-pie-chart-fill"></i>
+              Ocorrências por Tipo
+            </span>
           </div>
-
-          <div class="card-body d-flex justify-content-center align-items-center" style="min-height: 280px;">
+          <div class="chart-body">
             <canvas id="graficoPizza"></canvas>
           </div>
         </div>
 
         <!-- GRÁFICO 2: BAIRRO (COM FILTRO) -->
-        <div class="card border-success shadow-sm">
-
-          <!-- Header com filtro -->
-          <div class="card-header bg-green text-white fw-bold d-flex justify-content-between align-items-center">
-            <span>
-              <i class="bi bi-bar-chart-fill me-2"></i>Ocorrências por Bairro
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">
+              <i class="bi bi-bar-chart-fill"></i>
+              Ocorrências por Bairro
             </span>
-
             <select id="filtroTipo" class="form-select form-select-sm w-auto">
-              <option value="todos">Todos</option>
+              <option value="todos">Todos os tipos</option>
               <option value="crime">Crime</option>
               <option value="alagamento">Alagamento</option>
               <option value="acidente">Acidente</option>
             </select>
           </div>
-
-          <div class="card-body d-flex justify-content-center align-items-center" style="min-height: 280px;">
+          <div class="chart-body">
             <canvas id="graficoBarra"></canvas>
           </div>
-
         </div>
 
       </div>
 
-      <!-- CARDS -->
+      <!-- ── CARDS LATERAIS ── -->
       <div class="col-12 col-md-4 d-flex flex-column gap-4">
 
         <!-- Total -->
-        <div class="card border-success shadow-sm text-center">
-          <div class="card-header bg-green text-white fw-bold">
-            <i class="bi bi-clipboard-data-fill me-2"></i>Total de Ocorrências
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--green);color:var(--white); display: flex; align-items: center; justify-content: center;">
+            <i class="bi bi-clipboard-data-fill"></i>
           </div>
-          <div class="card-body">
-            <p class="display-6 fw-bold text-success mb-1" id="totalOcorrencias">0</p>
-            <p class="text-muted small mb-0">ocorrências registradas</p>
-          </div>
+          <p class="stat-value" id="totalOcorrencias">0</p>
+          <p class="stat-label">OCORRÊNCIAS REGISTRADAS</p>
         </div>
 
         <!-- Tipo mais comum -->
-        <div class="card border-success shadow-sm text-center">
-          <div class="card-header bg-green text-white fw-bold">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>Tipo Mais Comum
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--red);color:var(--white); display: flex; align-items: center; justify-content: center;">
+            <i class="bi bi-exclamation-triangle-fill"></i>
           </div>
-          <div class="card-body">
-            <p class="fs-5 fw-bold text-success mb-1" id="topTipo">Carregando...</p>
-            <p class="text-muted small mb-0">tipo com mais registros</p>
-          </div>
+          <p class="stat-value-sm" id="topTipo">Carregando...</p>
+          <p class="stat-label">TIPO COM MAIS REGISTROS</p>
         </div>
 
         <!-- Bairro destaque -->
-        <div class="card border-success shadow-sm text-center">
-          <div class="card-header bg-green text-white fw-bold">
-            <i class="bi bi-geo-alt-fill me-2"></i>Bairro em Destaque
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--green);color:var(--white); display: flex; align-items: center; justify-content: center;">
+            <i class="bi bi-geo-alt-fill"></i>
           </div>
-          <div class="card-body">
-            <p class="fs-5 fw-bold text-success mb-1" id="topBairro">Carregando...</p>
-            <p class="text-muted small mb-0">bairro com mais ocorrências</p>
-          </div>
+          <p class="stat-value-sm" id="topBairro">Carregando...</p>
+          <p class="stat-label">BAIRRO COM MAIS OCORRÊNCIAS</p>
         </div>
 
         <!-- Botão mapa -->
-        <div class="d-flex justify-content-center mt-auto">
-          <a href="/mapa">
-            <button class="btn btn-success btn-lg px-4 bg-green btn-aument fw-bold w-100">
-              Ver no Mapa
-            </button>
-          </a>
-        </div>
+        <a href="/mapa" class="btn btn-success btn-lg fw-bold w-100 mt-auto" style="padding:.85rem;letter-spacing:.3px;">
+          <i class="bi bi-map-fill me-2"></i>Ver no Mapa
+        </a>
 
       </div>
-    </div>
 
+    </div>
   </div>
 </main>
 
-<!-- JS do dashboard -->
-<!-- <script type="module" src="/js/dashboard/index.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <%- include('./includes/footer'); %>

@@ -1,0 +1,128 @@
+/* ====================================================
+   DASHBOARD PAGE (VERSÃO FINAL AJUSTADA)
+   ==================================================== */
+
+.dashboard-header h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.dashboard-header p {
+  color: var(--ink-muted);
+  font-size: .9rem;
+}
+
+/* =========================
+   STAT CARDS
+========================= */
+
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+/* 🔥 BARRA SUPERIOR VERDE */
+.stat-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: var(--green);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ÍCONE */
+.stat-icon {
+  width: 40px;
+  height: 40px;
+  font-size: 1rem;
+  margin-bottom: .6rem;
+  border-radius: var(--radius);
+}
+
+/* VALOR PRINCIPAL */
+.stat-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.9rem;
+  font-weight: 800;
+  margin-bottom: .25rem;
+}
+
+/* LABEL */
+.stat-label {
+  font-size: .75rem;
+  color: var(--ink-muted);
+  font-weight: 600;
+  letter-spacing: .4px;
+}
+
+/* =========================
+   GRÁFICOS
+========================= */
+
+.chart-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+/* HEADER DO GRÁFICO */
+.chart-header {
+  padding: .75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* TÍTULO */
+.chart-title {
+  font-size: .875rem;
+  font-weight: 700;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.chart-title i {
+  color: var(--green);
+}
+
+/* ÁREA DO GRÁFICO */
+.chart-body {
+  position: relative;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-body canvas {
+  max-height: 240px !important;
+  width: 100% !important;
+}
+
+/* filtro */
+#filtroTipo {
+  font-size: .75rem !important;
+  padding: .3rem .5rem !important;
+}

@@ -1,0 +1,510 @@
+/* ===================================================
+   MAPA PAGE
+   Z-INDEX HIERARCHY:
+     20   leaflet controls (zoom, attribution)
+     100  markers / popups
+     200  sidebar
+     1000 botão registrar ocorrência
+     1100 botão filtros mobile  (abaixo da search)
+     1200 search bar
+     5000 bottom sheet overlay
+     9999 sugestões de busca   (sempre no topo)
+   =================================================== */
+
+/* =========================================
+   LAYOUT RAIZ
+========================================= */
+
+#map-layout {
+  display: flex;
+  height: calc(100vh - var(--nav-h));
+  background: var(--off-white);
+  overflow: hidden;
+}
+
+/* =========================================
+   SIDEBAR  (desktop)
+========================================= */
+
+.map-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #ffffff 0%, #f8faf9 100%);
+  border-right: 1px solid #dce7e1;
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 4px 0 18px rgba(0, 0, 0, 0.04);
+  z-index: 200;
+}
+
+.map-sidebar-header h4 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.map-sidebar-header p {
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+  margin-bottom: 1.25rem;
+}
+
+/* =========================================
+   FILTER ITEMS  (desktop sidebar + mobile sheet)
+========================================= */
+
+.map-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.map-filter-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(180deg, #f7faf8 0%, #eef5f1 100%);
+  border: 1px solid #d9e6dd;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 2px 8px rgba(16, 168, 97, 0.04);
+  user-select: none;
+}
+
+.map-filter-item:hover {
+  transform: translateY(-1px);
+  border-color: rgba(16, 168, 97, 0.4);
+  box-shadow: 0 8px 16px rgba(16, 168, 97, 0.1);
+}
+
+.map-filter-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--green);
+  flex-shrink: 0;
+}
+
+.map-filter-item span {
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--ink-mid);
+}
+
+/* =========================================
+   BOTÃO APLICAR FILTROS  (sidebar desktop)
+========================================= */
+
+#filtrarOcc {
+  margin-top: 1.25rem;
+  border: none;
+  background: linear-gradient(135deg, #10a861 0%, #0d8a4f 100%);
+  color: white;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(16, 168, 97, 0.18);
+  transition: var(--transition);
+}
+
+#filtrarOcc:hover {
+  box-shadow: 0 12px 24px rgba(16, 168, 97, 0.28);
+  transform: translateY(-1px);
+}
+
+/* =========================================
+   MAPA CONTAINER
+========================================= */
+
+.map-content {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  min-width: 0;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+/* Empurra controles do Leaflet para não bater na search + filtro */
+.leaflet-top.leaflet-left,
+.leaflet-top.leaflet-right {
+  top: 130px !important;
+}
+
+/* =========================================
+   SEARCH BAR
+   Centralizada, larga, elemento principal do topo.
+   z-index: 1200
+========================================= */
+
+.map-search-wrapper {
+  position: absolute;
+  top: 14px;
+  left: 1.25rem;
+  right: 1.25rem;
+  width: auto;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 1200;
+}
+
+.map-search-box {
+  display: flex;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.13);
+}
+
+.map-search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0.9rem 1.25rem;
+  font-size: 0.95rem;
+  background: transparent;
+  color: var(--ink);
+}
+
+.map-search-box input::placeholder {
+  color: var(--ink-faint);
+}
+
+.map-search-box button {
+  width: 58px;
+  flex-shrink: 0;
+  border: none;
+  background: var(--green);
+  color: white;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 1rem;
+}
+
+.map-search-box button:hover {
+  background: var(--green-dark);
+}
+
+/* =========================================
+   SUGESTÕES DE BUSCA
+   z-index: 9999 — topo absoluto da UI.
+   Sobrescreve qualquer elemento, incluindo o sheet.
+========================================= */
+
+#suggestions {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 9999;
+  border-radius: 14px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+}
+
+#suggestions .list-group-item {
+  border: none;
+  border-bottom: 1px solid var(--border-light);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+#suggestions .list-group-item:last-child {
+  border-bottom: none;
+}
+
+#suggestions .list-group-item:hover {
+  background: var(--green-light);
+  color: var(--green-dark);
+}
+
+/* =========================================
+   BOTÃO REGISTRAR OCORRÊNCIA
+   z-index: 1000
+========================================= */
+
+#btnRegistrarOcorrencia {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: none;
+  background: linear-gradient(135deg, #0c8c4f 0%, #08673a 100%);
+  color: white;
+  padding: 0.9rem 1.6rem;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  box-shadow: 0 12px 28px rgba(12, 140, 79, 0.28);
+  z-index: 1000;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#btnRegistrarOcorrencia:hover {
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 18px 36px rgba(12, 140, 79, 0.34);
+}
+
+/* =========================================
+   BOTÃO FILTROS  (mobile / tablet)
+   Posicionado ABAIXO da search com espaço confortável.
+   Search: top 14px + altura pill ~48px = base ~62px.
+   top: 82px = 20px de espaço entre search e filtro.
+   z-index: 1100
+   REGRA CRÍTICA: display:none aqui no base.
+   Os @media abaixo (que vêm DEPOIS na cascata)
+   sobrescrevem com display:flex. NUNCA inverta a ordem.
+========================================= */
+
+#mobileFilterBtn {
+  position: absolute;
+  top: 82px;
+  right: 1.25rem;
+  z-index: 1100;
+  display: none;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(255, 255, 255, 0.97);
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--green-dark);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.11);
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+#mobileFilterBtn:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+/* =========================================
+   MOBILE FILTER BOTTOM SHEET
+   z-index: 5000
+========================================= */
+
+#mobileFilterPanel {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 5000;
+}
+
+#mobileFilterPanel.active {
+  display: flex;
+}
+
+.mobile-sheet {
+  width: 100%;
+  max-width: 520px;
+  background: white;
+  border-radius: 22px 22px 0 0;
+  display: flex;
+  flex-direction: column;
+  max-height: 82vh;
+  overflow: hidden;
+  transform: translateY(100%);
+  animation: sheetUp 0.28s cubic-bezier(0.34, 1.26, 0.64, 1) forwards;
+}
+
+@keyframes sheetUp {
+  to { transform: translateY(0); }
+}
+
+.sheet-handle {
+  width: 40px;
+  height: 4px;
+  background: #e0e3e9;
+  border-radius: 99px;
+  margin: 12px auto 0;
+  flex-shrink: 0;
+}
+
+.mobile-filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem 0.75rem;
+  border-bottom: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+
+.mobile-filter-header h5 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0;
+}
+
+#closeMobileFilter {
+  border: none;
+  background: #f3f4f6;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ink-mid);
+  transition: var(--transition);
+  font-size: 1rem;
+}
+
+#closeMobileFilter:hover {
+  background: #e5e7eb;
+}
+
+.mobile-filter-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.mobile-filter-footer {
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+
+#applyMobileFilters {
+  width: 100%;
+  border: none;
+  background: linear-gradient(135deg, #10a861 0%, #0d8a4f 100%);
+  color: white;
+  padding: 0.9rem;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(16, 168, 97, 0.22);
+  transition: var(--transition);
+}
+
+#applyMobileFilters:hover {
+  box-shadow: 0 12px 24px rgba(16, 168, 97, 0.32);
+  transform: translateY(-1px);
+}
+
+/* =========================================
+   TABLET  (<=992px)
+   @media SEMPRE depois dos estilos base.
+   O display:flex aqui sobrescreve o display:none acima.
+========================================= */
+
+@media (max-width: 992px) {
+
+  .map-sidebar {
+    display: none;
+  }
+
+  #mobileFilterBtn {
+    display: flex !important;
+  }
+
+  .map-search-wrapper {
+    left: 1rem;
+    right: 1rem;
+    max-width: 100%;
+  }
+
+  .map-search-box input {
+    padding: 1rem 1.25rem;
+    font-size: 1rem;
+  }
+
+  .map-search-box button {
+    width: 62px;
+    font-size: 1.05rem;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 576px) {
+
+  .map-search-wrapper {
+    left: 0.75rem;
+    right: 0.75rem;
+  }
+
+  #mobileFilterBtn {
+    top: 72px;
+    right: 0.75rem;
+    font-size: 0.82rem;
+    padding: 0.55rem 0.9rem;
+  }
+}
+
+/* =========================================
+   SEARCH WRAPPER
+========================================= */
+
+.map-search-wrapper {
+  position: absolute;
+  top: 14px;
+  left: 1.25rem;
+  right: 1.25rem;
+  max-width: 720px;
+  margin: 0 auto;
+  z-index: 1200;
+}
+
+.map-search-box {
+  display: flex;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(14px);
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.13);
+}
+
+.map-search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0.9rem 1.25rem;
+  font-size: 0.95rem;
+  background: transparent;
+}
+
+.map-search-box button {
+  width: 58px;
+  border: none;
+  background: var(--green);
+  color: white;
+}

@@ -1,0 +1,70 @@
+/* ===================================================
+   BOTÕES GLOBAIS
+   =================================================== */
+
+.btn {
+  border-radius: var(--radius-sm) !important;
+  font-weight: 600 !important;
+  transition: var(--transition) !important;
+}
+
+/* Success */
+
+.btn-success,
+.bg-green {
+  background: var(--green) !important;
+  border-color: var(--green) !important;
+  color: var(--white) !important;
+}
+
+.btn-success:hover {
+  background: var(--green-dark) !important;
+  border-color: var(--green-dark) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px var(--green-glow) !important;
+}
+
+/* Primary */
+
+.btn-primary {
+  background: var(--blue) !important;
+  border-color: var(--blue) !important;
+}
+
+.btn-primary:hover {
+  background: var(--blue-dark) !important;
+  border-color: var(--blue-dark) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px var(--blue-glow) !important;
+}
+
+/* Outline Primary */
+
+.btn-outline-primary {
+  color: var(--blue) !important;
+  border-color: var(--blue) !important;
+}
+
+.btn-outline-primary:hover {
+  background: var(--blue) !important;
+  color: var(--white) !important;
+}
+
+/* Outline Secondary */
+
+.btn-outline-secondary {
+  color: var(--ink-mid) !important;
+  border-color: var(--border) !important;
+}
+
+.btn-outline-secondary:hover {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border-color: var(--border) !important;
+}
+
+/* Helpers */
+
+.btn-aument {
+  letter-spacing: .3px;
+}

@@ -1,0 +1,8 @@
+/* ===================================================
+   LIST GROUP
+   =================================================== */
+
+.list-group-item {
+  border-color: var(--border-light) !important;
+  font-size: .875rem !important;
+}

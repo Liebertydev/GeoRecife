@@ -1,116 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+/* ====================================================
+   GLOBAL STYLE ENTRY
+   Carregado em TODAS as páginas
+   ==================================================== */
 
-/* =========================
-   VARIÁVEIS
-========================= */
-:root {
-  --fonte-principal: 'Roboto', sans-serif;
-  --fonte-secundaria: 'Montserrat', sans-serif;
-  --fonte-title: 'Alfa Slab One', serif;
-}
+/* ---------- TOKENS ---------- */
+@import './global/variables.css';
 
-/* =========================
-   ESTILOS GERAIS
-========================= */
-html, body {
-  overflow-x: hidden;
-}
+/* ---------- BASE ---------- */
+@import './global/reset.css';
+@import './global/typography.css';
+@import './global/scrollbar.css';
 
-a {
-  text-decoration: none;
-}
+/* ---------- LAYOUT ---------- */
+@import './global/navbar.css';
+@import './global/footer.css';
 
-p {
-  font-size: 17px;
-  font-family: var(--fonte-principal);
-  font-weight: 400;
-}
+/* ---------- COMPONENTS ---------- */
+@import './global/buttons.css';
+@import './global/forms.css';
+@import './global/cards.css';
+@import './global/badges.css';
+@import './global/flash.css';
+@import './global/list-groups.css';
 
-h2 {
-  font-family: var(--fonte-title);
-}
-
-h4 {
-  font-family: var(--fonte-principal);
-}
-
-.text-justify {
-  text-align: justify;
-}
-
-.btn-aument:hover {
-  transform: scale(1.02);
-}
-
-/* =========================
-   ESTILOS DE BOTÕES GLOBAIS
-========================= */
-.bg-green {
-  background-color: #157347;
-  transition: all 0.25s;
-}
-
-.btn-login {
-  color: #157347;
-  font-family: var(--fonte-secundaria);
-  font-weight: bolder;
-}
-
-/* =========================
-   ESTILOS DA NAVBAR
-========================= */
-.navbar .title {
-  font-family: var(--fonte-title);
-  font-weight: 500;
-}
-
-.nav-white {
-  color: white;
-  position: relative;
-  font-size: 20px;
-}
-
-nav a:hover {
-  transform: scale(1.05);
-  transition: all 0.25s;
-}
-
-/* Media Query específico da Navbar */
-@media (min-width: 768px) {
-  .nav-white::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -4px;
-    width: 0;
-    height: 2px;
-    background: white;
-    transition: width 0.25s ease;
-  }
-
-  .nav-white:hover::after {
-    width: 100%;
-  }
-}
-
-.navbar {
-  position: relative;
-}
-
-@media (max-width: 768px) {
-
-  .navbar-collapse {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background-color: #157347; /* mesmo verde da navbar */
-    padding: 0px 35px; /* mantém o alinhamento */
-    z-index: 1000;
-  }
-
-  .navbar-nav {
-    align-items: flex-start;
-  }
-
-}
+/* ---------- HELPERS ---------- */
+@import './global/helpers.css';
+@import './global/responsive.css';

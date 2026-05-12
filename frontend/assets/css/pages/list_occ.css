@@ -1,0 +1,87 @@
+/* ====================================================
+   LIST PAGE
+   ==================================================== */
+
+.list-header h2 {
+  font-size: 1.75rem;
+  font-weight: 800;
+}
+
+.occ-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  height: 100%;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+
+.occ-card:hover {
+  border-color: var(--green);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.occ-card-body {
+  padding: 1.25rem;
+  flex: 1;
+}
+
+.occ-card-footer {
+  padding: .85rem 1.25rem;
+  border-top: 1px solid var(--border-light);
+  background: var(--off-white);
+  display: flex;
+  gap: .5rem;
+}
+
+.occ-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  padding: .3em .75em;
+  border-radius: var(--radius-sm);
+  background: var(--green-light);
+  color: #065f46;
+  margin-bottom: .75rem;
+}
+
+.occ-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: .25rem;
+}
+
+.occ-district {
+  font-size: .8125rem;
+  color: var(--ink-muted);
+  margin-bottom: .5rem;
+}
+
+.occ-author {
+  font-size: .75rem;
+  color: var(--ink-faint);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--ink-muted);
+}
+
+.empty-state i {
+  font-size: 3rem;
+  color: var(--ink-faint);
+  margin-bottom: 1rem;
+}
+
+.empty-state p {
+  font-size: .9375rem;
+}

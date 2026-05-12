@@ -41,6 +41,185 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /***/ },
 
+/***/ "./frontend/modules/modulesDashboard/apiDashboard.js"
+/*!***********************************************************!*\
+  !*** ./frontend/modules/modulesDashboard/apiDashboard.js ***!
+  \***********************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   fetchDashboard: () => (/* binding */ fetchDashboard)
+/* harmony export */ });
+async function fetchDashboard(tipo = "todos") {
+  try {
+    const response = await fetch(`/api/dashboard?tipo=${tipo}`);
+    if (!response.ok) {
+      throw new Error('Erro ao buscar dados');
+    }
+    const data = await response.json();
+    return data;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
+/***/ },
+
+/***/ "./frontend/modules/modulesDashboard/dashboard.js"
+/*!********************************************************!*\
+  !*** ./frontend/modules/modulesDashboard/dashboard.js ***!
+  \********************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _apiDashboard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./apiDashboard */ "./frontend/modules/modulesDashboard/apiDashboard.js");
+/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ui */ "./frontend/modules/modulesDashboard/ui.js");
+/* harmony import */ var _event__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./event */ "./frontend/modules/modulesDashboard/event.js");
+/* harmony import */ var _graficos__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./graficos */ "./frontend/modules/modulesDashboard/graficos.js");
+
+
+
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const data = await (0,_apiDashboard__WEBPACK_IMPORTED_MODULE_0__.fetchDashboard)();
+  (0,_ui__WEBPACK_IMPORTED_MODULE_1__.updateUI)(data);
+  (0,_graficos__WEBPACK_IMPORTED_MODULE_3__.renderCharts)(data);
+  (0,_event__WEBPACK_IMPORTED_MODULE_2__.initEvents)();
+});
+
+/***/ },
+
+/***/ "./frontend/modules/modulesDashboard/event.js"
+/*!****************************************************!*\
+  !*** ./frontend/modules/modulesDashboard/event.js ***!
+  \****************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   initEvents: () => (/* binding */ initEvents)
+/* harmony export */ });
+/* harmony import */ var _apiDashboard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./apiDashboard */ "./frontend/modules/modulesDashboard/apiDashboard.js");
+/* harmony import */ var _graficos__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./graficos */ "./frontend/modules/modulesDashboard/graficos.js");
+/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ui */ "./frontend/modules/modulesDashboard/ui.js");
+
+
+
+function initEvents() {
+  const select = document.getElementById('filtroTipo');
+  if (!select) return;
+  select.addEventListener('change', async e => {
+    const tipo = e.target.value;
+    const data = await (0,_apiDashboard__WEBPACK_IMPORTED_MODULE_0__.fetchDashboard)(tipo);
+    (0,_ui__WEBPACK_IMPORTED_MODULE_2__.updateUI)(data);
+    (0,_graficos__WEBPACK_IMPORTED_MODULE_1__.renderCharts)(data);
+  });
+}
+
+/***/ },
+
+/***/ "./frontend/modules/modulesDashboard/graficos.js"
+/*!*******************************************************!*\
+  !*** ./frontend/modules/modulesDashboard/graficos.js ***!
+  \*******************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   renderCharts: () => (/* binding */ renderCharts)
+/* harmony export */ });
+let pizzaChart;
+let barraChart;
+const coresPorTipo = {
+  'crime': '#dc3545',
+  'trânsito': '#ffc107',
+  'buraco na via': '#6c757d',
+  'alagamento': '#007bff',
+  'problema de iluminação': '#6610f2',
+  'entulho': '#795548',
+  'outro': '#20c997'
+};
+function renderCharts(data) {
+  if (!data) return;
+  renderPizza(data.porTipo);
+  renderBarra(data.porBairro);
+}
+function renderPizza(dados) {
+  const ctx = document.getElementById('graficoPizza');
+  if (!ctx) return;
+  const labels = dados.map(item => item.type);
+  const valores = dados.map(item => item._count.type);
+  if (pizzaChart) pizzaChart.destroy();
+  pizzaChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Ocorrências por Tipo',
+        data: valores,
+        backgroundColor: dados.map(item => coresPorTipo[item.type] || '#999999'),
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top'
+        }
+      }
+    }
+  });
+}
+function renderBarra(dados) {
+  const ctx = document.getElementById('graficoBarra');
+  if (!ctx) return;
+  const labels = dados.map(item => item.district);
+  const valores = dados.map(item => item._count.district);
+  if (barraChart) barraChart.destroy();
+  barraChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Ocorrências por Bairro',
+        data: valores
+      }]
+    },
+    options: {
+      responsive: true
+    }
+  });
+}
+
+/***/ },
+
+/***/ "./frontend/modules/modulesDashboard/ui.js"
+/*!*************************************************!*\
+  !*** ./frontend/modules/modulesDashboard/ui.js ***!
+  \*************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   updateUI: () => (/* binding */ updateUI)
+/* harmony export */ });
+function updateUI(data) {
+  if (!data) return;
+  document.getElementById('totalOcorrencias').innerText = data.total;
+  document.getElementById('topTipo').innerText = data.tipoMaisComum?.type || 'sem dados';
+  document.getElementById('topBairro').innerText = data.bairroDestaque?.district || 'sem dados';
+}
+
+/***/ },
+
 /***/ "./frontend/modules/modulesMap/autocomplete.js"
 /*!*****************************************************!*\
   !*** ./frontend/modules/modulesMap/autocomplete.js ***!
@@ -349,7 +528,8 @@ function inicializarMapa(elementId) {
     maxBounds: _bounds_js__WEBPACK_IMPORTED_MODULE_0__.RMR_BOUNDS,
     maxBoundsViscosity: 1.0,
     minZoom: 10,
-    maxZoom: 18
+    maxZoom: 18,
+    zoomControl: false
   });
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
@@ -27463,13 +27643,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _assets_css_style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./assets/css/style.css */ "./frontend/assets/css/style.css");
 /* harmony import */ var _modules_modulesMap_main_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/modulesMap/main.js */ "./frontend/modules/modulesMap/main.js");
-/* harmony import */ var _modules_form_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/form.js */ "./frontend/modules/form.js");
-/* harmony import */ var _modules_form_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_modules_form_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _modules_modulesDashboard_dashboard_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/modulesDashboard/dashboard.js */ "./frontend/modules/modulesDashboard/dashboard.js");
+/* harmony import */ var _modules_form_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/form.js */ "./frontend/modules/form.js");
+/* harmony import */ var _modules_form_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_modules_form_js__WEBPACK_IMPORTED_MODULE_5__);
 // frontend/index.js
 
 
 
- // ← import estático
+
+
 
 })();
 

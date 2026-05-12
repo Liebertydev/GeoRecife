@@ -1,0 +1,160 @@
+/* ====================================================
+   FORM PAGE
+   ==================================================== */
+
+.form-wrapper {
+  min-height: calc(100vh - var(--nav-h));
+  padding: 1rem;
+  background: var(--off-white);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+
+  overflow: hidden;
+
+  max-width: 620px;
+  width: 100%;
+
+  margin: 0 auto;
+}
+
+.form-card-header {
+  padding: 1rem 1.5rem;
+
+  border-bottom: 1px solid var(--border);
+
+  background: linear-gradient(
+    135deg,
+    var(--green) 0%,
+    var(--green-dark) 100%
+  );
+
+  color: var(--white);
+}
+
+.form-card-header h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+
+  color: var(--white);
+
+  margin: 0;
+}
+
+.form-card-header p {
+  font-size: .75rem;
+  opacity: .85;
+
+  margin: .2rem 0 0;
+}
+
+.form-card-body {
+  padding: 1.25rem 1.5rem;
+}
+
+.form-section-divider {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+
+  margin: 1rem 0;
+}
+
+.form-section-divider span {
+  font-size: .68rem;
+  font-weight: 700;
+
+  color: var(--ink-muted);
+
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.form-section-divider::before,
+.form-section-divider::after {
+  content: '';
+
+  flex: 1;
+  height: 1px;
+
+  background: var(--border);
+}
+
+.coord-display {
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+
+  padding: .45rem .7rem;
+
+  font-size: .75rem;
+  color: var(--blue);
+
+  font-family: monospace;
+}
+
+/* Compactação dos campos */
+
+.form-label {
+  margin-bottom: .3rem;
+  font-size: .85rem;
+}
+
+.form-control,
+.form-select {
+  padding: .55rem .75rem;
+  font-size: .9rem;
+}
+
+/* Reduz espaços Bootstrap */
+
+.mb-3 {
+  margin-bottom: .9rem !important;
+}
+
+.mb-4 {
+  margin-bottom: 1rem !important;
+}
+
+.row {
+  --bs-gutter-y: .5rem;
+}
+
+/* Textarea menor */
+
+textarea.form-control {
+  min-height: 90px;
+  resize: vertical;
+}
+
+/* Botões */
+
+.btn {
+  padding: .6rem 1rem;
+}
+
+/* Desktop baixo */
+
+@media (max-height: 900px) {
+  .form-wrapper {
+    padding: .75rem;
+  }
+
+  .form-card-body {
+    padding: 1rem 1.25rem;
+  }
+
+  textarea.form-control {
+    min-height: 75px;
+  }
+}

@@ -1,0 +1,35 @@
+/* ===================================================
+   HELPERS
+   =================================================== */
+
+.empurrar-baixo {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* Login box */
+
+.login-box {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+  max-width: 420px;
+  width: 100%;
+}
+
+/* Text helpers */
+
+.text-success {
+  color: var(--green) !important;
+}
+
+.text-primary {
+  color: var(--blue) !important;
+}
+
+/* Display */
+
+.display-6 {
+  font-family: 'Syne', sans-serif !important;
+}

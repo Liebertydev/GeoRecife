@@ -131,7 +131,9 @@ app.use(checkCsrfError);
 // ====================
 
 app.use((req, res) => {
-  res.status(404).render('404');
+  res.status(404).render('404', {
+        pageCSS: '/frontend/assets/css/pages/404.css'
+      });
 });
 
 

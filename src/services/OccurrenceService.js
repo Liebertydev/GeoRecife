@@ -1,7 +1,7 @@
 // src/services/OccurrenceService.js
 
 const prisma = require('../database/prisma');
-const validator = require('validator');
+// const validator = require('validator');
 
 class OccurrenceService {
   constructor(body, userId = null) {
@@ -115,6 +115,25 @@ class OccurrenceService {
     });
 
   }
+
+  static async listarPaginado(page = 1, limit = 9) {
+    const skip = (page - 1) * limit;
+
+    return await prisma.occurrence.findMany({
+      orderBy: {
+        createdAt: 'desc'
+      },
+
+      skip,
+      take: limit,
+
+      include: {
+        user: true
+      }
+    });
+  }
 }
+
+
 
 module.exports = OccurrenceService;

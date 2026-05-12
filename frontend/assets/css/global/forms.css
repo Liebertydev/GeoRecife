@@ -1,0 +1,51 @@
+/* ===================================================
+   FORM CONTROLS
+   =================================================== */
+
+.form-control,
+.form-select {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-sm) !important;
+  font-size: .875rem !important;
+  color: var(--ink) !important;
+  background: var(--white) !important;
+  padding: .6rem .9rem !important;
+  transition: var(--transition) !important;
+}
+
+.form-select {
+    display: inline;
+}
+
+/* Focus */
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--green) !important;
+  box-shadow: 0 0 0 3px var(--green-glow) !important;
+  outline: none !important;
+}
+
+/* Readonly */
+
+.form-control[readonly] {
+  background: var(--surface) !important;
+  color: var(--ink-muted) !important;
+}
+
+/* Labels */
+
+.form-label {
+  font-size: .8125rem !important;
+  font-weight: 600 !important;
+  color: var(--ink-mid) !important;
+  margin-bottom: .4rem !important;
+  letter-spacing: .2px;
+}
+
+/* Textarea */
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 100px;
+}

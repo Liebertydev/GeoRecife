@@ -1,0 +1,60 @@
+/* ===================================================
+   FLASH MESSAGES
+   =================================================== */
+
+.flash-wrapper {
+  position: fixed;
+
+  top: calc(var(--nav-h) + 12px);
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  z-index: 1050;
+
+  width: 90%;
+  max-width: 480px;
+}
+
+.flashMsg {
+  border-radius: var(--radius) !important;
+
+  border: none !important;
+
+  font-size: .875rem !important;
+  font-weight: 500 !important;
+
+  box-shadow: var(--shadow-md) !important;
+
+  animation: slideDown .3s ease;
+}
+
+.alert-danger {
+  background: #fef2f2 !important;
+
+  color: #991b1b !important;
+
+  border-left: 4px solid #dc2626 !important;
+}
+
+.alert-success {
+  background: var(--green-light) !important;
+
+  color: #065f46 !important;
+
+  border-left: 4px solid var(--green) !important;
+}
+
+@keyframes slideDown {
+
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}

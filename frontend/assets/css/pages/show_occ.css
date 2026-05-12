@@ -1,0 +1,60 @@
+/* ====================================================
+   SHOW PAGE
+   ==================================================== */
+
+.show-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.show-card-header {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+  color: var(--white);
+}
+
+.show-detail-row {
+  display: flex;
+  align-items: flex-start;
+  padding: .9rem 1.5rem;
+  border-bottom: 1px solid var(--border-light);
+  gap: .75rem;
+  transition: var(--transition);
+}
+
+.show-detail-row:hover {
+  background: var(--off-white);
+}
+
+.show-detail-row:last-child {
+  border-bottom: none;
+}
+
+.show-detail-label {
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--ink-muted);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  min-width: 120px;
+  padding-top: .1rem;
+}
+
+.show-detail-value {
+  font-size: .9rem;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.show-coords {
+  font-family: monospace;
+  font-size: .8rem;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: .2em .55em;
+  color: var(--blue);
+}

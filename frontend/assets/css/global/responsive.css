@@ -1,0 +1,182 @@
+/* ===================================================
+   RESPONSIVE GLOBAL (GEORECIFE)
+   Breakpoints gerais do sistema
+   =================================================== */
+
+/* =========================
+   EXTRA LARGE (>=1200px)
+========================= */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+/* =========================
+   LARGE (>=992px)
+========================= */
+@media (max-width: 1199px) {
+  .hero-text h1 {
+    font-size: 3rem;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+  }
+}
+
+/* =========================
+   MEDIUM (<=992px)
+========================= */
+@media (max-width: 992px) {
+
+  /* NAVBAR */
+  .navbar {
+    padding: 0 1rem !important;
+  }
+
+  .navbar-nav .nav-link.nav-white {
+    font-size: .9rem;
+  }
+
+  /* HERO */
+  .hero-text h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-text p {
+    font-size: .95rem;
+  }
+
+  /* DASHBOARD */
+  .stat-card {
+    padding: 1.25rem;
+  }
+
+  .stat-value {
+    font-size: 1.75rem;
+  }
+
+  /* MAPA */
+  .map-sidebar {
+    min-width: 220px !important;
+    max-width: 240px !important;
+  }
+}
+
+/* =========================
+   SMALL (<=768px)
+========================= */
+@media (max-width: 768px) {
+
+  /* NAVBAR MOBILE */
+  .navbar-collapse {
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    padding: 1rem 1.25rem;
+    margin: 0 -1.5rem;
+  }
+
+  .navbar-nav {
+    gap: .25rem;
+  }
+
+  .nav-white {
+    font-size: 1rem;
+  }
+
+  /* HERO */
+  .hero-text h1 {
+    font-size: 2.1rem;
+    text-align: center;
+  }
+
+  .hero-text p {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  /* CARDS */
+  .card {
+    margin-bottom: 1rem;
+  }
+
+  /* DASHBOARD */
+  .stat-card {
+    width: 100%;
+  }
+
+  /* MAPA */
+  .map-sidebar {
+    position: relative;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+
+  /* FORM */
+  .form-card {
+    margin: 0 1rem;
+  }
+
+  .form-card-body {
+    padding: 1.25rem;
+  }
+
+  /* SHOW PAGE */
+  .show-detail-row {
+    flex-direction: column;
+    gap: .25rem;
+  }
+
+  .show-detail-label {
+    min-width: auto;
+  }
+}
+
+/* =========================
+   EXTRA SMALL (<=576px)
+========================= */
+@media (max-width: 576px) {
+
+  /* GLOBAL TEXT */
+  body {
+    font-size: 14px;
+  }
+
+  /* HERO */
+  .hero-text h1 {
+    font-size: 1.8rem;
+  }
+
+  .hero-text p {
+    font-size: .9rem;
+  }
+
+  /* AUTH */
+  .auth-card {
+    padding: 1.5rem;
+  }
+
+  /* DASHBOARD */
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* NOT FOUND */
+  .not-found-code {
+    font-size: 4.5rem;
+  }
+
+  /* BUTTONS */
+  .btn {
+    font-size: .85rem !important;
+  }
+}

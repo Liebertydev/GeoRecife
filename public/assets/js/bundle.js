@@ -571,6 +571,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _bounds_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bounds.js */ "./frontend/modules/modulesMap/bounds.js");
 
+function popupStrong(text) {
+  const el = document.createElement('strong');
+  el.textContent = text == null ? '' : String(text);
+  return el;
+}
+function tooltipText(text) {
+  const el = document.createElement('span');
+  el.textContent = text == null ? '' : String(text);
+  return el;
+}
 
 // ====================
 // CONTROLE DE DRAG DO MARCADOR
@@ -596,7 +606,7 @@ function adicionarDragend(marcador, map, onEnderecoAtualizado) {
         enderecoLimpo,
         dadosMarcador
       } = await onEnderecoAtualizado(lat, lng);
-      marcador.bindPopup(`<strong>${enderecoLimpo}</strong>`).openPopup();
+      marcador.bindPopup(popupStrong(enderecoLimpo)).openPopup();
       map.setView([lat, lng], map.getZoom());
     } catch (e) {
       console.error(e);
@@ -611,12 +621,12 @@ function adicionarDragend(marcador, map, onEnderecoAtualizado) {
 function criarMarcador(map, lat, lon, popupText, onEnderecoAtualizado = null) {
   const marcador = L.marker([lat, lon], {
     draggable: true
-  }).addTo(map).bindPopup(`<strong>${popupText}</strong>`).openPopup();
+  }).addTo(map).bindPopup(popupStrong(popupText)).openPopup();
   adicionarDragend(marcador, map, onEnderecoAtualizado);
   return marcador;
 }
 function criarMarcadorOcc(map, lat, lon, popupText) {
-  return L.marker([lat, lon]).addTo(map).bindPopup(`<strong>${popupText}<strong>`).bindTooltip(popupText, {
+  return L.marker([lat, lon]).addTo(map).bindPopup(popupStrong(popupText)).bindTooltip(tooltipText(popupText), {
     permanent: true,
     direction: 'top',
     offset: [0, -10]

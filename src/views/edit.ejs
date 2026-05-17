@@ -78,11 +78,9 @@
         <div class="mb-3">
           <label class="form-label">Tipo da ocorrência <span class="text-danger">*</span></label>
           <select name="type" class="form-select" required>
-            <option value="buraco"     <%= occurrence.type === 'buraco'     ? 'selected' : '' %>>Buraco na via</option>
-            <option value="alagamento" <%= occurrence.type === 'alagamento' ? 'selected' : '' %>>Alagamento</option>
-            <option value="iluminacao" <%= occurrence.type === 'iluminacao' ? 'selected' : '' %>>Problema de iluminação</option>
-            <option value="entulho"    <%= occurrence.type === 'entulho'    ? 'selected' : '' %>>Entulho / descarte irregular</option>
-            <option value="outro"      <%= occurrence.type === 'outro'      ? 'selected' : '' %>>Outro</option>
+            <% occurrenceTypes.forEach(t => { %>
+              <option value="<%= t.value %>" <%= occurrence.type === t.value ? 'selected' : '' %>><%= t.label %></option>
+            <% }) %>
           </select>
         </div>
 

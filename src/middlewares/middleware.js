@@ -1,8 +1,11 @@
+const { OCCURRENCE_TYPES } = require('../constants/occurrenceTypes');
+
 module.exports.middlewareGlobal = (req, res, next) => {
     res.locals.errors = req.flash('errors');
     res.locals.success = req.flash('success');
     res.locals.pageCSS = null;
     res.locals.user = req.session.user;
+    res.locals.occurrenceTypes = OCCURRENCE_TYPES;
     next();
 };
 

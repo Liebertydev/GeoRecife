@@ -49,9 +49,9 @@
             </span>
             <select id="filtroTipo" class="form-select form-select-sm w-auto">
               <option value="todos">Todos os tipos</option>
-              <option value="crime">Crime</option>
-              <option value="alagamento">Alagamento</option>
-              <option value="acidente">Acidente</option>
+              <% occurrenceTypes.forEach(t => { %>
+                <option value="<%= t.value %>"><%= t.label %></option>
+              <% }) %>
             </select>
           </div>
           <div class="chart-body">

@@ -7,9 +7,8 @@ exports.renderDashboard = (req, res) => {
 
 exports.getDashboard = async (req, res) => {
     try {
-        const tipo = req.query.tipo;
-        if(!tipo) tipo = 'todos';
-        
+        const tipo = req.query.tipo || 'todos';
+
         const [
             porTipo,
             porBairro,
@@ -33,6 +32,7 @@ exports.getDashboard = async (req, res) => {
         });
 
     } catch (e) {
-        console.log(e);
+        console.error(e);
+        res.status(500).json({ error: 'Erro ao carregar o dashboard.' });
     }
 }

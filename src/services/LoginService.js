@@ -2,6 +2,8 @@ const prisma = require('../database/prisma');
 const validator = require('validator');
 const bcryptjs = require('bcryptjs');
 
+const DUMMY_HASH = bcryptjs.hashSync('not-a-real-password', 12);
+
 class Login {
     constructor(body) {
         this.body = body;
@@ -18,14 +20,13 @@ class Login {
 
         if (this.errors.length > 0) return;
 
-        const salt = bcryptjs.genSaltSync();
-        this.body.password = bcryptjs.hashSync(this.body.password, salt);
+        const hash = await bcryptjs.hash(this.body.password, 12);
 
         this.user = await prisma.user.create({
             data: {
                 name: this.body.nome,
                 email: this.body.email,
-                password: this.body.password
+                password: hash
             }
         });
     }
@@ -35,31 +36,29 @@ class Login {
 
         if (this.errors.length > 0) return;
 
-        this.user = await prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
             where: { email: this.body.email }
         });
 
-        if (!this.user) {
-            this.errors.push('Email ou senha inválidos!');
-            return;
-        }
+        const hashToCheck = user ? user.password : DUMMY_HASH;
+        const passwordOk = await bcryptjs.compare(this.body.password, hashToCheck);
 
-        if (!bcryptjs.compareSync(this.body.password, this.user.password)) {
+        if (!user || !passwordOk) {
             this.errors.push('Email ou senha inválidos!');
             this.user = null;
             return;
         }
 
-
+        this.user = user;
     }
 
     async userExist() {
-        this.user = await prisma.user.findUnique({
+        const existing = await prisma.user.findUnique({
             where: { email: this.body.email }
         });
 
-        if (this.user) {
-            this.errors.push('Usuário já Cadastrado');
+        if (existing) {
+            this.errors.push('Não foi possível concluir o cadastro. Verifique os dados informados.');
         }
     }
 
@@ -74,8 +73,9 @@ class Login {
             this.errors.push('Nome precisa ter pelo menos 3 caracteres.');
         }
 
-        if (!this.body.password || this.body.password.trim().length < 3 || this.body.password.trim().length > 50) {
-            this.errors.push('Senha deve ter entre 3 e 50 caracteres.');
+        const password = this.body.password || '';
+        if (password.length < 8 || password.length > 128) {
+            this.errors.push('Senha deve ter entre 8 e 128 caracteres.');
         }
     }
 

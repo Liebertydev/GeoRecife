@@ -5,12 +5,11 @@ const app = express();
 const path = require('path');
 
 const helmet = require('helmet');
-const csrf = require('csurf');
+const cookieParser = require('cookie-parser');
 
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 
-const pool = require('./src/database/pg');
 const { sessionPool } = require('./src/database/pg');
 const flash = require('connect-flash');
 
@@ -23,6 +22,10 @@ const {
   checkCsrfError,
   csrfMiddleware
 } = require('./src/middlewares/middleware');
+
+const { doubleCsrfProtection } = require('./src/middlewares/csrf');
+
+const isProd = process.env.NODE_ENV === 'production';
 
 
 // ====================
@@ -48,6 +51,8 @@ if (process.env.NODE_ENV !== 'development') {
 // SESSÕES
 // ====================
 
+app.use(cookieParser(process.env.SESSION_SECRET));
+
 app.use(
   session({
     store: new pgSession({
@@ -56,12 +61,12 @@ app.use(
     }),
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7,
       httpOnly: true,
       sameSite: 'lax',
-      secure: false
+      secure: isProd
     }
   })
 );
@@ -100,7 +105,7 @@ app.use(middlewareGlobal);
 // CSRF
 // ====================
 
-app.use(csrf());
+app.use(doubleCsrfProtection);
 app.use(csrfMiddleware);
 
 

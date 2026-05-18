@@ -18,7 +18,7 @@ exports.register = async (req, res, next) => {
             return;
         }
 
-        req.flash('sucsess', 'Seu usuário foi criado com sucesso!');
+        req.flash('success', 'Seu usuário foi criado com sucesso!');
         req.session.save(() => {
             return res.redirect('/');
         });
@@ -42,17 +42,18 @@ exports.login = async (req, res, next) => {
             return;
         }
 
-        req.session.user = {
+        const userPayload = {
             id: login.user.id,
             name: login.user.name,
             email: login.user.email
         };
 
-        console.log('SALVANDO SESSION:', req.session.user);
+        req.session.regenerate((err) => {
+            if (err) return next(err);
 
-        req.flash('success', 'Login realizado com sucesso');
-        req.session.save(() => {
-            return res.redirect('/');
+            req.session.user = userPayload;
+            req.flash('success', 'Login realizado com sucesso');
+            req.session.save(() => res.redirect('/'));
         });
     } catch (e) {
         console.log(e);

@@ -122,18 +122,26 @@ class OccurrenceService {
   static async listarPaginado(page = 1, limit = 9) {
     const skip = (page - 1) * limit;
 
-    return await prisma.occurrence.findMany({
+    // Busca um item a mais para detectar se há próxima página
+    // sem precisar de uma query de count.
+    const rows = await prisma.occurrence.findMany({
       orderBy: {
         createdAt: 'desc'
       },
 
       skip,
-      take: limit,
+      take: limit + 1,
 
       include: {
         user: true
       }
     });
+
+    const hasMore = rows.length > limit;
+    return {
+      occurrences: hasMore ? rows.slice(0, limit) : rows,
+      hasMore,
+    };
   }
 }
 

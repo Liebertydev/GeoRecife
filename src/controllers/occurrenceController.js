@@ -48,11 +48,12 @@ exports.list = async (req, res) => {
   try {
     const page = Number(req.query.page) || 1;
 
-    const occurrences = await OccurrenceService.listarPaginado(page);
+    const { occurrences, hasMore } = await OccurrenceService.listarPaginado(page);
 
     res.render('list', {
       pageCSS: '/frontend/assets/css/pages/list_occ.css',
       occurrences,
+      hasMore,
       currentUserId: req.session.user ? req.session.user.id : null,
       currentPage: page,
     });

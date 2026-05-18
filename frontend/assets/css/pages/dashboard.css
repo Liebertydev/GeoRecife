@@ -1,13 +1,43 @@
 /* ====================================================
    DASHBOARD PAGE
+   Layout: header + KPI row + charts (full-width stacked)
    ==================================================== */
+
+.dashboard-page {
+  min-height: calc(100vh - var(--nav-h));
+  background:
+    radial-gradient(circle at 85% -10%, rgba(22, 163, 74, .08), transparent 38%),
+    radial-gradient(circle at -10% 110%, rgba(14, 165, 233, .06), transparent 40%),
+    var(--off-white);
+}
+
+.dashboard-container {
+  padding-top: 2.5rem;
+  padding-bottom: 4rem;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.dashboard-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+
+  margin-bottom: 2.25rem;
+}
+
+.dashboard-header-text { max-width: 640px; }
 
 .dashboard-eyebrow {
   display: inline-flex;
   align-items: center;
   gap: .45rem;
 
-  font-size: .6875rem;            /* 11px */
+  font-size: .6875rem;              /* 11px */
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -38,144 +68,308 @@
 
 .dashboard-header p {
   color: var(--ink-muted);
-  font-size: 1rem;                /* 16px */
+  font-size: 1rem;
   line-height: 1.6;
-  max-width: 640px;
   text-wrap: pretty;
   margin: 0;
 }
 
+.dashboard-cta {
+  flex-shrink: 0;
+  padding: .85rem 1.4rem !important;
+  letter-spacing: .01em;
+}
+
 /* =========================
-   STAT CARDS
+   KPI ROW
 ========================= */
 
-.stat-card {
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+
+  margin-bottom: 1.5rem;
+}
+
+.kpi-card {
+  --kpi-accent: var(--green);
+  --kpi-accent-soft: var(--green-light);
+
+  position: relative;
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 1.25rem;
+
+  padding: 1.5rem 1.5rem 1.75rem;
+
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
+
+  box-shadow: var(--shadow-xs);
+
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+
+  animation: kpiFadeIn .5s ease-out both;
 }
 
-/* 🔥 BARRA SUPERIOR VERDE */
-.stat-card::before {
+/* faixa lateral de acento */
+.kpi-card::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 8px;
-  background: var(--green);
+  bottom: 0;
+  width: 4px;
+  background: var(--kpi-accent);
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
 }
 
-.stat-card:hover {
-  transform: translateY(-2px);
+.kpi-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--kpi-accent);
   box-shadow: var(--shadow-md);
 }
 
-/* ÍCONE */
-.stat-icon {
-  width: 40px;
-  height: 40px;
-  font-size: 1rem;
-  margin-bottom: .6rem;
-  border-radius: var(--radius);
+.kpi-card:nth-child(2) { animation-delay: .05s; }
+.kpi-card:nth-child(3) { animation-delay: .1s; }
+
+/* Variantes semânticas */
+
+.kpi-card--emerald {
+  --kpi-accent:      #16a34a;       /* emerald-600 (var(--green)) */
+  --kpi-accent-soft: #dcfce7;
 }
 
-/* VALOR PRINCIPAL — números grandes */
-.stat-value {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 2.25rem;             /* 36px */
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -.025em;
-  color: var(--ink);
-  margin: 0 0 .35rem;
-  font-variant-numeric: tabular-nums;
+.kpi-card--amber {
+  --kpi-accent:      #d97706;       /* amber-600 */
+  --kpi-accent-soft: #fef3c7;
 }
 
-/* VALOR SECUNDÁRIO — quando o destaque é texto (tipo, bairro) */
-.stat-value-sm {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1.125rem;            /* 18px */
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -.01em;
-  color: var(--ink);
-  margin: 0 0 .35rem;
-  text-wrap: balance;
+.kpi-card--sky {
+  --kpi-accent:      #0284c7;       /* sky-600 */
+  --kpi-accent-soft: #e0f2fe;
 }
 
-/* LABEL */
-.stat-label {
-  font-size: .6875rem;            /* 11px */
-  color: var(--ink-muted);
+/* head: label à esquerda + ícone pequeno à direita */
+.kpi-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  margin-bottom: .85rem;
+}
+
+.kpi-label {
+  font-size: .6875rem;              /* 11px */
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
-  margin: 0;
+  color: var(--ink-muted);
+  line-height: 1.3;
 }
 
+.kpi-card-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--kpi-accent-soft);
+  color: var(--kpi-accent);
+
+  font-size: .95rem;
+  flex-shrink: 0;
+}
+
+/* valor: número grande */
+.kpi-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(2.5rem, 4vw, 3rem);   /* 40–48px */
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.03em;
+  color: var(--ink);
+
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* valor: variante texto (tipo/bairro) */
+.kpi-value--text {
+  font-size: 1.375rem;              /* 22px */
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -.01em;
+  text-wrap: balance;
+  word-break: break-word;
+}
+
+/* slot reservado para tendência (Fase 2) */
+.kpi-trend {
+  font-size: .8125rem;              /* 13px */
+  font-weight: 600;
+  margin: .6rem 0 0;
+  color: var(--ink-muted);
+}
+
+.kpi-trend--up   { color: #16a34a; }
+.kpi-trend--down { color: var(--red); }
+.kpi-trend i     { font-size: .85rem; margin-right: .15rem; }
+
 /* =========================
-   GRÁFICOS
+   CHARTS
 ========================= */
+
+.dashboard-charts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+}
 
 .chart-card {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
+
   overflow: hidden;
+
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow .2s ease, border-color .2s ease;
+
+  animation: kpiFadeIn .55s ease-out both;
+  animation-delay: .15s;
+}
+
+.chart-card:hover {
+  border-color: #cbd5e1;            /* slate-300 */
   box-shadow: var(--shadow-sm);
 }
 
+.chart-card--main { animation-delay: .12s; }
+
 /* HEADER DO GRÁFICO */
 .chart-header {
-  padding: 1rem 1.25rem;
+  padding: 1.1rem 1.4rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: .75rem;
+  gap: 1rem;
   border-bottom: 1px solid var(--border-light);
 }
 
-/* TÍTULO */
+.chart-header-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+
 .chart-title {
-  font-size: .9375rem;            /* 15px */
+  font-size: .9375rem;              /* 15px */
   font-weight: 700;
   letter-spacing: -.005em;
   color: var(--ink);
-  display: flex;
+
+  display: inline-flex;
   align-items: center;
   gap: .5rem;
 }
 
-.chart-title i {
-  color: var(--green);
+.chart-title i { color: var(--green); }
+
+.chart-summary {
+  font-size: .8125rem;              /* 13px */
+  line-height: 1.4;
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+.chart-summary strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* filtro */
+.chart-filter {
+  font-size: .8125rem !important;
+  padding: .35rem .65rem !important;
+  border-color: var(--border) !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--ink-mid) !important;
+  background-color: var(--white) !important;
+}
+
+.chart-filter:focus {
+  border-color: var(--green) !important;
+  box-shadow: 0 0 0 3px var(--green-glow) !important;
 }
 
 /* ÁREA DO GRÁFICO */
 .chart-body {
   position: relative;
-  height: 260px;
+  padding: 1.25rem;
+  height: 340px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .chart-body canvas {
-  max-height: 240px !important;
+  max-height: 100% !important;
   width: 100% !important;
 }
 
-/* filtro */
-#filtroTipo {
-  font-size: .75rem !important;
-  padding: .3rem .5rem !important;
+.chart-card--main .chart-body { height: 380px; }
+
+/* =========================
+   ANIMAÇÕES
+========================= */
+
+@keyframes kpiFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heroDotPulse {
+  0%, 100% { opacity: 1;   transform: scale(1);    }
+  50%      { opacity: .55; transform: scale(.85);  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kpi-card,
+  .chart-card,
+  .dashboard-eyebrow-dot {
+    animation: none !important;
+  }
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 991px) {
+  .kpi-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kpi-card:nth-child(3) { grid-column: 1 / -1; }
+}
+
+@media (max-width: 640px) {
+  .dashboard-header { flex-direction: column; align-items: flex-start; }
+  .dashboard-cta    { width: 100%; }
+
+  .kpi-row { grid-template-columns: minmax(0, 1fr); }
+  .kpi-card:nth-child(3) { grid-column: auto; }
+
+  .kpi-value          { font-size: 2.25rem; }
+  .kpi-value--text    { font-size: 1.25rem; }
+
+  .chart-header { flex-direction: column; align-items: flex-start; }
+  .chart-filter { width: 100% !important; }
+
+  .chart-body                    { height: 280px; padding: 1rem; }
+  .chart-card--main .chart-body  { height: 300px; }
 }

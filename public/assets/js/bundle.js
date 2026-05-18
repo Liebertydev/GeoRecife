@@ -152,12 +152,42 @@ const coresPorTipo = {
   'problema de iluminação': '#8b5cf6',
   // violet-500
   'entulho': '#a16207',
-  // yellow-700 (entulho marrom)
+  // yellow-700
   'outro': '#16a34a' // emerald-600 (--green)
 };
-const BAR_COLOR = '#16a34a'; // emerald-600 (--green)
-const BAR_COLOR_BORDER = '#15803d'; // emerald-700 (--green-dark)
-
+const LEGEND_OPTS = {
+  position: 'bottom',
+  labels: {
+    padding: 14,
+    boxWidth: 10,
+    boxHeight: 10,
+    usePointStyle: true,
+    pointStyle: 'circle',
+    font: {
+      size: 11,
+      family: "'DM Sans', system-ui, sans-serif",
+      weight: '500'
+    },
+    color: '#475569' // slate-600
+  }
+};
+const TOOLTIP_OPTS = {
+  backgroundColor: '#0f172a',
+  // --ink (slate-900)
+  titleFont: {
+    size: 12,
+    weight: '600',
+    family: "'DM Sans', sans-serif"
+  },
+  bodyFont: {
+    size: 12,
+    family: "'DM Sans', sans-serif"
+  },
+  padding: 10,
+  cornerRadius: 6,
+  displayColors: true,
+  boxPadding: 4
+};
 function renderCharts(data) {
   if (!data) return;
   renderPizza(data.porTipo);
@@ -174,18 +204,26 @@ function renderPizza(dados) {
     data: {
       labels,
       datasets: [{
-        label: 'Ocorrências por Tipo',
+        label: 'Ocorrências por tipo',
         data: valores,
-        backgroundColor: dados.map(item => coresPorTipo[item.type] || '#999999'),
-        borderWidth: 2
+        backgroundColor: dados.map(item => coresPorTipo[item.type] || '#94a3b8'),
+        borderWidth: 3,
+        borderColor: '#ffffff',
+        hoverOffset: 8
       }]
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
+      cutout: '58%',
+      /* arcos visivelmente grossos */
+      animation: {
+        duration: 700,
+        easing: 'easeOutCubic'
+      },
       plugins: {
-        legend: {
-          position: 'top'
-        }
+        legend: LEGEND_OPTS,
+        tooltip: TOOLTIP_OPTS
       }
     }
   });
@@ -196,20 +234,35 @@ function renderBarra(dados) {
   const labels = dados.map(item => item.district);
   const valores = dados.map(item => item._count.district);
   if (barraChart) barraChart.destroy();
+
+  // Escala HSL em torno do verde do projeto — primeiro slice mais intenso,
+  // os demais ficam progressivamente mais claros.
+  const cores = labels.map((_, i) => `hsl(152, 58%, ${Math.max(30, 60 - i * 5)}%)`);
   barraChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
       labels,
       datasets: [{
-        label: 'Ocorrências por Bairro',
+        label: 'Ocorrências por bairro',
         data: valores,
-        backgroundColor: labels.map((_, i) => `hsl(152, 60%, ${Math.max(28, 62 - i * 6)}%)`),
-        borderWidth: 2,
-        borderColor: '#ffffff'
+        backgroundColor: cores,
+        borderWidth: 3,
+        borderColor: '#ffffff',
+        hoverOffset: 8
       }]
     },
     options: {
-      responsive: true
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '58%',
+      animation: {
+        duration: 700,
+        easing: 'easeOutCubic'
+      },
+      plugins: {
+        legend: LEGEND_OPTS,
+        tooltip: TOOLTIP_OPTS
+      }
     }
   });
 }
@@ -227,11 +280,81 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   updateUI: () => (/* binding */ updateUI)
 /* harmony export */ });
+// Animação suave para o número principal (totalOcorrencias).
+// Conta do valor atual exibido até o novo valor em ~700ms.
+function animateCounter(el, target) {
+  const from = parseInt(el.textContent, 10) || 0;
+  if (from === target) {
+    el.textContent = target;
+    return;
+  }
+  const duration = 700;
+  const start = performance.now();
+  function tick(now) {
+    const t = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+    el.textContent = Math.round(from + (target - from) * eased);
+    if (t < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+function formatPct(n, total) {
+  if (!total) return '0%';
+  return `${Math.round(n / total * 100)}%`;
+}
+function topItem(arr, key) {
+  if (!arr || arr.length === 0) return null;
+  // Já vem ordenado do backend; mas garantimos só por segurança.
+  return [...arr].sort((a, b) => (b._count[key] ?? 0) - (a._count[key] ?? 0))[0];
+}
 function updateUI(data) {
-  if (!data) return;
-  document.getElementById('totalOcorrencias').innerText = data.total;
-  document.getElementById('topTipo').innerText = data.tipoMaisComum?.type || 'sem dados';
-  document.getElementById('topBairro').innerText = data.bairroDestaque?.district || 'sem dados';
+  const totalEl = document.getElementById('totalOcorrencias');
+  const tipoEl = document.getElementById('topTipo');
+  const bairroEl = document.getElementById('topBairro');
+  const resumoTipo = document.getElementById('resumoTipo');
+  const resumoBairro = document.getElementById('resumoBairro');
+
+  // Estado de erro / sem dados
+  if (!data) {
+    if (totalEl) totalEl.textContent = '0';
+    if (tipoEl) tipoEl.textContent = 'Sem dados';
+    if (bairroEl) bairroEl.textContent = 'Sem dados';
+    if (resumoTipo) resumoTipo.textContent = 'Não foi possível carregar os dados.';
+    if (resumoBairro) resumoBairro.textContent = 'Não foi possível carregar os dados.';
+    return;
+  }
+  const total = data.total ?? 0;
+
+  // ── KPI: total ─────────────────────────────────────
+  if (totalEl) animateCounter(totalEl, total);
+
+  // ── KPI: tipo / bairro ─────────────────────────────
+  if (tipoEl) {
+    tipoEl.textContent = data.tipoMaisComum?.type || '—';
+  }
+  if (bairroEl) {
+    bairroEl.textContent = data.bairroDestaque?.district || '—';
+  }
+
+  // ── Resumos abaixo do título de cada gráfico ───────
+  if (resumoTipo) {
+    const top = topItem(data.porTipo, 'type');
+    if (!top || total === 0) {
+      resumoTipo.textContent = 'Nenhuma ocorrência registrada ainda.';
+    } else {
+      const pct = formatPct(top._count.type, total);
+      resumoTipo.innerHTML = `Maior categoria: <strong>${top.type}</strong> (${pct})`;
+    }
+  }
+  if (resumoBairro) {
+    const top = topItem(data.porBairro, 'district');
+    if (!top) {
+      resumoBairro.textContent = 'Nenhum bairro com registros para o filtro atual.';
+    } else {
+      const n = top._count.district;
+      resumoBairro.innerHTML = `Bairro com mais registros: <strong>${top.district}</strong> (${n})`;
+    }
+  }
 }
 
 /***/ },

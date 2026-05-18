@@ -4,102 +4,107 @@
 <!-- INCLUDE: MESSAGE -->
 <%- include('./includes/messages') %>
 
-<main class="hero" data-page="dashboard">
-  <div class="container py-6 py-md-5">
+<main class="dashboard-page" data-page="dashboard">
+  <div class="container dashboard-container">
 
     <!-- Cabeçalho -->
-    <div class="row mb-4 dashboard-header">
-      <div class="col-12">
+    <header class="dashboard-header">
+      <div class="dashboard-header-text">
         <span class="dashboard-eyebrow">
           <span class="dashboard-eyebrow-dot" aria-hidden="true"></span>
           Ao vivo
         </span>
-        <h1>Dashboard de Ocorrências</h1>
+        <h1>Painel de monitoramento</h1>
         <p>
-          Visualize os dados registrados na plataforma GeoRecife. Os gráficos e
-          estatísticas abaixo mostram o panorama das ocorrências na cidade.
+          Acompanhe em tempo real as ocorrências registradas na plataforma —
+          distribuição por tipo, por bairro e indicadores principais.
         </p>
       </div>
-    </div>
 
-    <!-- Área principal -->
-    <div class="row g-4 align-items-stretch">
+      <a href="/mapa" class="btn btn-success btn-lg dashboard-cta">
+        <i class="bi bi-map-fill me-2" aria-hidden="true"></i>Ver no mapa
+      </a>
+    </header>
 
-      <!-- ── GRÁFICOS ── -->
-      <div class="col-12 col-md-8 d-flex flex-column gap-4">
+    <!-- KPI row -->
+    <section class="kpi-row" aria-label="Indicadores principais">
 
-        <!-- GRÁFICO 1: TIPOS (SEM FILTRO) -->
-        <div class="chart-card">
-          <div class="chart-header">
+      <article class="kpi-card kpi-card--emerald">
+        <div class="kpi-card-head">
+          <span class="kpi-label">Ocorrências registradas</span>
+          <span class="kpi-card-icon">
+            <i class="bi bi-clipboard-data-fill" aria-hidden="true"></i>
+          </span>
+        </div>
+        <p class="kpi-value" id="totalOcorrencias" data-counter>0</p>
+        <p class="kpi-trend" id="totalTrend" hidden></p>
+      </article>
+
+      <article class="kpi-card kpi-card--amber">
+        <div class="kpi-card-head">
+          <span class="kpi-label">Tipo com mais registros</span>
+          <span class="kpi-card-icon">
+            <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+          </span>
+        </div>
+        <p class="kpi-value kpi-value--text" id="topTipo">—</p>
+      </article>
+
+      <article class="kpi-card kpi-card--sky">
+        <div class="kpi-card-head">
+          <span class="kpi-label">Bairro com mais ocorrências</span>
+          <span class="kpi-card-icon">
+            <i class="bi bi-geo-alt-fill" aria-hidden="true"></i>
+          </span>
+        </div>
+        <p class="kpi-value kpi-value--text" id="topBairro">—</p>
+      </article>
+
+    </section>
+
+    <!-- Charts -->
+    <section class="dashboard-charts">
+
+      <!-- Chart principal -->
+      <article class="chart-card chart-card--main">
+        <header class="chart-header">
+          <div class="chart-header-text">
             <span class="chart-title">
-              <i class="bi bi-pie-chart-fill"></i>
-              Ocorrências por Tipo
+              <i class="bi bi-pie-chart-fill" aria-hidden="true"></i>
+              Ocorrências por tipo
             </span>
+            <p class="chart-summary" id="resumoTipo">Carregando dados…</p>
           </div>
-          <div class="chart-body">
-            <canvas id="graficoPizza"></canvas>
-          </div>
+        </header>
+        <div class="chart-body">
+          <canvas id="graficoPizza"></canvas>
         </div>
+      </article>
 
-        <!-- GRÁFICO 2: BAIRRO (COM FILTRO) -->
-        <div class="chart-card">
-          <div class="chart-header">
+      <!-- Chart secundário -->
+      <article class="chart-card">
+        <header class="chart-header">
+          <div class="chart-header-text">
             <span class="chart-title">
-              <i class="bi bi-bar-chart-fill"></i>
-              Ocorrências por Bairro
+              <i class="bi bi-bar-chart-fill" aria-hidden="true"></i>
+              Ocorrências por bairro
             </span>
-            <select id="filtroTipo" class="form-select form-select-sm w-auto">
-              <option value="todos">Todos os tipos</option>
-              <% occurrenceTypes.forEach(t => { %>
-                <option value="<%= t.value %>"><%= t.label %></option>
-              <% }) %>
-            </select>
+            <p class="chart-summary" id="resumoBairro">Carregando dados…</p>
           </div>
-          <div class="chart-body">
-            <canvas id="graficoBarra"></canvas>
-          </div>
+          <select id="filtroTipo" class="form-select form-select-sm w-auto chart-filter">
+            <option value="todos">Todos os tipos</option>
+            <% occurrenceTypes.forEach(t => { %>
+              <option value="<%= t.value %>"><%= t.label %></option>
+            <% }) %>
+          </select>
+        </header>
+        <div class="chart-body">
+          <canvas id="graficoBarra"></canvas>
         </div>
+      </article>
 
-      </div>
+    </section>
 
-      <!-- ── CARDS LATERAIS ── -->
-      <div class="col-12 col-md-4 d-flex flex-column gap-4">
-
-        <!-- Total -->
-        <div class="stat-card">
-          <div class="stat-icon" style="background:var(--green);color:var(--white); display: flex; align-items: center; justify-content: center;">
-            <i class="bi bi-clipboard-data-fill"></i>
-          </div>
-          <p class="stat-value" id="totalOcorrencias">0</p>
-          <p class="stat-label">OCORRÊNCIAS REGISTRADAS</p>
-        </div>
-
-        <!-- Tipo mais comum -->
-        <div class="stat-card">
-          <div class="stat-icon" style="background:var(--red);color:var(--white); display: flex; align-items: center; justify-content: center;">
-            <i class="bi bi-exclamation-triangle-fill"></i>
-          </div>
-          <p class="stat-value-sm" id="topTipo">Carregando...</p>
-          <p class="stat-label">TIPO COM MAIS REGISTROS</p>
-        </div>
-
-        <!-- Bairro destaque -->
-        <div class="stat-card">
-          <div class="stat-icon" style="background:var(--green);color:var(--white); display: flex; align-items: center; justify-content: center;">
-            <i class="bi bi-geo-alt-fill"></i>
-          </div>
-          <p class="stat-value-sm" id="topBairro">Carregando...</p>
-          <p class="stat-label">BAIRRO COM MAIS OCORRÊNCIAS</p>
-        </div>
-
-        <!-- Botão mapa -->
-        <a href="/mapa" class="btn btn-success btn-lg fw-bold w-100 mt-auto" style="padding:.85rem;letter-spacing:.3px;">
-          <i class="bi bi-map-fill me-2"></i>Ver no Mapa
-        </a>
-
-      </div>
-
-    </div>
   </div>
 </main>
 

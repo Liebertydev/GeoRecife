@@ -10,12 +10,36 @@ const coresPorTipo = {
     'buraco na via':          '#64748b',  // slate-500 (--ink-muted)
     'alagamento':             '#0ea5e9',  // sky-500
     'problema de iluminação': '#8b5cf6',  // violet-500
-    'entulho':                '#a16207',  // yellow-700 (entulho marrom)
+    'entulho':                '#a16207',  // yellow-700
     'outro':                  '#16a34a'   // emerald-600 (--green)
 };
 
-const BAR_COLOR = '#16a34a';        // emerald-600 (--green)
-const BAR_COLOR_BORDER = '#15803d'; // emerald-700 (--green-dark)
+const LEGEND_OPTS = {
+    position: 'bottom',
+    labels: {
+        padding: 14,
+        boxWidth: 10,
+        boxHeight: 10,
+        usePointStyle: true,
+        pointStyle: 'circle',
+        font: {
+            size: 11,
+            family: "'DM Sans', system-ui, sans-serif",
+            weight: '500'
+        },
+        color: '#475569'                  // slate-600
+    }
+};
+
+const TOOLTIP_OPTS = {
+    backgroundColor: '#0f172a',           // --ink (slate-900)
+    titleFont: { size: 12, weight: '600', family: "'DM Sans', sans-serif" },
+    bodyFont:  { size: 12,               family: "'DM Sans', sans-serif" },
+    padding: 10,
+    cornerRadius: 6,
+    displayColors: true,
+    boxPadding: 4
+};
 
 export function renderCharts(data) {
     if (!data) return;
@@ -28,7 +52,7 @@ function renderPizza(dados) {
     const ctx = document.getElementById('graficoPizza');
     if (!ctx) return;
 
-    const labels = dados.map(item => item.type);
+    const labels  = dados.map(item => item.type);
     const valores = dados.map(item => item._count.type);
 
     if (pizzaChart) pizzaChart.destroy();
@@ -38,20 +62,24 @@ function renderPizza(dados) {
         data: {
             labels,
             datasets: [{
-                label: 'Ocorrências por Tipo',
+                label: 'Ocorrências por tipo',
                 data: valores,
                 backgroundColor: dados.map(item =>
-                    coresPorTipo[item.type] || '#999999'
+                    coresPorTipo[item.type] || '#94a3b8'
                 ),
-                borderWidth: 2
+                borderWidth: 3,
+                borderColor: '#ffffff',
+                hoverOffset: 8
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
+            cutout: '58%',                /* arcos visivelmente grossos */
+            animation: { duration: 700, easing: 'easeOutCubic' },
             plugins: {
-                legend: {
-                    position: 'top'
-                }
+                legend: LEGEND_OPTS,
+                tooltip: TOOLTIP_OPTS
             }
         }
     });
@@ -61,27 +89,39 @@ function renderBarra(dados) {
     const ctx = document.getElementById('graficoBarra');
     if (!ctx) return;
 
-    const labels = dados.map(item => item.district);
+    const labels  = dados.map(item => item.district);
     const valores = dados.map(item => item._count.district);
 
     if (barraChart) barraChart.destroy();
+
+    // Escala HSL em torno do verde do projeto — primeiro slice mais intenso,
+    // os demais ficam progressivamente mais claros.
+    const cores = labels.map((_, i) =>
+        `hsl(152, 58%, ${Math.max(30, 60 - i * 5)}%)`
+    );
 
     barraChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels,
             datasets: [{
-                label: 'Ocorrências por Bairro',
+                label: 'Ocorrências por bairro',
                 data: valores,
-                backgroundColor: labels.map((_, i) =>
-                    `hsl(152, 60%, ${Math.max(28, 62 - i * 6)}%)`
-                ),
-                borderWidth: 2,
-                borderColor: '#ffffff'
+                backgroundColor: cores,
+                borderWidth: 3,
+                borderColor: '#ffffff',
+                hoverOffset: 8
             }]
         },
         options: {
-            responsive: true
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '58%',
+            animation: { duration: 700, easing: 'easeOutCubic' },
+            plugins: {
+                legend: LEGEND_OPTS,
+                tooltip: TOOLTIP_OPTS
+            }
         }
     });
 }

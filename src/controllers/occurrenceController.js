@@ -20,10 +20,6 @@ exports.renderForm = (req, res) => {
 // ====================
 exports.create = async (req, res) => {
   try {
-
-    console.log('SESSION:', req.session);
-    console.log('USER:', req.session.user);
-
     const userId = req.session.user ? req.session.user.id : null;
     const service = new OccurrenceService(req.body, userId);
     await service.create();
@@ -59,7 +55,6 @@ exports.list = async (req, res) => {
       occurrences,
       currentUserId: req.session.user ? req.session.user.id : null,
       currentPage: page,
-      success: req.flash('success'),
     });
 
   } catch (e) {
@@ -76,8 +71,13 @@ exports.list = async (req, res) => {
 // ====================
 exports.show = async (req, res) => {
   try {
+    const id = parseInt(req.params.id, 10);
+    if (!Number.isInteger(id)) {
+      return res.status(404).render('404', { pageCSS: '/frontend/assets/css/pages/404.css' });
+    }
+
     const occurrence = await prisma.occurrence.findUnique({
-      where: { id: parseInt(req.params.id) },
+      where: { id },
       include: { user: true },
     });
 
@@ -106,8 +106,13 @@ exports.show = async (req, res) => {
 // ====================
 exports.renderEdit = async (req, res) => {
   try {
+    const id = parseInt(req.params.id, 10);
+    if (!Number.isInteger(id)) {
+      return res.status(404).render('404', { pageCSS: '/frontend/assets/css/pages/404.css' });
+    }
+
     const occurrence = await prisma.occurrence.findUnique({
-      where: { id: parseInt(req.params.id) },
+      where: { id },
     });
 
     if (!occurrence) {
@@ -126,7 +131,6 @@ exports.renderEdit = async (req, res) => {
     res.render('edit', {
       pageCSS: '/frontend/assets/css/pages/form_occ.css',
       occurrence,
-      errors: req.flash('errors'),
     });
   } catch (e) {
     console.error(e);
@@ -141,8 +145,13 @@ exports.renderEdit = async (req, res) => {
 // ====================
 exports.update = async (req, res) => {
   try {
+    const id = parseInt(req.params.id, 10);
+    if (!Number.isInteger(id)) {
+      return res.status(404).render('404', { pageCSS: '/frontend/assets/css/pages/404.css' });
+    }
+
     const occurrence = await prisma.occurrence.findUnique({
-      where: { id: parseInt(req.params.id) },
+      where: { id },
     });
 
     if (!occurrence) {
@@ -161,16 +170,16 @@ exports.update = async (req, res) => {
     }
 
     const service = new OccurrenceService(req.body, req.session.user.id);
-    await service.update(req.params.id);
+    await service.update(id);
 
     if (service.errors.length > 0) {
       req.flash('errors', service.errors);
-      req.session.save(() => res.redirect(`/ocorrencias/${req.params.id}/editar`));
+      req.session.save(() => res.redirect(`/ocorrencias/${id}/editar`));
       return;
     }
 
     req.flash('success', 'Ocorrência atualizada com sucesso!');
-    req.session.save(() => res.redirect(`/ocorrencias/${req.params.id}`));
+    req.session.save(() => res.redirect(`/ocorrencias/${id}`));
   } catch (e) {
     console.error(e);
     res.render('404', {

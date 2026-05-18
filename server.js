@@ -27,6 +27,11 @@ const { doubleCsrfProtection } = require('./src/middlewares/csrf');
 
 const isProd = process.env.NODE_ENV === 'production';
 
+// Precisa ser configurado antes do session middleware para que
+// express-session detecte HTTPS corretamente atrás de proxy
+// (Render, Heroku, nginx) e defina cookies Secure.
+app.set('trust proxy', 1);
+
 
 // ====================
 // CONEXÃO COM BANCO
@@ -61,7 +66,7 @@ app.use(
     }),
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7,
       httpOnly: true,
@@ -115,7 +120,6 @@ app.use(csrfMiddleware);
 
 app.set('views', path.resolve(__dirname, 'src', 'views'));
 app.set('view engine', 'ejs');
-app.set('trust proxy', 1);
 
 
 // ====================

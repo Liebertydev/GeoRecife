@@ -16,9 +16,7 @@
    LARGE (>=992px)
 ========================= */
 @media (max-width: 1199px) {
-  .stat-value {
-    font-size: 2rem;
-  }
+  .stat-value { font-size: 2rem; }       /* 32px */
 }
 
 /* =========================
@@ -37,13 +35,9 @@
   }
 
   /* DASHBOARD */
-  .stat-card {
-    padding: 1.25rem;
-  }
-
-  .stat-value {
-    font-size: 1.75rem;
-  }
+  .stat-card    { padding: 1.25rem; }
+  .stat-value   { font-size: 1.75rem; }    /* 28px */
+  .stat-value-sm { font-size: 1.0625rem; } /* 17px */
 
   /* MAPA */
   .map-sidebar {
@@ -137,11 +131,12 @@
 
   /* GLOBAL TEXT */
   body {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   /* HERO — ajuste fino no mobile pequeno */
-  .hero-subtitle { font-size: 1rem; }
+  .hero-title    { letter-spacing: -.02em; }
+  .hero-subtitle { font-size: 1rem; line-height: 1.6; }
 
   /* AUTH */
   .auth-card {

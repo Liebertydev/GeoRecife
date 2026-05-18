@@ -15,8 +15,8 @@ html {
 }
 
 body {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px;
+  font-family: 'DM Sans', system-ui, -apple-system, Segoe UI, sans-serif;
+  font-size: 16px;
   line-height: 1.6;
   min-height: 100vh;
 
@@ -24,6 +24,8 @@ body {
   background: var(--off-white);
 
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 a {

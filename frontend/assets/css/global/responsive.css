@@ -16,10 +16,6 @@
    LARGE (>=992px)
 ========================= */
 @media (max-width: 1199px) {
-  .hero-text h1 {
-    font-size: 3rem;
-  }
-
   .stat-value {
     font-size: 2rem;
   }
@@ -38,15 +34,6 @@
   .navbar-nav .nav-item-link {
     font-size: .88rem;
     padding: .5rem .65rem !important;
-  }
-
-  /* HERO */
-  .hero-text h1 {
-    font-size: 2.5rem;
-  }
-
-  .hero-text p {
-    font-size: .95rem;
   }
 
   /* DASHBOARD */
@@ -86,15 +73,21 @@
     font-size: 1rem;
   }
 
-  /* HERO */
-  .hero-text h1 {
-    font-size: 2.1rem;
-    text-align: center;
-  }
-
-  .hero-text p {
+  /* HERO — centraliza no mobile */
+  .hero-text {
+    align-items: center;
     text-align: center;
     margin: 0 auto;
+  }
+
+  .hero-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-cta,
+  .hero-meta {
+    justify-content: center;
   }
 
   /* CARDS */
@@ -147,14 +140,8 @@
     font-size: 14px;
   }
 
-  /* HERO */
-  .hero-text h1 {
-    font-size: 1.8rem;
-  }
-
-  .hero-text p {
-    font-size: .9rem;
-  }
+  /* HERO — ajuste fino no mobile pequeno */
+  .hero-subtitle { font-size: 1rem; }
 
   /* AUTH */
   .auth-card {

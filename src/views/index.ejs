@@ -5,81 +5,99 @@
       <main class="hero">
 
         <!-- ══ HERO ══ -->
-        <div class="container py-3 py-md-5">
+        <section class="hero-section">
+          <div class="container">
 
-          <div class="row align-items-center g-4">
+            <div class="hero-grid">
 
-            <!-- Texto -->
-            <div class="col-12 col-md-6 d-flex flex-column hero-text">
+              <!-- Coluna de texto -->
+              <div class="hero-text">
 
-              <h1 class="order-1">GeoRecife</h1>
+                <span class="hero-eyebrow">
+                  <i class="bi bi-geo-alt-fill" aria-hidden="true"></i>
+                  Inteligência urbana &middot; Recife
+                </span>
 
-              <p class="mb-mobile mb-md-0 order-2 text-justify">
-                GeoRecife é uma plataforma desenvolvida para monitorar a cidade,
-                registrando ocorrências como acidentes, criminalidade e áreas de risco,
-                oferecendo informações atualizadas que ajudam na tomada de decisões e
-                na melhoria da segurança urbana.
-              </p>
+                <h1 class="hero-title">
+                  Monitore a cidade em <span class="hero-title-accent">tempo real</span>
+                </h1>
 
-              <!-- Desktop -->
-              <div class="d-none d-md-flex justify-content-start order-3">
+                <p class="hero-subtitle">
+                  Acompanhe acidentes, alagamentos, ocorrências de segurança e áreas
+                  de risco — tudo em um mapa interativo, atualizado de forma contínua.
+                </p>
 
-                <% if (!user) { %>
-
-                  <a href="/login">
-                    <button class="btn btn-success btn-lg px-4 bg-green btn-aument fw-bold mt-4">
-                      Faça Login
-                    </button>
+                <div class="hero-cta">
+                  <a href="/mapa" class="btn-hero btn-hero--primary">
+                    <i class="bi bi-map-fill" aria-hidden="true"></i>
+                    Ver mapa
                   </a>
-
-                  <% } else { %>
-
-                    <a href="/mapa">
-                      <button class="btn btn-success btn-lg px-4 bg-green btn-aument fw-bold mt-4">
-                        Ver mapa
-                      </button>
+                  <% if (user) { %>
+                    <a href="/ocorrencias/nova" class="btn-hero btn-hero--ghost">
+                      <i class="bi bi-plus-circle" aria-hidden="true"></i>
+                      Registrar ocorrência
                     </a>
+                  <% } else { %>
+                    <a href="/login" class="btn-hero btn-hero--ghost">
+                      <i class="bi bi-person-fill" aria-hidden="true"></i>
+                      Entrar
+                    </a>
+                  <% } %>
+                </div>
 
-                    <% } %>
+                <ul class="hero-meta" aria-label="Características da plataforma">
+                  <li><i class="bi bi-broadcast" aria-hidden="true"></i> Atualização contínua</li>
+                  <li><i class="bi bi-shield-check" aria-hidden="true"></i> Dados abertos</li>
+                  <li><i class="bi bi-grid-1x2-fill" aria-hidden="true"></i> <%= occurrenceTypes.length %> categorias</li>
+                </ul>
+
+              </div>
+
+              <!-- Coluna do preview -->
+              <div class="hero-preview">
+
+                <div class="hero-preview-card">
+
+                  <div class="hero-preview-chrome">
+                    <span class="chrome-dot chrome-dot--red"></span>
+                    <span class="chrome-dot chrome-dot--yellow"></span>
+                    <span class="chrome-dot chrome-dot--green"></span>
+                    <span class="chrome-url">
+                      <i class="bi bi-geo-alt-fill" aria-hidden="true"></i>
+                      georecife.app/mapa
+                    </span>
+                  </div>
+
+                  <div class="hero-preview-body">
+                    <img src="/assets/img/mapa3.png" class="hero-map-img" alt="Pré-visualização do mapa do Recife com ocorrências">
+
+                    <!-- Stat card flutuante: status do sistema -->
+                    <div class="hero-floating-card hero-floating-card--top">
+                      <span class="hero-floating-dot" aria-hidden="true"></span>
+                      <div class="hero-floating-text">
+                        <strong>Ao vivo</strong>
+                        <span>Monitoramento contínuo</span>
+                      </div>
+                    </div>
+
+                    <!-- Stat card flutuante: categorias -->
+                    <div class="hero-floating-card hero-floating-card--bottom">
+                      <i class="bi bi-grid-1x2-fill" aria-hidden="true"></i>
+                      <div class="hero-floating-text">
+                        <strong><%= occurrenceTypes.length %> categorias</strong>
+                        <span>Acompanhadas no mapa</span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
 
               </div>
 
             </div>
 
-            <!-- Imagem -->
-            <div class="col-12 col-md-6 d-flex justify-content-center align-items-center order-3 order-md-2">
-
-              <img src="/assets/img/mapa3.png" class="img-fluid rounded-4 order-1 order-md-1 hero-map-img"
-                alt="Mapa do Recife">
-
-            </div>
-
-            <!-- Mobile -->
-            <div class="col-12 d-flex d-md-none justify-content-center order-4">
-
-              <% if (!user) { %>
-
-                <a href="/login">
-                  <button class="btn btn-success btn-lg px-4 bg-green btn-aument fw-bold mt-3">
-                    Faça Login
-                  </button>
-                </a>
-
-                <% } else { %>
-
-                  <a href="/mapa">
-                    <button class="btn btn-success btn-lg px-4 bg-green btn-aument fw-bold mt-3">
-                      Ver mapa
-                    </button>
-                  </a>
-
-                  <% } %>
-
-            </div>
-
           </div>
-
-        </div>
+        </section>
 
         <!-- ══ FUNCIONALIDADES ══ -->
         <div class="features-section">

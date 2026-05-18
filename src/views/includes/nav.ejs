@@ -1,63 +1,85 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-green px-4">
+<%
+  // Active-link helper: "/" exige igualdade exata; demais usam prefixo.
+  function isActive(href) {
+    if (!currentPath) return false;
+    if (href === '/') return currentPath === '/';
+    return currentPath === href || currentPath.startsWith(href + '/');
+  }
+  // Primeiro nome para o chip do usuário.
+  const firstName = (user && user.name) ? String(user.name).trim().split(/\s+/)[0] : null;
+%>
+<nav class="navbar navbar-expand-md">
   <div class="container-fluid">
 
-    <!-- Brand com ponto decorativo -->
-    <a class="navbar-brand me-5 title d-flex align-items-center gap-2" href="/">
-      GeoRecife
+    <!-- Brand -->
+    <a class="navbar-brand title d-flex align-items-center gap-2" href="/">
+      <span class="nav-brand-dot" aria-hidden="true"></span>
+      <span>GeoRecife</span>
     </a>
 
-    <!-- Botão hamburguer -->
+    <!-- Hamburger -->
     <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Abrir menu">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Menu -->
+    <!-- Collapsable area -->
     <div class="collapse navbar-collapse" id="navbarMenu">
 
-      <div class="navbar-nav gap-2 ms-md-4 fs-2">
+      <!-- Primary nav (pills) -->
+      <div class="navbar-nav nav-pills-group ms-md-5">
 
-        <!-- Link Login/Sair visível apenas no mobile -->
+        <!-- Mobile-only login/logout shortcut -->
         <% if (user) { %>
-          <a class="nav-link d-md-none nav-white fw-semibold nav-mobile-action" href="/logout">
+          <a class="nav-link d-md-none fw-semibold nav-mobile-action" href="/logout">
             <i class="bi bi-box-arrow-right me-1"></i>Sair
           </a>
         <% } else { %>
-          <a class="nav-link d-md-none nav-white fw-semibold nav-mobile-action" href="/login">
+          <a class="nav-link d-md-none fw-semibold nav-mobile-action" href="/login">
             <i class="bi bi-person-fill me-1"></i>Login
           </a>
         <% } %>
 
         <div class="nav-divider d-md-none"></div>
 
-        <a class="nav-link nav-white fw-semibold" href="/">
+        <a class="nav-link nav-item-link<%= isActive('/') ? ' active' : '' %>" href="/" <%= isActive('/') ? 'aria-current="page"' : '' %>>
           <i class="bi bi-house-fill me-1 d-md-none"></i>Início
         </a>
-        <a class="nav-link nav-white fw-semibold" href="/mapa">
+        <a class="nav-link nav-item-link<%= isActive('/mapa') ? ' active' : '' %>" href="/mapa" <%= isActive('/mapa') ? 'aria-current="page"' : '' %>>
           <i class="bi bi-map-fill me-1 d-md-none"></i>Mapa
         </a>
-        <a class="nav-link nav-white fw-semibold" href="/ocorrencias">
+        <a class="nav-link nav-item-link<%= isActive('/ocorrencias') ? ' active' : '' %>" href="/ocorrencias" <%= isActive('/ocorrencias') ? 'aria-current="page"' : '' %>>
           <i class="bi bi-exclamation-triangle-fill me-1 d-md-none"></i>Incidentes
         </a>
-        <a class="nav-link nav-white fw-semibold" href="/dashboard">
+        <a class="nav-link nav-item-link<%= isActive('/dashboard') ? ' active' : '' %>" href="/dashboard" <%= isActive('/dashboard') ? 'aria-current="page"' : '' %>>
           <i class="bi bi-bar-chart-fill me-1 d-md-none"></i>Dashboard
         </a>
 
       </div>
 
-      <!-- Botão Login/Sair desktop -->
-      <% if (user) { %>
-        <a href="/logout" class="ms-auto">
-          <button class="btn-light ms-auto d-none d-md-block px-5 fw-bold btn-login btn-aument btn-lg fw-bolder">
-            Sair
-          </button>
-        </a>
-      <% } else { %>
-        <a href="/login" class="ms-auto">
-          <button class="btn-light ms-auto d-none d-md-block px-5 fw-bold btn-login btn-aument btn-lg fw-bolder">
-            Login
-          </button>
-        </a>
-      <% } %>
+      <!-- Right cluster: status + user/actions -->
+      <div class="nav-right-cluster ms-md-auto d-none d-md-flex align-items-center gap-2">
+
+        <span class="nav-status" title="Sistema operacional" aria-label="Sistema operacional">
+          <span class="nav-status-dot" aria-hidden="true"></span>
+          <span class="nav-status-label">Sistema operacional</span>
+        </span>
+
+        <% if (user) { %>
+          <span class="nav-user-chip" aria-label="Usuário conectado">
+            <i class="bi bi-person-circle" aria-hidden="true"></i>
+            <span><%= firstName %></span>
+          </span>
+          <a href="/logout" class="btn-nav-icon" title="Sair" aria-label="Sair">
+            <i class="bi bi-box-arrow-right"></i>
+          </a>
+        <% } else { %>
+          <a href="/login" class="btn-nav-action btn-nav-action--primary" aria-label="Entrar">
+            <i class="bi bi-person-fill"></i>
+            <span>Login</span>
+          </a>
+        <% } %>
+
+      </div>
 
     </div>
   </div>

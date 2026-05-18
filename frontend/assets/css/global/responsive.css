@@ -35,8 +35,9 @@
     padding: 0 1rem !important;
   }
 
-  .navbar-nav .nav-link.nav-white {
-    font-size: .9rem;
+  .navbar-nav .nav-item-link {
+    font-size: .88rem;
+    padding: .5rem .65rem !important;
   }
 
   /* HERO */
@@ -81,7 +82,7 @@
     gap: .25rem;
   }
 
-  .nav-white {
+  .nav-item-link {
     font-size: 1rem;
   }
 

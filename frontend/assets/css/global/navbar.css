@@ -1,133 +1,306 @@
 /* ===================================================
    NAVBAR
+   Frosted glass, emerald pill active state, status chip.
+   Vibe: civic-intelligence dashboard (Linear / Vercel / Mapbox).
    =================================================== */
 
 .navbar {
-  background: var(--white) !important;
+  /* Frosted surface */
+  background: rgba(255, 255, 255, 0.78) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  backdrop-filter: blur(12px) saturate(180%);
 
   border-bottom: 1px solid var(--border);
 
   min-height: var(--nav-h);
 
-  padding: 0 20px !important;
+  padding: 0 1.5rem !important;
 
   position: sticky;
   top: 0;
   z-index: 1040;
 
-  box-shadow: var(--shadow-xs);
+  /* Layered shadow > hard border */
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 1px 3px rgba(15, 23, 42, 0.06);
 
   display: flex;
   align-items: center;
 }
 
+/* Brand ============================================ */
+
 .navbar-brand.title {
   font-weight: 800;
-  font-size: 2rem;
+  font-size: 1.35rem;
 
   color: var(--ink) !important;
 
-  letter-spacing: -.5px;
+  letter-spacing: -.4px;
+
+  padding: 0;
+
+  display: inline-flex;
+  align-items: center;
 }
 
 .nav-brand-dot {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--green);
+  display: inline-block;
+  position: relative;
 
+  box-shadow: 0 0 0 3px var(--green-glow);
+  animation: navDotPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes navDotPulse {
+  0%, 100% { box-shadow: 0 0 0 3px var(--green-glow); }
+  50%      { box-shadow: 0 0 0 6px rgba(22, 163, 74, .06); }
+}
+
+/* Primary nav (pills) =============================== */
+
+.navbar-nav.nav-pills-group {
+  gap: .35rem;
+}
+
+.navbar-nav .nav-item-link {
+  position: relative;
+
+  color: var(--ink-mid) !important;
+
+  font-weight: 500;
+  font-size: .9rem;
+
+  padding: .45rem .85rem !important;
+
+  border-radius: 999px;
+
+  transition: background-color .2s ease, color .2s ease, transform .15s ease;
+}
+
+.navbar-nav .nav-item-link:hover {
+  color: var(--ink) !important;
+  background: var(--surface);
+}
+
+.navbar-nav .nav-item-link:active {
+  transform: scale(.97);
+}
+
+.navbar-nav .nav-item-link.active {
+  color: #166534 !important;          /* emerald-800 */
+  background: var(--green-light);
+  font-weight: 600;
+}
+
+.navbar-nav .nav-item-link.active:hover {
+  background: var(--green-light);     /* hold the pill on hover */
+}
+
+/* Right cluster ==================================== */
+
+.nav-right-cluster {
+  /* element-level spacing handled by gap utility on the wrapper */
+}
+
+/* Status chip (live system indicator) -------------- */
+
+.nav-status {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+
+  padding: .35rem .7rem;
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+
+  font-size: .78rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+
+  user-select: none;
+  white-space: nowrap;
+}
+
+.nav-status-dot {
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
 
   background: var(--green);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, .14);
 
-  display: inline-block;
-
-  box-shadow: 0 0 0 3px var(--green-glow);
+  animation: navStatusPulse 2s ease-in-out infinite;
 }
 
-.navbar-nav .nav-link.nav-white {
-  color: var(--ink) !important;
-
-  font-weight: 500;
-  font-size: 1rem;
-
-  padding: .45rem .75rem;
-
-  border-radius: var(--radius-sm);
-
-  transition: var(--transition);
+@keyframes navStatusPulse {
+  0%, 100% { opacity: 1;   transform: scale(1);    }
+  50%      { opacity: .55; transform: scale(.85);  }
 }
 
-.navbar-nav .nav-link.nav-white:hover {
-  color: var(--white) !important;
-  background: var(--ink);
+/* Hide the label below ~lg to keep things compact. */
+@media (max-width: 1199px) {
+  .nav-status-label { display: none; }
+  .nav-status { padding: .35rem; }
 }
 
-.navbar-nav .nav-link.nav-white.active {
-  color: var(--green) !important;
-  background: var(--green-light);
+/* Hide the whole status pill below md (toggler shows). */
+@media (max-width: 991px) {
+  .nav-status { display: none !important; }
 }
 
-.btn-login {
-  background: var(--ink) !important;
-  color: var(--white) !important;
+/* User chip --------------------------------------- */
 
-  border: none !important;
+.nav-user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
 
-  font-size: 1rem !important;
-  font-weight: 600 !important;
+  padding: .35rem .75rem .35rem .55rem;
 
-  padding: .70rem 3rem !important;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 999px;
 
-  border-radius: 80px !important;
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--ink);
 
-  transition: var(--transition) !important;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.btn-login:hover {
-  background: var(--ink-mid) !important;
+.nav-user-chip i {
+  color: var(--green);
+  font-size: 1.05rem;
+  line-height: 1;
+}
 
+/* Icon-only ghost button (logout) ----------------- */
+
+.btn-nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink-mid);
+
+  border-radius: 999px;
+
+  text-decoration: none;
+
+  transition: background-color .2s ease, color .2s ease, transform .15s ease;
+}
+
+.btn-nav-icon i {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.btn-nav-icon:hover {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.btn-nav-icon:active {
+  transform: scale(.94);
+}
+
+/* Filled action (Login) --------------------------- */
+
+.btn-nav-action {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+
+  padding: .5rem .9rem;
+
+  border: 1px solid transparent;
+  border-radius: 999px;
+
+  font-size: .88rem;
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .15s ease;
+}
+
+.btn-nav-action i { font-size: 1rem; line-height: 1; }
+
+.btn-nav-action--primary {
+  background: var(--green);
+  color: var(--white);
+  border-color: var(--green);
+}
+
+.btn-nav-action--primary:hover {
+  background: var(--green-dark);
+  border-color: var(--green-dark);
+  color: var(--white);
+  box-shadow: 0 6px 16px var(--green-glow);
   transform: translateY(-1px);
-
-  box-shadow: var(--shadow-sm) !important;
 }
+
+/* Toggler (mobile) ================================ */
 
 .navbar-toggler {
   border: 1px solid var(--border) !important;
-
   border-radius: var(--radius-sm) !important;
-
   padding: .35rem .6rem !important;
 }
 
-.navbar-toggler:focus {
-  box-shadow: none !important;
-}
+.navbar-toggler:focus { box-shadow: none !important; }
 
 .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='%23374151' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='%23334155' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
 }
+
+/* Mobile menu ==================================== */
 
 .nav-divider.d-md-none {
   height: 1px;
-
   background: var(--border);
-
   margin: .5rem 0;
 }
 
-.nav-mobile-action {
-  color: var(--green) !important;
-}
+.nav-mobile-action { color: var(--green) !important; }
 
 @media (max-width: 767px) {
 
-  .navbar-collapse {
-    background: var(--white);
-
-    border-top: 1px solid var(--border);
-
-    padding: 1rem 1.5rem;
-
-    margin: 0 -1.5rem;
+  .navbar {
+    padding: 0 1rem !important;
   }
 
+  .navbar-collapse {
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    padding: 1rem 1.25rem;
+    margin: 0 -1rem;
+  }
+
+  .navbar-nav .nav-item-link {
+    color: var(--ink) !important;
+    padding: .65rem .85rem !important;
+    border-radius: var(--radius-sm);
+  }
+
+  .navbar-nav .nav-item-link.active {
+    color: #166534 !important;
+    background: var(--green-light);
+  }
 }

@@ -7,6 +7,7 @@ module.exports.middlewareGlobal = (req, res, next) => {
     res.locals.pageCSS = null;
     res.locals.user = req.session.user;
     res.locals.occurrenceTypes = OCCURRENCE_TYPES;
+    res.locals.currentPath = req.path;
     next();
 };
 

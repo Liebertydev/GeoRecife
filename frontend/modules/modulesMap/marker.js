@@ -1,5 +1,17 @@
 import { dentroDosBounds } from './bounds.js';
 
+function popupStrong(text) {
+  const el = document.createElement('strong');
+  el.textContent = text == null ? '' : String(text);
+  return el;
+}
+
+function tooltipText(text) {
+  const el = document.createElement('span');
+  el.textContent = text == null ? '' : String(text);
+  return el;
+}
+
 // ====================
 // CONTROLE DE DRAG DO MARCADOR
 // ====================
@@ -22,7 +34,7 @@ export function adicionarDragend(marcador, map, onEnderecoAtualizado) {
     try {
       marcador.bindPopup('Buscando endereço...').openPopup();
       const { enderecoLimpo, dadosMarcador } = await onEnderecoAtualizado(lat, lng);
-      marcador.bindPopup(`<strong>${enderecoLimpo}</strong>`).openPopup();
+      marcador.bindPopup(popupStrong(enderecoLimpo)).openPopup();
       map.setView([lat, lng], map.getZoom());
     } catch (e) {
       console.error(e);
@@ -37,7 +49,7 @@ export function adicionarDragend(marcador, map, onEnderecoAtualizado) {
 export function criarMarcador(map, lat, lon, popupText, onEnderecoAtualizado = null) {
   const marcador = L.marker([lat, lon], { draggable: true })
     .addTo(map)
-    .bindPopup(`<strong>${popupText}</strong>`)
+    .bindPopup(popupStrong(popupText))
     .openPopup();
 
   adicionarDragend(marcador, map, onEnderecoAtualizado);
@@ -48,8 +60,8 @@ export function criarMarcador(map, lat, lon, popupText, onEnderecoAtualizado = n
 export function criarMarcadorOcc(map, lat, lon, popupText) {
   return L.marker([lat, lon])
     .addTo(map)
-    .bindPopup(`<strong>${popupText}<strong>`)
-    .bindTooltip(popupText, {
+    .bindPopup(popupStrong(popupText))
+    .bindTooltip(tooltipText(popupText), {
       permanent: true,
       direction: 'top',
       offset: [0, -10]

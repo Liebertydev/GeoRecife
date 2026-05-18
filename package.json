@@ -9,7 +9,7 @@
     "dev": "webpack -w"
   },
   "keywords": ["recife", "ocorrencias", "mapa", "express", "leaflet", "prisma"],
-  "author": "Ananda Almeida Ramos <ananda.almeida.ramos@gmail.com>",
+  "author": "Lieberty",
   "license": "ISC",
   "description": "Plataforma web para registro e visualização geográfica de ocorrências urbanas em Recife (crimes, trânsito, buracos, alagamentos, etc.).",
   "dependencies": {

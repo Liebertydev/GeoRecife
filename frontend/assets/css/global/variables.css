@@ -1,44 +1,54 @@
 /* ===================================================
    VARIABLES
+   Paleta: Emerald + Slate/Navy (Notion/Linear-style).
+   Tokens mantidos para compatibilidade; valores atualizados.
    =================================================== */
 
 :root {
-  --white: #ffffff;
-  --off-white: #f7f8fc;
-  --surface: #f0f2f8;
+  /* Surfaces */
+  --white: #ffffff;            /* card background        */
+  --off-white: #f8fafc;        /* main page background   */
+  --surface: #f1f5f9;          /* section alt background */
 
-  --border: #e2e6f0;
-  --border-light: #eef0f6;
+  --border: #e2e8f0;           /* slate-200 */
+  --border-light: #f1f5f9;     /* slate-100 */
 
-  --green: #10a861;
-  --green-dark: #0d8a4f;
-  --green-light: #d6f5e8;
-  --green-glow: rgba(16,168,97,.12);
+  /* Primary — Emerald */
+  --green: #16a34a;            /* emerald-600           */
+  --green-dark: #15803d;       /* emerald-700           */
+  --green-light: #dcfce7;      /* emerald-100 / mint    */
+  --green-glow: rgba(22, 163, 74, .12);
 
-  --blue: #2563eb;
-  --blue-dark: #1d4ed8;
-  --blue-light: #dbeafe;
-  --blue-glow: rgba(37,99,235,.10);
+  /* Secondary — Navy / Slate (semantically: --blue mantém o nome
+     por retrocompatibilidade, mas representa o navy da paleta). */
+  --blue: #0f172a;             /* slate-900 / navy      */
+  --blue-dark: #1e293b;        /* slate-800             */
+  --blue-light: #e2e8f0;       /* slate-200             */
+  --blue-glow: rgba(15, 23, 42, .10);
 
-  --red: #f56363ef;
+  /* Danger */
+  --red: #ef4444;              /* red-500 */
 
-  --ink: #111827;
-  --ink-mid: #374151;
-  --ink-muted: #6b7280;
-  --ink-faint: #9ca3af;
+  /* Text */
+  --ink: #0f172a;              /* slate-900 (main text)   */
+  --ink-mid: #334155;          /* slate-700               */
+  --ink-muted: #64748b;        /* slate-500 (secondary)   */
+  --ink-faint: #94a3b8;        /* slate-400               */
 
+  /* Radius */
   --radius-sm: 6px;
   --radius: 12px;
   --radius-lg: 18px;
   --radius-xl: 24px;
 
-  --shadow-xs: 0 1px 3px rgba(0,0,0,.06);
-  --shadow-sm: 0 2px 8px rgba(0,0,0,.07);
-  --shadow: 0 4px 16px rgba(0,0,0,.08);
-  --shadow-md: 0 8px 32px rgba(0,0,0,.10);
-  --shadow-lg: 0 16px 48px rgba(0,0,0,.12);
+  /* Shadows */
+  --shadow-xs: 0 1px 3px rgba(15, 23, 42, .06);
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, .07);
+  --shadow:    0 4px 16px rgba(15, 23, 42, .08);
+  --shadow-md: 0 8px 32px rgba(15, 23, 42, .10);
+  --shadow-lg: 0 16px 48px rgba(15, 23, 42, .12);
 
   --nav-h: 64px;
 
-  --transition: .18s cubic-bezier(.4,0,.2,1);
+  --transition: .18s cubic-bezier(.4, 0, .2, 1);
 }

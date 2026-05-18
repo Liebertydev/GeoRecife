@@ -14,7 +14,7 @@
     <div class="map-filter-group">
 
       <% occurrenceTypes.forEach(t => { %>
-        <label class="map-filter-item">
+        <label class="map-filter-item" data-type="<%= t.value %>">
           <input type="checkbox" name="filter" value="<%= t.value %>">
           <span><%= t.label %></span>
         </label>
@@ -94,7 +94,7 @@
     <div class="mobile-filter-body">
 
       <% occurrenceTypes.forEach(t => { %>
-        <label class="map-filter-item">
+        <label class="map-filter-item" data-type="<%= t.value %>">
           <input type="checkbox" name="filter-mobile" value="<%= t.value %>">
           <span><%= t.label %></span>
         </label>

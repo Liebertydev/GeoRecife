@@ -364,31 +364,73 @@ main.hero {
 }
 
 .feat-card {
-  background: var(--off-white);
+  --card-accent: var(--green);
+  --card-accent-soft: var(--green-light);
+
+  position: relative;
+  background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 1.75rem 1.5rem;
+  padding: 2rem 1.75rem;
   height: 100%;
-  transition: var(--transition);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.feat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--card-accent);
+  opacity: .85;
+  transition: opacity 0.2s ease, height 0.2s ease;
 }
 
 .feat-card:hover {
-  border-color: var(--green);
+  border-color: var(--card-accent);
   box-shadow: var(--shadow-md);
-  transform: translateY(-3px);
+  transform: translateY(-2px);
+}
+
+.feat-card:hover::before {
+  height: 4px;
+  opacity: 1;
+}
+
+.feat-card--blue {
+  --card-accent: #2563eb;            /* blue-600 */
+  --card-accent-soft: #dbeafe;       /* blue-100 */
+}
+
+.feat-card--green {
+  --card-accent: var(--green);
+  --card-accent-soft: var(--green-light);
+}
+
+.feat-card--amber {
+  --card-accent: #d97706;            /* amber-600 */
+  --card-accent-soft: #fef3c7;       /* amber-100 */
 }
 
 .feat-icon {
   width: 48px;
   height: 48px;
   border-radius: var(--radius);
-  background: var(--green-light);
+  background: var(--card-accent-soft);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1rem;
   font-size: 1.35rem;
-  color: var(--green);
+  color: var(--card-accent);
+  transition: transform 0.2s ease;
+}
+
+.feat-card:hover .feat-icon {
+  transform: scale(1.05);
 }
 
 .feat-card h5 {

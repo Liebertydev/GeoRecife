@@ -13,40 +13,12 @@
 
     <div class="map-filter-group">
 
-      <label class="map-filter-item">
-        <input type="checkbox" name="filter" value="crime">
-        <span>Crimes</span>
-      </label>
-
-      <label class="map-filter-item">
-        <input type="checkbox" name="filter" value="transito">
-        <span>Trânsito</span>
-      </label>
-
-      <label class="map-filter-item">
-        <input type="checkbox" name="filter" value="buraco">
-        <span>Buracos na via</span>
-      </label>
-
-      <label class="map-filter-item">
-        <input type="checkbox" name="filter" value="alagamento">
-        <span>Alagamentos</span>
-      </label>
-
-      <label class="map-filter-item">
-        <input type="checkbox" name="filter" value="entulho">
-        <span>Entulho irregular</span>
-      </label>
-
-      <label class="map-filter-item">
-        <input type="checkbox" name="filter" value="iluminacao">
-        <span>Iluminação</span>
-      </label>
-
-      <label class="map-filter-item">
-        <input type="checkbox" name="filter" value="outros">
-        <span>Outros</span>
-      </label>
+      <% occurrenceTypes.forEach(t => { %>
+        <label class="map-filter-item">
+          <input type="checkbox" name="filter" value="<%= t.value %>">
+          <span><%= t.label %></span>
+        </label>
+      <% }) %>
 
     </div>
 
@@ -121,40 +93,12 @@
     <!-- Checkboxes (scrolláveis) -->
     <div class="mobile-filter-body">
 
-      <label class="map-filter-item">
-        <input type="checkbox" name="filter-mobile" value="crime">
-        <span>Crimes</span>
-      </label>
-
-      <label class="map-filter-item">
-        <input type="checkbox" name="filter-mobile" value="transito">
-        <span>Trânsito</span>
-      </label>
-
-      <label class="map-filter-item">
-        <input type="checkbox" name="filter-mobile" value="buraco">
-        <span>Buracos na via</span>
-      </label>
-
-      <label class="map-filter-item">
-        <input type="checkbox" name="filter-mobile" value="alagamento">
-        <span>Alagamentos</span>
-      </label>
-
-      <label class="map-filter-item">
-        <input type="checkbox" name="filter-mobile" value="entulho">
-        <span>Entulho irregular</span>
-      </label>
-
-      <label class="map-filter-item">
-        <input type="checkbox" name="filter-mobile" value="iluminacao">
-        <span>Iluminação</span>
-      </label>
-
-      <label class="map-filter-item">
-        <input type="checkbox" name="filter-mobile" value="outros">
-        <span>Outros</span>
-      </label>
+      <% occurrenceTypes.forEach(t => { %>
+        <label class="map-filter-item">
+          <input type="checkbox" name="filter-mobile" value="<%= t.value %>">
+          <span><%= t.label %></span>
+        </label>
+      <% }) %>
 
     </div>
 

@@ -1,3 +1,4 @@
+const { OCCURRENCE_TYPES } = require('../constants/occurrenceTypes');
 const { generateCsrfToken, invalidCsrfTokenError } = require('./csrf');
 
 module.exports.middlewareGlobal = (req, res, next) => {
@@ -5,6 +6,7 @@ module.exports.middlewareGlobal = (req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.pageCSS = null;
     res.locals.user = req.session.user;
+    res.locals.occurrenceTypes = OCCURRENCE_TYPES;
     next();
 };
 

@@ -60,10 +60,12 @@
 .auth-title {
   text-align: center;
 
-  font-size: 1.5rem;
+  font-size: 1.75rem;            /* 28px */
   font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -.02em;
 
-  margin-bottom: .35rem;
+  margin-bottom: .5rem;
 }
 
 .auth-subtitle {
@@ -71,9 +73,11 @@
 
   color: var(--ink-muted);
 
-  font-size: .875rem;
+  font-size: .9375rem;           /* 15px */
+  line-height: 1.55;
 
-  margin-bottom: 1.75rem;
+  max-width: 320px;
+  margin: 0 auto 1.75rem;
 }
 
 .auth-divider {

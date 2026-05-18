@@ -1,16 +1,48 @@
 /* ====================================================
-   DASHBOARD PAGE (VERSÃO FINAL AJUSTADA)
+   DASHBOARD PAGE
    ==================================================== */
 
+.dashboard-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+
+  font-size: .6875rem;            /* 11px */
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--green);
+
+  margin-bottom: .85rem;
+}
+
+.dashboard-eyebrow-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 3px var(--green-glow);
+  animation: heroDotPulse 1.6s ease-in-out infinite;
+}
+
 .dashboard-header h1 {
-  font-size: 1.75rem;
+  font-size: clamp(1.875rem, 3vw, 2.375rem);   /* 30–38px */
   font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -.02em;
   color: var(--ink);
+
+  margin-bottom: .5rem;
+  text-wrap: balance;
 }
 
 .dashboard-header p {
   color: var(--ink-muted);
-  font-size: .9rem;
+  font-size: 1rem;                /* 16px */
+  line-height: 1.6;
+  max-width: 640px;
+  text-wrap: pretty;
+  margin: 0;
 }
 
 /* =========================
@@ -57,20 +89,38 @@
   border-radius: var(--radius);
 }
 
-/* VALOR PRINCIPAL */
+/* VALOR PRINCIPAL — números grandes */
 .stat-value {
-  font-family: 'Syne', sans-serif;
-  font-size: 1.9rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.25rem;             /* 36px */
   font-weight: 800;
-  margin-bottom: .25rem;
+  line-height: 1.05;
+  letter-spacing: -.025em;
+  color: var(--ink);
+  margin: 0 0 .35rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* VALOR SECUNDÁRIO — quando o destaque é texto (tipo, bairro) */
+.stat-value-sm {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.125rem;            /* 18px */
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -.01em;
+  color: var(--ink);
+  margin: 0 0 .35rem;
+  text-wrap: balance;
 }
 
 /* LABEL */
 .stat-label {
-  font-size: .75rem;
+  font-size: .6875rem;            /* 11px */
   color: var(--ink-muted);
-  font-weight: 600;
-  letter-spacing: .4px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin: 0;
 }
 
 /* =========================
@@ -87,16 +137,19 @@
 
 /* HEADER DO GRÁFICO */
 .chart-header {
-  padding: .75rem 1rem;
+  padding: 1rem 1.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: .75rem;
+  border-bottom: 1px solid var(--border-light);
 }
 
 /* TÍTULO */
 .chart-title {
-  font-size: .875rem;
+  font-size: .9375rem;            /* 15px */
   font-weight: 700;
+  letter-spacing: -.005em;
   color: var(--ink);
   display: flex;
   align-items: center;

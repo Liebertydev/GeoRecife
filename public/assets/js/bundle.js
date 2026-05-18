@@ -136,15 +136,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 let pizzaChart;
 let barraChart;
+
+// Paleta alinhada com os tokens do projeto (variables.css).
+// Emerald-600 (#16a34a) é a cor primária; demais cores ficam em tons
+// distintos para legibilidade nos gráficos sem brigar com o verde.
 const coresPorTipo = {
-  'crime': '#dc3545',
-  'trânsito': '#ffc107',
-  'buraco na via': '#6c757d',
-  'alagamento': '#007bff',
-  'problema de iluminação': '#6610f2',
-  'entulho': '#795548',
-  'outro': '#20c997'
+  'crime': '#ef4444',
+  // red-500 (--red)
+  'trânsito': '#f59e0b',
+  // amber-500
+  'buraco na via': '#64748b',
+  // slate-500 (--ink-muted)
+  'alagamento': '#0ea5e9',
+  // sky-500
+  'problema de iluminação': '#8b5cf6',
+  // violet-500
+  'entulho': '#a16207',
+  // yellow-700 (entulho marrom)
+  'outro': '#16a34a' // emerald-600 (--green)
 };
+const BAR_COLOR = '#16a34a'; // emerald-600 (--green)
+const BAR_COLOR_BORDER = '#15803d'; // emerald-700 (--green-dark)
+
 function renderCharts(data) {
   if (!data) return;
   renderPizza(data.porTipo);
@@ -189,7 +202,10 @@ function renderBarra(dados) {
       labels,
       datasets: [{
         label: 'Ocorrências por Bairro',
-        data: valores
+        data: valores,
+        backgroundColor: labels.map((_, i) => `hsl(152, 60%, ${Math.max(28, 62 - i * 6)}%)`),
+        borderWidth: 2,
+        borderColor: '#ffffff'
       }]
     },
     options: {
@@ -329,6 +345,41 @@ function dentroDosBounds(lat, lng) {
     if (intersect) inside = !inside;
   }
   return inside;
+}
+
+/***/ },
+
+/***/ "./frontend/modules/modulesMap/categoryColors.js"
+/*!*******************************************************!*\
+  !*** ./frontend/modules/modulesMap/categoryColors.js ***!
+  \*******************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   CATEGORY_COLORS: () => (/* binding */ CATEGORY_COLORS),
+/* harmony export */   DEFAULT_CATEGORY_COLOR: () => (/* binding */ DEFAULT_CATEGORY_COLOR),
+/* harmony export */   corDaCategoria: () => (/* binding */ corDaCategoria)
+/* harmony export */ });
+const CATEGORY_COLORS = {
+  crime: '#dc2626',
+  // red-600
+  transito: '#f97316',
+  // orange-500
+  buraco: '#d97706',
+  // amber-600
+  alagamento: '#2563eb',
+  // blue-600
+  iluminacao: '#eab308',
+  // yellow-500
+  entulho: '#78716c',
+  // stone-500
+  outro: '#64748b' // slate-500
+};
+const DEFAULT_CATEGORY_COLOR = '#64748b';
+function corDaCategoria(tipo) {
+  return CATEGORY_COLORS[tipo] || DEFAULT_CATEGORY_COLOR;
 }
 
 /***/ },
@@ -570,7 +621,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   criarMarcadorOcc: () => (/* binding */ criarMarcadorOcc)
 /* harmony export */ });
 /* harmony import */ var _bounds_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bounds.js */ "./frontend/modules/modulesMap/bounds.js");
+/* harmony import */ var _categoryColors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./categoryColors.js */ "./frontend/modules/modulesMap/categoryColors.js");
 
+
+function criarIconePorTipo(tipo) {
+  const cor = (0,_categoryColors_js__WEBPACK_IMPORTED_MODULE_1__.corDaCategoria)(tipo);
+  const html = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="36" viewBox="0 0 28 36" aria-hidden="true">
+      <path d="M14 1C6.82 1 1 6.82 1 14c0 9.4 13 21 13 21s13-11.6 13-21C27 6.82 21.18 1 14 1z"
+            fill="${cor}" stroke="#ffffff" stroke-width="2"/>
+      <circle cx="14" cy="14" r="4.5" fill="#ffffff"/>
+    </svg>`;
+  return L.divIcon({
+    html,
+    className: `map-pin map-pin--${tipo || 'outro'}`,
+    iconSize: [28, 36],
+    iconAnchor: [14, 36],
+    popupAnchor: [0, -32],
+    tooltipAnchor: [0, -28]
+  });
+}
 function popupStrong(text) {
   const el = document.createElement('strong');
   el.textContent = text == null ? '' : String(text);
@@ -625,11 +695,14 @@ function criarMarcador(map, lat, lon, popupText, onEnderecoAtualizado = null) {
   adicionarDragend(marcador, map, onEnderecoAtualizado);
   return marcador;
 }
-function criarMarcadorOcc(map, lat, lon, popupText) {
-  return L.marker([lat, lon]).addTo(map).bindPopup(popupStrong(popupText)).bindTooltip(tooltipText(popupText), {
+function criarMarcadorOcc(map, lat, lon, popupText, tipo) {
+  const icon = criarIconePorTipo(tipo);
+  return L.marker([lat, lon], {
+    icon
+  }).addTo(map).bindPopup(popupStrong(popupText)).bindTooltip(tooltipText(popupText), {
     permanent: true,
     direction: 'top',
-    offset: [0, -10]
+    offset: [0, 0]
   });
 }
 
@@ -660,7 +733,7 @@ async function carregarOcorrencias(map, url = '/api/ocorrencias') {
     const res = await fetch(url);
     const ocorrencias = await res.json();
     ocorrencias.forEach(occ => {
-      const marcador = (0,_marker__WEBPACK_IMPORTED_MODULE_0__.criarMarcadorOcc)(map, occ.latitude, occ.longitude, occ.placeName || occ.street);
+      const marcador = (0,_marker__WEBPACK_IMPORTED_MODULE_0__.criarMarcadorOcc)(map, occ.latitude, occ.longitude, occ.placeName || occ.street, occ.type);
       marcador.on('click', () => {
         window.location.href = `/ocorrencias/${occ.id}`;
       });

@@ -1,14 +1,21 @@
 let pizzaChart;
 let barraChart;
+
+// Paleta alinhada com os tokens do projeto (variables.css).
+// Emerald-600 (#16a34a) é a cor primária; demais cores ficam em tons
+// distintos para legibilidade nos gráficos sem brigar com o verde.
 const coresPorTipo = {
-    'crime': '#dc3545',
-    'trânsito': '#ffc107',
-    'buraco na via': '#6c757d',
-    'alagamento': '#007bff',
-    'problema de iluminação': '#6610f2',
-    'entulho': '#795548',
-    'outro': '#20c997'
+    'crime':                  '#ef4444',  // red-500 (--red)
+    'trânsito':               '#f59e0b',  // amber-500
+    'buraco na via':          '#64748b',  // slate-500 (--ink-muted)
+    'alagamento':             '#0ea5e9',  // sky-500
+    'problema de iluminação': '#8b5cf6',  // violet-500
+    'entulho':                '#a16207',  // yellow-700 (entulho marrom)
+    'outro':                  '#16a34a'   // emerald-600 (--green)
 };
+
+const BAR_COLOR = '#16a34a';        // emerald-600 (--green)
+const BAR_COLOR_BORDER = '#15803d'; // emerald-700 (--green-dark)
 
 export function renderCharts(data) {
     if (!data) return;
@@ -65,7 +72,12 @@ function renderBarra(dados) {
             labels,
             datasets: [{
                 label: 'Ocorrências por Bairro',
-                data: valores
+                data: valores,
+                backgroundColor: labels.map((_, i) =>
+                    `hsl(152, 60%, ${Math.max(28, 62 - i * 6)}%)`
+                ),
+                borderWidth: 2,
+                borderColor: '#ffffff'
             }]
         },
         options: {

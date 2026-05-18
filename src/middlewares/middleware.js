@@ -1,3 +1,5 @@
+const { generateCsrfToken, invalidCsrfTokenError } = require('./csrf');
+
 module.exports.middlewareGlobal = (req, res, next) => {
     res.locals.errors = req.flash('errors');
     res.locals.success = req.flash('success');
@@ -7,7 +9,7 @@ module.exports.middlewareGlobal = (req, res, next) => {
 };
 
 module.exports.checkCsrfError = (err, req, res, next) => {
-    if (err.code === 'EBADCSRFTOKEN') {
+    if (err === invalidCsrfTokenError) {
         return res.status(403).send('CSRF inválido');
     }
 
@@ -16,7 +18,7 @@ module.exports.checkCsrfError = (err, req, res, next) => {
 
 
 exports.csrfMiddleware = (req, res, next) => {
-    res.locals.csrfToken = req.csrfToken();
+    res.locals.csrfToken = generateCsrfToken(req, res);
     next();
 };
 

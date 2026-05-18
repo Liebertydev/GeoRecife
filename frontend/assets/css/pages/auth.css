@@ -13,7 +13,7 @@
   background: linear-gradient(
     160deg,
     var(--off-white) 0%,
-    #e8f5ee 100%
+    var(--green-light) 100%
   );
 }
 

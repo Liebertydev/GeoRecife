@@ -2,6 +2,7 @@ const express = require('express');
 const route = express.Router();
 
 const { loginRequired } = require('./src/middlewares/middleware');
+const { loginLimiter, registerLimiter } = require('./src/middlewares/rateLimit');
 
 // Controllers
 const homeController = require('./src/controllers/homeController');
@@ -17,8 +18,8 @@ route.get('/', homeController.index);
 // Rotas de Login/Registro/Logout
 route.get('/login', loginController.index);
 route.get('/register', registerController.index);
-route.post('/login/login', loginController.login);
-route.post('/login/register', loginController.register);
+route.post('/login/login', loginLimiter, loginController.login);
+route.post('/login/register', registerLimiter, loginController.register);
 route.get('/logout', loginController.logout)
 
 // Rotas do Mapa

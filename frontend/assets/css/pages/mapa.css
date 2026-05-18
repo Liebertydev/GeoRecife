@@ -63,12 +63,15 @@
 }
 
 .map-filter-item {
+  --cat-color: var(--ink-faint);
+
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.75rem;
   background: linear-gradient(180deg, var(--off-white) 0%, var(--surface) 100%);
   border: 1px solid var(--border);
-  padding: 0.85rem 1rem;
+  padding: 0.85rem 1rem 0.85rem 1.85rem;
   border-radius: 14px;
   cursor: pointer;
   transition: var(--transition);
@@ -76,16 +79,37 @@
   user-select: none;
 }
 
+.map-filter-item::before {
+  content: '';
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--cat-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cat-color) 18%, transparent);
+}
+
+.map-filter-item[data-type="crime"]      { --cat-color: #dc2626; }
+.map-filter-item[data-type="transito"]   { --cat-color: #f97316; }
+.map-filter-item[data-type="buraco"]     { --cat-color: #d97706; }
+.map-filter-item[data-type="alagamento"] { --cat-color: #2563eb; }
+.map-filter-item[data-type="iluminacao"] { --cat-color: #eab308; }
+.map-filter-item[data-type="entulho"]    { --cat-color: #78716c; }
+.map-filter-item[data-type="outro"]      { --cat-color: #64748b; }
+
 .map-filter-item:hover {
   transform: translateY(-1px);
-  border-color: var(--green);
-  box-shadow: 0 8px 16px var(--green-glow);
+  border-color: var(--cat-color);
+  box-shadow: 0 8px 16px color-mix(in srgb, var(--cat-color) 18%, transparent);
 }
 
 .map-filter-item input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: var(--green);
+  accent-color: var(--cat-color);
   flex-shrink: 0;
 }
 
@@ -95,6 +119,14 @@
   color: var(--ink-mid);
 }
 
+/* Pin do mapa (L.divIcon) — remove o background/borda padrão do Leaflet
+   e adiciona uma sombra suave abaixo do pino. */
+.leaflet-marker-icon.map-pin {
+  background: transparent;
+  border: 0;
+  filter: drop-shadow(0 2px 4px rgba(15, 23, 42, 0.25));
+}
+
 /* =========================================
    BOTÃO APLICAR FILTROS  (sidebar desktop)
 ========================================= */
@@ -102,7 +134,7 @@
 #filtrarOcc {
   margin-top: 1.25rem;
   border: none;
-  background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+  background: var(--green);
   color: var(--white);
   padding: 0.85rem 1rem;
   border-radius: 12px;
@@ -114,6 +146,7 @@
 }
 
 #filtrarOcc:hover {
+  background: var(--green-dark);
   box-shadow: 0 12px 24px rgba(22, 163, 74, 0.28);
   transform: translateY(-1px);
 }
@@ -245,13 +278,13 @@
   left: 50%;
   transform: translateX(-50%);
   border: none;
-  background: linear-gradient(135deg, var(--green-dark) 0%, #166534 100%);
+  background: var(--green);
   color: var(--white);
   padding: 0.9rem 1.6rem;
   border-radius: 30px;
   font-size: 0.9rem;
   font-weight: 800;
-  box-shadow: 0 12px 28px rgba(21, 128, 61, 0.28);
+  box-shadow: 0 12px 28px rgba(22, 163, 74, 0.28);
   z-index: 1000;
   cursor: pointer;
   white-space: nowrap;
@@ -262,8 +295,9 @@
 }
 
 #btnRegistrarOcorrencia:hover {
+  background: var(--green-dark);
   transform: translateX(-50%) translateY(-2px);
-  box-shadow: 0 18px 36px rgba(21, 128, 61, 0.34);
+  box-shadow: 0 18px 36px rgba(22, 163, 74, 0.34);
 }
 
 /* =========================================
@@ -402,7 +436,7 @@
 #applyMobileFilters {
   width: 100%;
   border: none;
-  background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+  background: var(--green);
   color: var(--white);
   padding: 0.9rem;
   border-radius: 14px;
@@ -414,6 +448,7 @@
 }
 
 #applyMobileFilters:hover {
+  background: var(--green-dark);
   box-shadow: 0 12px 24px rgba(22, 163, 74, 0.32);
   transform: translateY(-1px);
 }

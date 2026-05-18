@@ -20,7 +20,8 @@ export async function carregarOcorrencias(map, url = '/api/ocorrencias') {
                 map,
                 occ.latitude,
                 occ.longitude,
-                occ.placeName || occ.street
+                occ.placeName || occ.street,
+                occ.type
             );
 
             marcador.on('click', () => {

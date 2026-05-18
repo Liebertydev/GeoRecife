@@ -1,8 +1,10 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const isProd = process.env.NODE_ENV === 'production';
+
 module.exports = {
-  mode: 'development',
+  mode: isProd ? 'production' : 'development',
   entry: './frontend/index.js',
   output: {
     path: path.resolve(__dirname, 'public/assets/js'),
@@ -29,5 +31,5 @@ module.exports = {
       filename: '../css/bundle.css'
     })
   ],
-  devtool: 'source-map'
+  devtool: isProd ? false : 'source-map'
 };

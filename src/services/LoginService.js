@@ -14,6 +14,11 @@ class Login {
     async register() {
         this.valida();
 
+        const nome = (this.body.nome || '').trim();
+        if (nome.length < 3) {
+            this.errors.push('Nome precisa ter pelo menos 3 caracteres.');
+        }
+
         if (this.errors.length > 0) return;
 
         await this.userExist();
@@ -67,10 +72,6 @@ class Login {
 
         if (!this.body.email || !validator.isEmail(this.body.email)) {
             this.errors.push('E-mail inválido!');
-        }
-
-        if (this.body.nome && this.body.nome.trim().length < 3) {
-            this.errors.push('Nome precisa ter pelo menos 3 caracteres.');
         }
 
         const password = this.body.password || '';

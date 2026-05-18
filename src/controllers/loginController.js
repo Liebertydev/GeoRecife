@@ -1,7 +1,6 @@
 const prisma = require('../database/prisma');
 const Login = require('../services/LoginService');
 
-// src/controllers/homeController.js
 exports.index = (req, res) => {
     res.render('login', { pageCSS: '/frontend/assets/css/pages/auth.css' });
 };

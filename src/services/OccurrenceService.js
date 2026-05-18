@@ -1,6 +1,7 @@
 // src/services/OccurrenceService.js
 
 const prisma = require('../database/prisma');
+const { OCCURRENCE_TYPE_VALUES } = require('../constants/occurrenceTypes');
 // const validator = require('validator');
 
 class OccurrenceService {
@@ -34,6 +35,8 @@ class OccurrenceService {
 
     if (!this.body.type || this.body.type.trim().length < 2) {
       this.errors.push('Tipo da ocorrência é obrigatório.');
+    } else if (!OCCURRENCE_TYPE_VALUES.includes(this.body.type)) {
+      this.errors.push('Tipo da ocorrência inválido.');
     }
 
     if (isNaN(this.body.latitude) || isNaN(this.body.longitude)) {

@@ -15,9 +15,7 @@
 /* =========================
    LARGE (>=992px)
 ========================= */
-@media (max-width: 1199px) {
-  .stat-value { font-size: 2rem; }       /* 32px */
-}
+/* (dashboard responsive lives em pages/dashboard.css) */
 
 /* =========================
    MEDIUM (<=992px)
@@ -33,11 +31,6 @@
     font-size: .88rem;
     padding: .5rem .65rem !important;
   }
-
-  /* DASHBOARD */
-  .stat-card    { padding: 1.25rem; }
-  .stat-value   { font-size: 1.75rem; }    /* 28px */
-  .stat-value-sm { font-size: 1.0625rem; } /* 17px */
 
   /* MAPA */
   .map-sidebar {
@@ -141,16 +134,6 @@
   /* AUTH */
   .auth-card {
     padding: 1.5rem;
-  }
-
-  /* DASHBOARD */
-  .stat-value {
-    font-size: 1.5rem;
-  }
-
-  .stat-icon {
-    width: 40px;
-    height: 40px;
   }
 
   /* NOT FOUND */

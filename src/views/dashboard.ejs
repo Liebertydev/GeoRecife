@@ -20,10 +20,6 @@
           distribuição por tipo, por bairro e indicadores principais.
         </p>
       </div>
-
-      <a href="/mapa" class="btn btn-success btn-lg dashboard-cta">
-        <i class="bi bi-map-fill me-2" aria-hidden="true"></i>Ver no mapa
-      </a>
     </header>
 
     <!-- KPI row -->
@@ -106,25 +102,52 @@
 
     </section>
 
-    <!-- Feed: ocorrências recentes -->
-    <section class="recent-feed" aria-label="Ocorrências recentes">
-      <header class="recent-feed-header">
-        <div class="chart-header-text">
-          <span class="chart-title">
-            <i class="bi bi-activity" aria-hidden="true"></i>
-            Ocorrências recentes
-          </span>
-          <p class="chart-summary" id="resumoRecent">Carregando atividade…</p>
+    <!-- Camada operacional: mapa ao vivo + feed de recentes -->
+    <div class="dashboard-ops">
+
+      <section class="dashboard-map-card" aria-label="Mapa ao vivo">
+        <header class="map-card-header">
+          <div class="chart-header-text">
+            <span class="chart-title">
+              <i class="bi bi-broadcast" aria-hidden="true"></i>
+              Mapa ao vivo
+            </span>
+            <p class="chart-summary" id="resumoMapa">Carregando localizações…</p>
+          </div>
+          <a href="/mapa" class="map-card-cta">
+            Abrir mapa em tempo real
+            <i class="bi bi-arrow-right" aria-hidden="true"></i>
+          </a>
+        </header>
+        <div class="map-card-body">
+          <div id="dashboardMiniMap" class="dashboard-mini-map"></div>
+          <div class="map-card-empty" id="mapEmptyState" hidden>
+            <i class="bi bi-geo-alt" aria-hidden="true"></i>
+            Sem ocorrências geolocalizadas para exibir.
+          </div>
         </div>
-        <a href="/ocorrencias" class="recent-feed-link">
-          Ver todas
-          <i class="bi bi-arrow-right" aria-hidden="true"></i>
-        </a>
-      </header>
-      <ul class="recent-feed-list" id="recentList">
-        <!-- preenchido em ui.js -->
-      </ul>
-    </section>
+      </section>
+
+      <section class="recent-feed" aria-label="Ocorrências recentes">
+        <header class="recent-feed-header">
+          <div class="chart-header-text">
+            <span class="chart-title">
+              <i class="bi bi-activity" aria-hidden="true"></i>
+              Ocorrências recentes
+            </span>
+            <p class="chart-summary" id="resumoRecent">Carregando atividade…</p>
+          </div>
+          <a href="/ocorrencias" class="recent-feed-link">
+            Ver todas
+            <i class="bi bi-arrow-right" aria-hidden="true"></i>
+          </a>
+        </header>
+        <ul class="recent-feed-list" id="recentList">
+          <!-- preenchido em ui.js -->
+        </ul>
+      </section>
+
+    </div>
 
   </div>
 </main>

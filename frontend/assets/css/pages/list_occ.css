@@ -713,8 +713,16 @@
   .occ-select { flex: 1 1 calc(50% - .55rem); }
 
   .occ-list-header { flex-direction: column; align-items: stretch; }
-  .btn-primary-cta { align-self: flex-start; }
+  .btn-primary-cta { align-self: center; }
 
   .occ-card { padding: 1rem 1rem .9rem 1.2rem; }
   .occ-card-title { font-size: 1rem; }
+
+  .occ-list-header-text p {
+    text-align: justify;
+  }
+
+  .occ-list-header-text h1 {
+    text-align: center;
+  }
 }

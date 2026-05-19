@@ -67,12 +67,30 @@
     margin: 0 auto;
   }
 
+  /* Badge “Inteligência urbana” */
+  .hero-eyebrow {
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .hero-subtitle {
     margin-left: auto;
     margin-right: auto;
   }
 
-  .hero-cta,
+  /* Botões */
+  .hero-cta {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .hero-cta .btn-hero {
+    margin: 0 auto;
+  }
+
+  /* Meta */
   .hero-meta {
     justify-content: center;
   }
@@ -114,35 +132,5 @@
 
   .show-detail-label {
     min-width: auto;
-  }
-}
-
-/* =========================
-   EXTRA SMALL (<=576px)
-========================= */
-@media (max-width: 576px) {
-
-  /* GLOBAL TEXT */
-  body {
-    font-size: 15px;
-  }
-
-  /* HERO — ajuste fino no mobile pequeno */
-  .hero-title    { letter-spacing: -.02em; }
-  .hero-subtitle { font-size: 1rem; line-height: 1.6; }
-
-  /* AUTH */
-  .auth-card {
-    padding: 1.5rem;
-  }
-
-  /* NOT FOUND */
-  .not-found-code {
-    font-size: 4.5rem;
-  }
-
-  /* BUTTONS */
-  .btn {
-    font-size: .85rem !important;
   }
 }

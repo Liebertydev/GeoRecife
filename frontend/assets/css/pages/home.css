@@ -358,6 +358,9 @@ main.hero {
   .hero-floating-text span   { font-size: .65rem; }
   .hero-floating-card--top    { top: .65rem; right: .65rem; }
   .hero-floating-card--bottom { bottom: .75rem; left: .65rem; }
+  .hero-subtitle {
+    text-align: justify;
+  }
 }
 
 /* Features */

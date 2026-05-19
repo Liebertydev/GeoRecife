@@ -1,6 +1,7 @@
 import { fetchDashboard } from "./apiDashboard";
 import { renderCharts } from "./graficos";
 import { updateUI } from "./ui";
+import { renderMiniMap } from "./miniMap";
 
 export function initEvents() {
     const select = document.getElementById('filtroTipo');
@@ -11,8 +12,9 @@ export function initEvents() {
         const tipo = e.target.value;
 
         const data = await fetchDashboard(tipo);
-        
+
         updateUI(data);
         renderCharts(data);
+        if (data) renderMiniMap(data.recent);
     });
 }

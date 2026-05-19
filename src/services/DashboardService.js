@@ -77,6 +77,8 @@ const dashboardService = {
                 type: true,
                 district: true,
                 street: true,
+                latitude: true,
+                longitude: true,
                 createdAt: true
             }
         });

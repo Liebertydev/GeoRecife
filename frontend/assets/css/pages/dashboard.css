@@ -74,11 +74,168 @@
   margin: 0;
 }
 
-.dashboard-cta {
-  flex-shrink: 0;
-  padding: .85rem 1.4rem !important;
-  letter-spacing: .01em;
+/* =========================
+   OPERATIONAL LAYER
+   Grid 60/40 — mapa à esquerda + feed à direita.
+   Os dois cards estendem para igualar a altura do mais alto.
+========================= */
+
+.dashboard-ops {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: stretch;
+
+  margin-top: 1.5rem;
 }
+
+/* =========================
+   MINI-MAP CARD
+========================= */
+
+.dashboard-map-card {
+  display: flex;
+  flex-direction: column;
+
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-xs);
+
+  animation: kpiFadeIn .55s ease-out both;
+  animation-delay: .18s;
+}
+
+.map-card-header {
+  padding: 1.1rem 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.map-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+
+  font-size: .8125rem;
+  font-weight: 600;
+  color: var(--green);
+
+  padding: .45rem .85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+
+  transition: background-color .15s ease, border-color .15s ease, transform .15s ease;
+}
+
+.map-card-cta:hover {
+  background: var(--green-light);
+  border-color: var(--green);
+  color: var(--green-dark);
+}
+
+.map-card-cta i { font-size: .85rem; transition: transform .15s ease; }
+.map-card-cta:hover i { transform: translateX(2px); }
+
+.map-card-body {
+  position: relative;
+  flex: 1;                          /* preenche a altura do card no grid */
+  min-height: 360px;
+  background: var(--off-white);
+}
+
+.dashboard-mini-map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.map-card-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+
+  color: var(--ink-muted);
+  font-size: .9375rem;
+
+  background: var(--off-white);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.map-card-empty i {
+  font-size: 2rem;
+  color: var(--ink-faint);
+}
+
+/* Marcador custom — bolinha colorida com halo branco */
+.mini-map-marker {
+  background: transparent !important;
+  border: 0 !important;
+}
+
+.mini-map-marker-dot {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, .35);
+}
+
+/* Popup */
+.leaflet-popup-content-wrapper {
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.mini-map-popup {
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+  font-family: 'DM Sans', sans-serif;
+  min-width: 160px;
+}
+
+.mini-map-popup strong {
+  font-size: .8125rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--ink-mid);
+  font-weight: 700;
+}
+
+.mini-map-popup span {
+  font-size: .9375rem;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.mini-map-popup .mini-map-popup-meta {
+  font-size: .8125rem;
+  color: var(--ink-muted);
+  font-weight: 500;
+}
+
+.mini-map-popup a {
+  margin-top: .35rem;
+  font-size: .8125rem;
+  font-weight: 600;
+  color: var(--green);
+}
+
+.mini-map-popup a:hover { text-decoration: underline; }
 
 /* =========================
    KPI ROW
@@ -344,7 +501,8 @@
 ========================= */
 
 .recent-feed {
-  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
 
   background: var(--white);
   border: 1px solid var(--border);
@@ -353,7 +511,12 @@
   box-shadow: var(--shadow-xs);
 
   animation: kpiFadeIn .55s ease-out both;
-  animation-delay: .2s;
+  animation-delay: .22s;
+}
+
+.recent-feed-list {
+  flex: 1;                          /* acompanha a altura do mapa no grid */
+  overflow-y: auto;
 }
 
 .recent-feed-header {
@@ -507,11 +670,13 @@
 @media (max-width: 991px) {
   .kpi-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .kpi-card:nth-child(3) { grid-column: 1 / -1; }
+
+  /* Mapa + feed empilham em coluna única */
+  .dashboard-ops { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media (max-width: 640px) {
   .dashboard-header { flex-direction: column; align-items: flex-start; }
-  .dashboard-cta    { width: 100%; }
 
   .kpi-row { grid-template-columns: minmax(0, 1fr); }
   .kpi-card:nth-child(3) { grid-column: auto; }
@@ -524,6 +689,11 @@
 
   .chart-body                    { height: 280px; padding: 1rem; }
   .chart-card--main .chart-body  { height: 300px; }
+
+  /* Mini-mapa: empilha header e encolhe o card */
+  .map-card-header { flex-direction: column; align-items: flex-start; padding: 1rem; }
+  .map-card-cta    { align-self: stretch; justify-content: center; }
+  .map-card-body   { height: 240px; }
 
   /* Feed: empilha tipo e local em uma linha mais compacta */
   .recent-feed-row {

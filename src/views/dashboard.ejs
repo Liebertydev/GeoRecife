@@ -38,6 +38,7 @@
         </div>
         <p class="kpi-value" id="totalOcorrencias" data-counter>0</p>
         <p class="kpi-trend" id="totalTrend" hidden></p>
+        <p class="kpi-trend kpi-trend--week" id="totalTrendWeek" hidden></p>
       </article>
 
       <article class="kpi-card kpi-card--amber">
@@ -103,6 +104,26 @@
         </div>
       </article>
 
+    </section>
+
+    <!-- Feed: ocorrências recentes -->
+    <section class="recent-feed" aria-label="Ocorrências recentes">
+      <header class="recent-feed-header">
+        <div class="chart-header-text">
+          <span class="chart-title">
+            <i class="bi bi-activity" aria-hidden="true"></i>
+            Ocorrências recentes
+          </span>
+          <p class="chart-summary" id="resumoRecent">Carregando atividade…</p>
+        </div>
+        <a href="/ocorrencias" class="recent-feed-link">
+          Ver todas
+          <i class="bi bi-arrow-right" aria-hidden="true"></i>
+        </a>
+      </header>
+      <ul class="recent-feed-list" id="recentList">
+        <!-- preenchido em ui.js -->
+      </ul>
     </section>
 
   </div>

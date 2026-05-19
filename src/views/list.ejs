@@ -4,165 +4,350 @@
 <!-- INCLUDE: MESSAGE -->
 <%- include('./includes/messages') %>
 
-<div class="container py-5">
+<%
+  // Helpers de formatação só usados nesta view.
+  function timeAgoPt(date) {
+    if (!date) return '';
+    const now = Date.now();
+    const then = new Date(date).getTime();
+    const diff = Math.max(0, Math.floor((now - then) / 1000));
+    if (diff < 60)       return 'agora';
+    const m = Math.floor(diff / 60);
+    if (m < 60)          return `há ${m} min`;
+    const h = Math.floor(m / 60);
+    if (h < 24)          return `há ${h} h`;
+    const d = Math.floor(h / 24);
+    if (d < 7)           return `há ${d} d`;
+    return new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+  }
 
-  <!-- Cabeçalho -->
-  <div class="d-flex justify-content-between align-items-center mb-4 list-header flex-wrap gap-3">
+  const hasFilters = Boolean(
+    (filters.q && filters.q.trim().length) ||
+    filters.type ||
+    filters.severity ||
+    (filters.sort && filters.sort !== 'recent')
+  );
 
-    <div>
-      <h2>Ocorrências</h2>
+  const sortOptions = [
+    { value: 'recent',   label: 'Mais recentes' },
+    { value: 'oldest',   label: 'Mais antigas'  },
+    { value: 'district', label: 'Bairro (A–Z)'  },
+  ];
+%>
 
-      <p class="list-header-subtitle">
-        Todas as ocorrências registradas na plataforma
-      </p>
-    </div>
+<main class="occ-list-page" data-page="ocorrencias">
+  <div class="container occ-list-container">
 
-    <a href="/mapa" class="btn btn-success fw-bold">
-      <i class="bi bi-plus-lg me-1"></i>
-      Nova ocorrência
-    </a>
-
-  </div>
-
-  <!-- Flash sucesso -->
-  <% if (success && success.length > 0) { %>
-
-    <div
-      class="alert alert-success mb-4"
-      style="border-radius:var(--radius);font-size:.875rem;"
-    >
-      <i class="bi bi-check-circle me-1"></i>
-      <%= success[0] %>
-    </div>
-
-  <% } %>
-
-  <!-- Estado vazio -->
-  <% if (occurrences.length === 0) { %>
-
-    <div class="empty-state">
-
-      <div>
-        <i class="bi bi-inbox"></i>
+    <!-- Cabeçalho -->
+    <header class="occ-list-header">
+      <div class="occ-list-header-text">
+        <span class="occ-list-eyebrow">
+          <span class="occ-list-eyebrow-dot" aria-hidden="true"></span>
+          Painel operacional
+        </span>
+        <h1>Ocorrências</h1>
+        <p>
+          Visualize, filtre e priorize os registros enviados pela comunidade.
+          Cada cor indica o nível de severidade da ocorrência.
+        </p>
       </div>
 
-      <h3 class="empty-state-title">Nenhuma ocorrência por aqui</h3>
-
-      <p>
-        Ainda não há registros na plataforma. Seja a primeira pessoa a contribuir
-        com o mapa do Recife.
-      </p>
-
-      <a href="/mapa" class="btn btn-success">
-        Registrar primeira ocorrência
+      <a href="/mapa" class="btn-primary-cta">
+        <i class="bi bi-plus-lg" aria-hidden="true"></i>
+        Nova ocorrência
       </a>
+    </header>
 
-    </div>
+    <!-- Flash sucesso -->
+    <% if (success && success.length > 0) { %>
+      <div class="alert alert-success occ-list-alert">
+        <i class="bi bi-check-circle me-1"></i>
+        <%= success[0] %>
+      </div>
+    <% } %>
 
-  <% } %>
+    <!-- KPI strip -->
+    <section class="occ-kpi-strip" aria-label="Resumo das ocorrências">
+      <article class="occ-kpi occ-kpi--total">
+        <span class="occ-kpi-label">Total filtrado</span>
+        <span class="occ-kpi-value"><%= summary.total %></span>
+      </article>
 
-  <!-- Grid -->
-  <div class="row g-3">
+      <article class="occ-kpi occ-kpi--critical">
+        <span class="occ-kpi-dot" aria-hidden="true"></span>
+        <span class="occ-kpi-label">Críticas</span>
+        <span class="occ-kpi-value"><%= summary.severityCount.critical %></span>
+      </article>
 
-    <% occurrences.forEach(occ => { %>
+      <article class="occ-kpi occ-kpi--warning">
+        <span class="occ-kpi-dot" aria-hidden="true"></span>
+        <span class="occ-kpi-label">Avisos</span>
+        <span class="occ-kpi-value"><%= summary.severityCount.warning %></span>
+      </article>
 
-      <div class="col-12 col-md-6 col-lg-4">
+      <article class="occ-kpi occ-kpi--info">
+        <span class="occ-kpi-dot" aria-hidden="true"></span>
+        <span class="occ-kpi-label">Informativas</span>
+        <span class="occ-kpi-value"><%= summary.severityCount.info %></span>
+      </article>
 
-        <div class="occ-card">
+      <article class="occ-kpi occ-kpi--today">
+        <span class="occ-kpi-label">Hoje</span>
+        <span class="occ-kpi-value"><%= summary.hoje %></span>
+      </article>
+    </section>
 
-          <div class="occ-card-body">
+    <!-- Toolbar de filtros -->
+    <form
+      class="occ-toolbar"
+      method="get"
+      action="/ocorrencias"
+      id="occFilterForm"
+      role="search"
+    >
+      <label class="occ-search" for="occSearchInput">
+        <i class="bi bi-search" aria-hidden="true"></i>
+        <input
+          id="occSearchInput"
+          type="search"
+          name="q"
+          value="<%= filters.q %>"
+          placeholder="Buscar por rua, bairro ou local…"
+          autocomplete="off"
+        />
+      </label>
 
-            <span class="occ-type-badge" data-type="<%= occ.type %>">
-              <i class="bi bi-exclamation-triangle-fill"></i>
-              <%= occ.type %>
-            </span>
+      <div class="occ-toolbar-selects">
+        <label class="occ-select">
+          <span class="occ-select-label">Tipo</span>
+          <select name="type" data-auto-submit>
+            <option value="">Todos os tipos</option>
+            <% occurrenceTypes.forEach(t => { %>
+              <option value="<%= t.value %>" <%= filters.type === t.value ? 'selected' : '' %>>
+                <%= t.label %>
+              </option>
+            <% }) %>
+          </select>
+        </label>
 
-            <h5 class="occ-title">
-              <%= occ.street %>
-            </h5>
+        <label class="occ-select">
+          <span class="occ-select-label">Severidade</span>
+          <select name="severity" data-auto-submit>
+            <option value="">Todas</option>
+            <% occurrenceSeverities.forEach(s => { %>
+              <option value="<%= s.value %>" <%= filters.severity === s.value ? 'selected' : '' %>>
+                <%= s.label %>
+              </option>
+            <% }) %>
+          </select>
+        </label>
 
-            <p class="occ-district">
-              <i
-                class="bi bi-geo-alt me-1"
-                style="color:var(--green);"
-              ></i>
+        <label class="occ-select">
+          <span class="occ-select-label">Ordenar</span>
+          <select name="sort" data-auto-submit>
+            <% sortOptions.forEach(s => { %>
+              <option value="<%= s.value %>" <%= filters.sort === s.value ? 'selected' : '' %>>
+                <%= s.label %>
+              </option>
+            <% }) %>
+          </select>
+        </label>
 
+        <% if (hasFilters) { %>
+          <a href="/ocorrencias" class="occ-toolbar-clear" title="Limpar filtros">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+            Limpar
+          </a>
+        <% } %>
+      </div>
+
+      <noscript>
+        <button type="submit" class="btn-primary-cta btn-primary-cta--ghost">
+          Aplicar filtros
+        </button>
+      </noscript>
+    </form>
+
+    <!-- Estado vazio -->
+    <% if (occurrences.length === 0) { %>
+      <div class="occ-empty-state">
+        <div class="occ-empty-icon">
+          <i class="bi bi-inbox"></i>
+        </div>
+        <h3>
+          <% if (hasFilters) { %>
+            Nenhum resultado para os filtros aplicados
+          <% } else { %>
+            Nenhuma ocorrência por aqui
+          <% } %>
+        </h3>
+        <p>
+          <% if (hasFilters) { %>
+            Tente remover algum filtro ou ampliar o termo de busca.
+          <% } else { %>
+            Ainda não há registros na plataforma. Seja a primeira pessoa a contribuir
+            com o mapa do Recife.
+          <% } %>
+        </p>
+        <% if (hasFilters) { %>
+          <a href="/ocorrencias" class="btn-primary-cta btn-primary-cta--ghost">
+            Limpar filtros
+          </a>
+        <% } else { %>
+          <a href="/mapa" class="btn-primary-cta">
+            Registrar primeira ocorrência
+          </a>
+        <% } %>
+      </div>
+    <% } %>
+
+    <!-- Grid -->
+    <% if (occurrences.length > 0) { %>
+      <div class="occ-grid">
+        <% occurrences.forEach(occ => {
+             const sev = severityOf(occ.type);
+             const typeLabel = labelOfType(occ.type);
+        %>
+
+          <a
+            href="/ocorrencias/<%= occ.id %>"
+            class="occ-card"
+            data-severity="<%= sev %>"
+            data-type="<%= occ.type %>"
+          >
+            <span class="occ-card-accent" aria-hidden="true"></span>
+
+            <div class="occ-card-top">
+              <span class="occ-type-chip" data-type="<%= occ.type %>">
+                <span class="occ-type-chip-dot" aria-hidden="true"></span>
+                <%= typeLabel %>
+              </span>
+              <time
+                class="occ-card-time"
+                datetime="<%= occ.createdAt.toISOString ? occ.createdAt.toISOString() : occ.createdAt %>"
+                title="<%= new Date(occ.createdAt).toLocaleString('pt-BR') %>"
+              >
+                <i class="bi bi-clock" aria-hidden="true"></i>
+                <%= timeAgoPt(occ.createdAt) %>
+              </time>
+            </div>
+
+            <h3 class="occ-card-title"><%= occ.street %></h3>
+
+            <p class="occ-card-district">
+              <i class="bi bi-geo-alt-fill" aria-hidden="true"></i>
               <%= occ.district %>
             </p>
 
-            <p class="occ-author">
-              <i class="bi bi-person-fill me-1"></i>
+            <div class="occ-card-footer">
+              <span class="occ-card-author">
+                <i class="bi bi-person-fill" aria-hidden="true"></i>
+                <%= occ.user ? occ.user.name : 'Anônimo' %>
+              </span>
 
-              Por:
-              <%= occ.user ? occ.user.name : 'Anônimo' %>
-            </p>
-
-          </div>
-
-          <div class="occ-card-footer">
-
-            <a
-              href="/ocorrencias/<%= occ.id %>"
-              class="btn btn-sm btn-outline-secondary flex-grow-1"
-            >
-              <i class="bi bi-eye me-1"></i>
-              Ver detalhes
-            </a>
+              <span class="occ-card-cta">
+                Ver detalhes
+                <i class="bi bi-arrow-right" aria-hidden="true"></i>
+              </span>
+            </div>
 
             <% if (currentUserId && currentUserId === occ.userId) { %>
-
-              <a
-                href="/ocorrencias/<%= occ.id %>/editar"
-                class="btn btn-sm btn-outline-primary"
+              <!-- Botão de edição flutua sobre o card; stopPropagation no JS impede o clique do card. -->
+              <span
+                class="occ-card-edit"
+                data-href="/ocorrencias/<%= occ.id %>/editar"
+                role="button"
+                tabindex="0"
+                aria-label="Editar ocorrência"
+                title="Editar"
               >
-                <i class="bi bi-pencil"></i>
-              </a>
-
+                <i class="bi bi-pencil" aria-hidden="true"></i>
+              </span>
             <% } %>
+          </a>
 
-          </div>
-
-        </div>
-
+        <% }) %>
       </div>
+    <% } %>
 
-    <% }) %>
+    <!-- Paginação -->
+    <% if (occurrences.length > 0) { %>
+      <%
+        // Reconstrói os query params preservando os filtros vigentes
+        function buildHref(page) {
+          const params = new URLSearchParams();
+          if (filters.q)        params.set('q', filters.q);
+          if (filters.type)     params.set('type', filters.type);
+          if (filters.severity) params.set('severity', filters.severity);
+          if (filters.sort && filters.sort !== 'recent') params.set('sort', filters.sort);
+          params.set('page', String(page));
+          return `/ocorrencias?${params.toString()}`;
+        }
+      %>
+
+      <nav class="occ-pagination" aria-label="Paginação">
+        <% if (currentPage > 1) { %>
+          <a href="<%= buildHref(currentPage - 1) %>" class="occ-pagination-link">
+            <i class="bi bi-arrow-left" aria-hidden="true"></i>
+            Anterior
+          </a>
+        <% } %>
+
+        <span class="occ-pagination-current">Página <%= currentPage %></span>
+
+        <% if (hasMore) { %>
+          <a href="<%= buildHref(currentPage + 1) %>" class="occ-pagination-link occ-pagination-link--primary">
+            Próxima
+            <i class="bi bi-arrow-right" aria-hidden="true"></i>
+          </a>
+        <% } %>
+      </nav>
+    <% } %>
 
   </div>
+</main>
 
-  <!-- Paginação -->
-  <% if (occurrences.length > 0) { %>
+<script>
+  (function () {
+    const form = document.getElementById('occFilterForm');
+    if (!form) return;
 
-    <div class="d-flex justify-content-center align-items-center gap-2 mt-5">
+    // Selects auto-submetem ao trocar (e zeram a página)
+    form.querySelectorAll('select[data-auto-submit]').forEach((select) => {
+      select.addEventListener('change', () => {
+        form.querySelectorAll('input[name="page"]').forEach(el => el.remove());
+        form.submit();
+      });
+    });
 
-      <% if (currentPage > 1) { %>
+    // Busca: debounce de 380ms
+    const searchInput = document.getElementById('occSearchInput');
+    if (searchInput) {
+      let t;
+      searchInput.addEventListener('input', () => {
+        clearTimeout(t);
+        t = setTimeout(() => {
+          form.querySelectorAll('input[name="page"]').forEach(el => el.remove());
+          form.submit();
+        }, 380);
+      });
+    }
 
-        <a
-          href="/ocorrencias?page=<%= currentPage - 1 %>"
-          class="btn btn-outline-secondary"
-        >
-          <i class="bi bi-arrow-left me-1"></i>
-          Anterior
-        </a>
-
-      <% } %>
-
-      <% if (hasMore) { %>
-
-        <a
-          href="/ocorrencias?page=<%= currentPage + 1 %>"
-          class="btn btn-success"
-        >
-          Ver mais
-          <i class="bi bi-arrow-right ms-1"></i>
-        </a>
-
-      <% } %>
-
-    </div>
-
-  <% } %>
-
-</div>
+    // Botão de edição flutua sobre o card-link: interceptamos o clique
+    // para não disparar o link pai do card.
+    document.querySelectorAll('.occ-card-edit').forEach((el) => {
+      const go = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const href = el.dataset.href;
+        if (href) window.location.assign(href);
+      };
+      el.addEventListener('click', go);
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') go(e);
+      });
+    });
+  })();
+</script>
 
 <%- include('./includes/footer') %>

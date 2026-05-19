@@ -2,6 +2,12 @@
 
 const prisma = require('../database/prisma');
 const OccurrenceService = require('../services/OccurrenceService');
+const {
+  OCCURRENCE_TYPES,
+  OCCURRENCE_SEVERITIES,
+  severityOf,
+  labelOfType,
+} = require('../constants/occurrenceTypes');
 
 // ====================
 // RENDERIZA FORMULÁRIO DE NOVA OCORRÊNCIA
@@ -46,9 +52,19 @@ exports.create = async (req, res) => {
 
 exports.list = async (req, res) => {
   try {
-    const page = Number(req.query.page) || 1;
+    const page = Math.max(1, Number(req.query.page) || 1);
 
-    const { occurrences, hasMore } = await OccurrenceService.listarPaginado(page);
+    const filters = {
+      q:        typeof req.query.q === 'string' ? req.query.q : '',
+      type:     typeof req.query.type === 'string' ? req.query.type : '',
+      severity: typeof req.query.severity === 'string' ? req.query.severity : '',
+      sort:     typeof req.query.sort === 'string' ? req.query.sort : 'recent',
+    };
+
+    const [{ occurrences, hasMore }, summary] = await Promise.all([
+      OccurrenceService.listarPaginado(page, filters),
+      OccurrenceService.contarResumo(filters),
+    ]);
 
     res.render('list', {
       pageCSS: '/frontend/assets/css/pages/list_occ.css',
@@ -56,6 +72,12 @@ exports.list = async (req, res) => {
       hasMore,
       currentUserId: req.session.user ? req.session.user.id : null,
       currentPage: page,
+      filters,
+      summary,
+      occurrenceTypes: OCCURRENCE_TYPES,
+      occurrenceSeverities: OCCURRENCE_SEVERITIES,
+      severityOf,
+      labelOfType,
     });
 
   } catch (e) {

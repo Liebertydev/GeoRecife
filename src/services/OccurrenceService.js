@@ -1,7 +1,10 @@
 // src/services/OccurrenceService.js
 
 const prisma = require('../database/prisma');
-const { OCCURRENCE_TYPE_VALUES } = require('../constants/occurrenceTypes');
+const {
+  OCCURRENCE_TYPE_VALUES,
+  OCCURRENCE_TYPES,
+} = require('../constants/occurrenceTypes');
 // const validator = require('validator');
 
 class OccurrenceService {
@@ -119,22 +122,19 @@ class OccurrenceService {
 
   }
 
-  static async listarPaginado(page = 1, limit = 9) {
+  static async listarPaginado(page = 1, filters = {}, limit = 9) {
     const skip = (page - 1) * limit;
+    const where = OccurrenceService.buildWhere(filters);
+    const orderBy = OccurrenceService.buildOrderBy(filters.sort);
 
     // Busca um item a mais para detectar se há próxima página
     // sem precisar de uma query de count.
     const rows = await prisma.occurrence.findMany({
-      orderBy: {
-        createdAt: 'desc'
-      },
-
+      where,
+      orderBy,
       skip,
       take: limit + 1,
-
-      include: {
-        user: true
-      }
+      include: { user: true },
     });
 
     const hasMore = rows.length > limit;
@@ -143,8 +143,84 @@ class OccurrenceService {
       hasMore,
     };
   }
+
+  // Conta resumido para a faixa de KPIs do topo da listagem.
+  // Respeita os mesmos filtros aplicados na lista, exceto sort (irrelevante).
+  static async contarResumo(filters = {}) {
+    const where = OccurrenceService.buildWhere(filters);
+
+    const [total, rows, hoje] = await Promise.all([
+      prisma.occurrence.count({ where }),
+      prisma.occurrence.findMany({ where, select: { type: true } }),
+      prisma.occurrence.count({
+        where: {
+          ...where,
+          createdAt: { gte: startOfToday() },
+        },
+      }),
+    ]);
+
+    const severityCount = { critical: 0, warning: 0, info: 0 };
+    const typeToSeverity = OCCURRENCE_TYPES.reduce((acc, t) => {
+      acc[t.value] = t.severity;
+      return acc;
+    }, {});
+
+    for (const r of rows) {
+      const s = typeToSeverity[r.type] || 'info';
+      severityCount[s] += 1;
+    }
+
+    return { total, hoje, severityCount };
+  }
+
+  static buildWhere(filters = {}) {
+    const where = {};
+
+    if (filters.type && OCCURRENCE_TYPE_VALUES.includes(filters.type)) {
+      where.type = filters.type;
+    }
+
+    if (filters.severity) {
+      const types = OCCURRENCE_TYPES
+        .filter(t => t.severity === filters.severity)
+        .map(t => t.value);
+      if (types.length) {
+        where.type = where.type
+          ? (types.includes(where.type) ? where.type : { in: [] })
+          : { in: types };
+      }
+    }
+
+    const q = (filters.q || '').trim();
+    if (q.length >= 2) {
+      where.OR = [
+        { street:    { contains: q, mode: 'insensitive' } },
+        { district:  { contains: q, mode: 'insensitive' } },
+        { title:     { contains: q, mode: 'insensitive' } },
+        { placeName: { contains: q, mode: 'insensitive' } },
+      ];
+    }
+
+    return where;
+  }
+
+  static buildOrderBy(sort) {
+    switch (sort) {
+      case 'oldest':   return { createdAt: 'asc'  };
+      case 'district': return { district:  'asc'  };
+      case 'recent':
+      default:         return { createdAt: 'desc' };
+    }
+  }
 }
 
 
+
+function startOfToday() {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
 
 module.exports = OccurrenceService;

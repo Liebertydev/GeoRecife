@@ -2,16 +2,16 @@ let pizzaChart;
 let barraChart;
 
 // Paleta alinhada com os tokens do projeto (variables.css).
-// Emerald-600 (#16a34a) é a cor primária; demais cores ficam em tons
-// distintos para legibilidade nos gráficos sem brigar com o verde.
-const coresPorTipo = {
-    'crime':                  '#ef4444',  // red-500 (--red)
-    'trânsito':               '#f59e0b',  // amber-500
-    'buraco na via':          '#64748b',  // slate-500 (--ink-muted)
-    'alagamento':             '#0ea5e9',  // sky-500
-    'problema de iluminação': '#8b5cf6',  // violet-500
-    'entulho':                '#a16207',  // yellow-700
-    'outro':                  '#16a34a'   // emerald-600 (--green)
+// As chaves precisam bater com os `value` em src/constants/occurrenceTypes.js
+// (sem acentos, formato curto) — qualquer divergência cai no cinza padrão.
+export const coresPorTipo = {
+    crime:      '#ef4444',  // red-500 (--red)
+    transito:   '#f59e0b',  // amber-500
+    buraco:     '#64748b',  // slate-500 (--ink-muted)
+    alagamento: '#0ea5e9',  // sky-500
+    iluminacao: '#8b5cf6',  // violet-500
+    entulho:    '#a16207',  // yellow-700
+    outro:      '#16a34a'   // emerald-600 (--green)
 };
 
 const LEGEND_OPTS = {
@@ -89,38 +89,74 @@ function renderBarra(dados) {
     const ctx = document.getElementById('graficoBarra');
     if (!ctx) return;
 
-    const labels  = dados.map(item => item.district);
-    const valores = dados.map(item => item._count.district);
+    // Mostra apenas o top 10 — ranking horizontal fica ilegível com 20+ bairros.
+    const top = [...dados]
+        .sort((a, b) => (b._count.district ?? 0) - (a._count.district ?? 0))
+        .slice(0, 10);
+
+    const labels  = top.map(item => item.district);
+    const valores = top.map(item => item._count.district);
 
     if (barraChart) barraChart.destroy();
 
-    // Escala HSL em torno do verde do projeto — primeiro slice mais intenso,
-    // os demais ficam progressivamente mais claros.
-    const cores = labels.map((_, i) =>
-        `hsl(152, 58%, ${Math.max(30, 60 - i * 5)}%)`
-    );
-
     barraChart = new Chart(ctx, {
-        type: 'doughnut',
+        type: 'bar',
         data: {
             labels,
             datasets: [{
-                label: 'Ocorrências por bairro',
+                label: 'Ocorrências',
                 data: valores,
-                backgroundColor: cores,
-                borderWidth: 3,
-                borderColor: '#ffffff',
-                hoverOffset: 8
+                backgroundColor: '#16a34a',           // emerald-600 (--green)
+                hoverBackgroundColor: '#15803d',     // emerald-700 (--green-dark)
+                borderRadius: 6,
+                borderSkipped: false,
+                barPercentage: 0.8,
+                categoryPercentage: 0.85
             }]
         },
         options: {
+            indexAxis: 'y',                          // barras horizontais
             responsive: true,
             maintainAspectRatio: false,
-            cutout: '58%',
             animation: { duration: 700, easing: 'easeOutCubic' },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    grid: {
+                        color: '#f1f5f9',            // --border-light
+                        drawBorder: false
+                    },
+                    border: { display: false },
+                    ticks: {
+                        precision: 0,                // sem casas decimais
+                        font: {
+                            size: 11,
+                            family: "'DM Sans', system-ui, sans-serif"
+                        },
+                        color: '#94a3b8'             // --ink-faint
+                    }
+                },
+                y: {
+                    grid: { display: false },
+                    border: { display: false },
+                    ticks: {
+                        font: {
+                            size: 12,
+                            family: "'DM Sans', system-ui, sans-serif",
+                            weight: '500'
+                        },
+                        color: '#334155'             // --ink-mid
+                    }
+                }
+            },
             plugins: {
-                legend: LEGEND_OPTS,
-                tooltip: TOOLTIP_OPTS
+                legend: { display: false },           // 1 dataset → desnecessário
+                tooltip: {
+                    ...TOOLTIP_OPTS,
+                    callbacks: {
+                        label: (ctx) => ` ${ctx.parsed.x} ocorrência${ctx.parsed.x === 1 ? '' : 's'}`
+                    }
+                }
             }
         }
     });

@@ -66,6 +66,26 @@ const dashboardService = {
         });
 
         return result[0] || null;
+    },
+
+    async getRecent(limit = 8) {
+        return prisma.occurrence.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: limit,
+            select: {
+                id: true,
+                type: true,
+                district: true,
+                street: true,
+                createdAt: true
+            }
+        });
+    },
+
+    async getCountBetween(gte, lt) {
+        return prisma.occurrence.count({
+            where: { createdAt: { gte, lt } }
+        });
     }
 }
 
